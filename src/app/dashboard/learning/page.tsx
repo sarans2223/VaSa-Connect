@@ -33,7 +33,11 @@ export default function LearningPage() {
                   alt={module.title}
                   fill
                   className="object-cover"
-                  data-ai-hint="woman working"
+                  data-ai-hint={
+                    module.title.toLowerCase().includes('cook') ? 'food preparation' :
+                    module.title.toLowerCase().includes('plate') ? 'gourmet food' :
+                    'woman working'
+                  }
                 />
               </div>
             </CardHeader>

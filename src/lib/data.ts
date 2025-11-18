@@ -65,12 +65,12 @@ export const mockJobs: Job[] = [
 export const mockLearningModules: LearningModule[] = [
   {
     id: 'learn-1',
-    title: 'Financial Literacy for Entrepreneurs',
-    description: 'Master the financial essentials for starting and growing your business.',
+    title: 'Professional Cooking Techniques',
+    description: 'Master the fundamental techniques of professional cooking, from knife skills to sauce making.',
     type: 'video',
-    duration: '2h 30m',
-    imageUrl: 'https://picsum.photos/seed/learn1/600/400',
-    progress: 50,
+    duration: '4h 15m',
+    imageUrl: 'https://picsum.photos/seed/cook1/600/400',
+    progress: 40,
   },
   {
     id: 'learn-2',
@@ -83,12 +83,12 @@ export const mockLearningModules: LearningModule[] = [
   },
   {
     id: 'learn-3',
-    title: 'Leadership and Team Management',
-    description: 'Develop your leadership skills and learn how to manage a high-performing team.',
+    title: 'The Art of Plate Decoration',
+    description: 'Learn how to present your culinary creations with artistic flair and elegance.',
     type: 'video',
-    duration: '3h 15m',
-    imageUrl: 'https://picsum.photos/seed/learn3/600/400',
-    progress: 100,
+    duration: '1h 45m',
+    imageUrl: 'https://picsum.photos/seed/plate1/600/400',
+    progress: 75,
   },
   {
     id: 'learn-4',
