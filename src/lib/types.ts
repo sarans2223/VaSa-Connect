@@ -1,0 +1,42 @@
+export type User = {
+  id: string;
+  name: string;
+  email: string;
+  avatarUrl: string;
+  skills: string[];
+  experience: string;
+  desiredJobType: string;
+  locationPreferences: string;
+  industryPreferences: string[];
+  profileCompletion: number;
+};
+
+export type Job = {
+  id: string;
+  title: string;
+  companyName: string;
+  companyLogoUrl: string;
+  location: string;
+  jobType: 'Full-time' | 'Part-time' | 'Contract' | 'Internship';
+  salary?: string;
+  description: string;
+  skillsRequired: string[];
+  industry: string;
+};
+
+export type LearningModule = {
+  id: string;
+  title: string;
+  description: string;
+  type: 'video' | 'article';
+  duration: string;
+  imageUrl: string;
+  progress: number;
+};
+
+export type Team = {
+  id: string;
+  name: string;
+  description: string;
+  members: Pick<User, 'id' | 'name' | 'avatarUrl'>[];
+};
