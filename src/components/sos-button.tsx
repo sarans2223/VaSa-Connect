@@ -45,7 +45,7 @@ export function SosButton() {
         setIsOpen(false);
       },
       (error) => {
-        console.error('Geolocation error:', error);
+        console.error('Geolocation error:', error.message);
         toast({
           title: 'Error capturing location',
           description: `Could not get your location. Please ensure location services are enabled. Error: ${error.message}`,
