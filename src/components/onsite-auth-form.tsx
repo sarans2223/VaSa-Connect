@@ -9,7 +9,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -25,8 +24,8 @@ export function OnsiteAuthForm() {
     setIsLoading(true);
     // Simulate API call
     setTimeout(() => {
-      // Redirect to a dedicated dashboard for onsite members later
-      router.push("/dashboard"); 
+      // Redirect to the jobs page for onsite members
+      router.push("/dashboard/jobs"); 
     }, 1000);
   };
 
