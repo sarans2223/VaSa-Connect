@@ -1,0 +1,77 @@
+"use client";
+
+import { useState } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { KeyRound, Building, UserPlus } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+
+export function OnsiteAuthForm() {
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+    // Simulate API call
+    setTimeout(() => {
+      // Redirect to a dedicated dashboard for onsite members later
+      router.push("/dashboard"); 
+    }, 1000);
+  };
+
+  return (
+    <div className="flex min-h-screen w-full items-center justify-center bg-background px-4">
+      <Card className="w-full max-w-md">
+        <CardHeader className="text-center">
+          <CardTitle className="text-2xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-[#E0BBE4] via-[#957DAD] to-[#D291BC]">
+            Onsite Member Authentication
+          </CardTitle>
+          <CardDescription>
+            Enter your credentials to manage registrations.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="panchayat-id">Panchayat ID</Label>
+              <div className="relative">
+                <Building className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                <Input id="panchayat-id" placeholder="Enter your Panchayat ID" required className="pl-10" />
+              </div>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="password">Panchayat Unique Password</Label>
+              <div className="relative">
+                <KeyRound className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                <Input id="password" type="password" required className="pl-10" />
+              </div>
+            </div>
+            <Button disabled={isLoading} type="submit" className="w-full font-semibold bg-gradient-to-r from-[#E0BBE4] to-[#957DAD] hover:opacity-90 transition-opacity text-primary-foreground">
+              {isLoading ? 'Logging in...' : "Login"}
+            </Button>
+          </form>
+        </CardContent>
+        <CardFooter className="flex-col items-center justify-center text-sm space-y-2">
+            <p>New to the onsite program?</p>
+            <Button variant="outline" asChild>
+                <Link href="/onsite-register">
+                    <UserPlus className="mr-2 h-4 w-4" />
+                    New Panchayat Registration
+                </Link>
+            </Button>
+        </CardFooter>
+      </Card>
+    </div>
+  );
+}

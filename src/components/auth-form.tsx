@@ -137,7 +137,7 @@ export function AuthForm({ type }: AuthFormProps) {
                 </span>
                 <Separator className="flex-1" />
               </div>
-              <Button variant="secondary" className="w-full" onClick={() => router.push('/dashboard')}>
+              <Button variant="secondary" className="w-full" onClick={() => router.push('/onsite-login')}>
                 <Users className="mr-2 h-5 w-5" />
                 Onsite Member Login
               </Button>
