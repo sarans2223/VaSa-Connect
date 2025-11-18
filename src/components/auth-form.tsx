@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Github, KeyRound, Mail, User } from "lucide-react";
+import { Github, KeyRound, Mail, User, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -127,6 +127,23 @@ export function AuthForm({ type }: AuthFormProps) {
               Microsoft
             </Button>
           </div>
+          
+           {type === 'login' && (
+            <>
+              <div className="my-6 flex items-center">
+                <Separator className="flex-1" />
+                <span className="mx-4 text-sm text-muted-foreground">
+                  OR
+                </span>
+                <Separator className="flex-1" />
+              </div>
+              <Button variant="secondary" className="w-full" onClick={() => router.push('/dashboard')}>
+                <Users className="mr-2 h-5 w-5" />
+                Onsite Member Login
+              </Button>
+            </>
+           )}
+
         </CardContent>
         <CardFooter className="justify-center text-sm">
           {type === "login" ? (
