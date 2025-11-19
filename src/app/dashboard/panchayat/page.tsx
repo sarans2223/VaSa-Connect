@@ -8,10 +8,11 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, UserPlus, Users, Briefcase, BarChart } from 'lucide-react';
+import { ArrowRight, UserPlus, Users, Briefcase, BarChart, TrendingUp, BriefcaseBusiness, UsersRound } from 'lucide-react';
+import { Progress } from '@/components/ui/progress';
 
-const panchayatName = 'Gram Panchayat of Exampleville';
-const panchayatId = 'GP-EXMPL-001';
+const panchayatName = 'Sathyamangalam';
+const panchayatId = 'GP-STYM-001';
 
 const dashboardItems = [
   {
@@ -19,15 +20,15 @@ const dashboardItems = [
     description: 'Register new job seekers in your panchayat.',
     href: '/dashboard/panchayat/add-profile',
     icon: UserPlus,
-    count: 120, // Example count
-    countLabel: 'Profiles',
+    count: null,
+    countLabel: 'Add a new person to the registry',
   },
   {
     title: 'Profiles Already Added',
     description: 'View and manage all registered profiles.',
     href: '/dashboard/panchayat/profiles',
     icon: Users,
-    count: 120, // Example count
+    count: 120,
     countLabel: 'Total Profiles',
   },
   {
@@ -35,15 +36,15 @@ const dashboardItems = [
     description: 'Create new job opportunities and match them to profiles.',
     href: '/dashboard/panchayat/post-job',
     icon: Briefcase,
-    count: 15, // Example count
-    countLabel: 'Open Jobs',
+    count: null,
+    countLabel: 'Create a new job and find candidates',
   },
   {
     title: 'Job Current Status',
     description: 'Track the status of all posted jobs.',
     href: '/dashboard/panchayat/job-status',
     icon: BarChart,
-    count: 45, // Example count
+    count: 45,
     countLabel: 'Jobs Assigned',
   },
 ];
@@ -58,6 +59,39 @@ export default function PanchayatDashboard() {
           </h1>
           <p className="text-muted-foreground">Panchayat ID: {panchayatId}</p>
         </div>
+      </div>
+      
+      <div className="grid gap-6 md:grid-cols-3">
+        <Card>
+            <CardHeader className="flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Total Workers Assigned</CardTitle>
+                <UsersRound className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+                <div className="text-2xl font-bold">132</div>
+                <p className="text-xs text-muted-foreground">in active jobs</p>
+            </CardContent>
+        </Card>
+        <Card>
+            <CardHeader className="flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Total Jobs Assigned</CardTitle>
+                <BriefcaseBusiness className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+                <div className="text-2xl font-bold">45</div>
+                <p className="text-xs text-muted-foreground">+12% from last month</p>
+            </CardContent>
+        </Card>
+        <Card>
+            <CardHeader className="flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Panchayat Working Percentage</CardTitle>
+                <TrendingUp className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+                <div className="text-2xl font-bold">78%</div>
+                <Progress value={78} className="h-2 mt-2" />
+            </CardContent>
+        </Card>
       </div>
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-2">
@@ -75,8 +109,14 @@ export default function PanchayatDashboard() {
             </CardHeader>
             <CardContent className="flex-grow flex flex-col justify-end">
                 <div className="mt-4">
-                     <div className="text-3xl font-bold">{item.count}</div>
-                     <p className="text-xs text-muted-foreground">{item.countLabel}</p>
+                     {item.count !== null ? (
+                        <>
+                            <div className="text-3xl font-bold">{item.count}</div>
+                            <p className="text-xs text-muted-foreground">{item.countLabel}</p>
+                        </>
+                     ) : (
+                        <p className="text-sm text-muted-foreground">{item.countLabel}</p>
+                     )}
                 </div>
               <Button asChild className="w-full mt-4 bg-gradient-to-r from-[#E0BBE4] to-[#957DAD] hover:opacity-90 text-primary-foreground">
                 <Link href={item.href}>

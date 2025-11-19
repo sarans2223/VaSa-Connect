@@ -20,10 +20,10 @@ import { Search, Users, Eye, Edit, Trash2 } from "lucide-react";
 
 // Mock data for demonstration
 const mockProfiles = [
-  { id: '1', name: 'Gita Devi', jobsCompleted: 2, benefitedAmount: 5000, status: 'Good' },
-  { id: '2', name: 'Suresh Kumar', jobsCompleted: 0, benefitedAmount: 0, status: 'Yet To Evaluate' },
+  { id: '1', name: 'Lakshmi Priya', jobsCompleted: 2, benefitedAmount: 5000, status: 'Good' },
+  { id: '2', name: 'Kavita Devi', jobsCompleted: 0, benefitedAmount: 0, status: 'Yet To Evaluate' },
   { id: '3', name: 'Meena Kumari', jobsCompleted: 5, benefitedAmount: 12000, status: 'Excellent' },
-  { id: '4', name: 'Ravi Sharma', jobsCompleted: 1, benefitedAmount: 1500, status: 'Bad' },
+  { id: '4', name: 'Anjali Sharma', jobsCompleted: 1, benefitedAmount: 1500, status: 'Bad' },
 ];
 
 const statusColors = {

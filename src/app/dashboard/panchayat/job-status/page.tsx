@@ -11,9 +11,9 @@ import { BarChart, CheckCircle } from "lucide-react";
 
 
 const mockJobs = [
-    { id: '1', name: 'Road Construction Phase 1', workerNames: ['Gita Devi', 'Suresh Kumar'], status: 'Worker Assigned' },
-    { id: '2', name: 'Community Hall Painting', workerNames: [], status: 'Yet To Assign' },
-    { id: '3', name: 'Canal Cleaning', workerNames: ['Meena Kumari'], status: 'Completed' },
+    { id: '1', name: 'Farm Harvesting', workerNames: ['Gita Devi', 'Priya'], status: 'Worker Assigned' },
+    { id: '2', name: 'Washing', workerNames: [], status: 'Yet To Assign' },
+    { id: '3', name: 'Herder', workerNames: ['Meena Kumari'], status: 'Completed' },
 ];
 
 const statusColors = {

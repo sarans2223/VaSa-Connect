@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Briefcase } from "lucide-react";
+import { Briefcase, Sparkles } from "lucide-react";
 
 export default function PostJobAndMatchPage() {
   return (
@@ -28,7 +28,7 @@ export default function PostJobAndMatchPage() {
           <form className="space-y-6">
             <div className="space-y-2">
               <Label htmlFor="job-name">Job Name</Label>
-              <Input id="job-name" placeholder="e.g., Construction Work at Block A" />
+              <Input id="job-name" placeholder="e.g., Farm Harvesting" />
             </div>
             
             <div className="grid sm:grid-cols-3 gap-6">
@@ -46,7 +46,11 @@ export default function PostJobAndMatchPage() {
               </div>
             </div>
 
-            <div className="flex justify-end">
+            <div className="flex justify-between items-center">
+              <Button size="lg" className="bg-gradient-to-r from-[#D291BC] to-[#957DAD] hover:opacity-90 text-white">
+                <Sparkles className="mr-2 h-5 w-5" />
+                AI Profile Matching
+              </Button>
               <Button type="submit" size="lg" className="bg-gradient-to-r from-[#E0BBE4] to-[#957DAD] hover:opacity-90 text-primary-foreground">
                 Post Job & Match
               </Button>
