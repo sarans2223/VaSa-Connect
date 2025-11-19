@@ -22,7 +22,7 @@ export function JobCard({ job, relevanceScore }: JobCardProps) {
     <Card className="transition-all hover:shadow-lg flex flex-col">
       <CardHeader className="flex-row gap-4 items-start">
         <Avatar className="h-14 w-14 rounded-sm">
-          <AvatarImage src={job.companyLogoUrl} alt={job.companyName} data-ai-hint="abstract logo" />
+          <AvatarImage src={job.companyLogoUrl} alt={job.companyName} data-ai-hint="company logo" />
           <AvatarFallback>{job.companyName.charAt(0)}</AvatarFallback>
         </Avatar>
         <div>
