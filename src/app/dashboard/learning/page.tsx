@@ -9,15 +9,42 @@ import {
 } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { mockLearningModules } from "@/lib/data";
-import { BookOpen, Clock } from "lucide-react";
+import { BookOpen, Clock, Languages } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
 
 export default function LearningPage() {
   return (
     <div className="p-4 sm:p-6 lg:p-8 space-y-8">
-      <div className="flex items-center gap-4">
-        <BookOpen className="h-8 w-8 text-primary" />
-        <h1 className="text-3xl font-bold tracking-tight">Learning Hub</h1>
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div className="flex items-center gap-4">
+          <BookOpen className="h-8 w-8 text-primary" />
+          <h1 className="text-3xl font-bold tracking-tight">Learning Hub</h1>
+        </div>
+        <div className="flex items-center gap-2">
+            <Languages className="h-5 w-5 text-muted-foreground" />
+            <Select>
+                <SelectTrigger className="w-full sm:w-[180px]">
+                    <SelectValue placeholder="Filter by language" />
+                </SelectTrigger>
+                <SelectContent>
+                    <SelectItem value="all">All Languages</SelectItem>
+                    <SelectItem value="en">English</SelectItem>
+                    <SelectItem value="hi">Hindi</SelectItem>
+                    <SelectItem value="ta">Tamil</SelectItem>
+                    <SelectItem value="te">Telugu</SelectItem>
+                    <SelectItem value="bn">Bengali</SelectItem>
+                    <SelectItem value="mr">Marathi</SelectItem>
+                </SelectContent>
+            </Select>
+        </div>
       </div>
       <p className="text-muted-foreground max-w-2xl">
         Empower yourself with new skills. Explore our curated courses and articles designed for your growth.
