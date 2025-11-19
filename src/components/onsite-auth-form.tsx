@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from 'next/link';
 import { KeyRound, Building } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -24,8 +25,8 @@ export function OnsiteAuthForm() {
     setIsLoading(true);
     // Simulate API call
     setTimeout(() => {
-      // Redirect to the jobs page for onsite members
-      router.push("/dashboard/jobs"); 
+      // Redirect to the panchayat dashboard for onsite members
+      router.push("/dashboard/panchayat"); 
     }, 1000);
   };
 
