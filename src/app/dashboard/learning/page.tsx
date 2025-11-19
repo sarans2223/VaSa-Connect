@@ -63,6 +63,8 @@ export default function LearningPage() {
                   data-ai-hint={
                     module.title.toLowerCase().includes('cook') ? 'food preparation' :
                     module.title.toLowerCase().includes('plate') ? 'gourmet food' :
+                    module.title.toLowerCase().includes('marketing') ? 'digital marketing' :
+                    module.title.toLowerCase().includes('coding') ? 'laptop code' :
                     'woman working'
                   }
                 />

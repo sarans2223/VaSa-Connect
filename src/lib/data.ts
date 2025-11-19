@@ -69,7 +69,7 @@ export const mockLearningModules: LearningModule[] = [
     description: 'Master the fundamental techniques of professional cooking, from knife skills to sauce making.',
     type: 'video',
     duration: '4h 15m',
-    imageUrl: 'https://picsum.photos/seed/cook1/600/400',
+    imageUrl: 'https://images.unsplash.com/photo-1556911220-bff31c812dba?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxjb29raW5nJTIwa2l0Y2hlbnxlbnwwfHx8fDE3MTc2MTU0OTB8MA&ixlib=rb-4.0.3&q=80&w=1080',
     progress: 40,
   },
   {
@@ -78,7 +78,7 @@ export const mockLearningModules: LearningModule[] = [
     description: 'Learn SEO, SEM, and social media strategies to boost your online presence.',
     type: 'article',
     duration: '45 min read',
-    imageUrl: 'https://picsum.photos/seed/learn2/600/400',
+    imageUrl: 'https://images.unsplash.com/photo-1557862921-37829c790f19?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxkaWdpdGFsJTIwbWFya2V0aW5nfGVufDB8fHx8MTcxNzYxNTU0Nnww&ixlib=rb-4.0.3&q=80&w=1080',
     progress: 0,
   },
   {
@@ -87,7 +87,7 @@ export const mockLearningModules: LearningModule[] = [
     description: 'Learn how to present your culinary creations with artistic flair and elegance.',
     type: 'video',
     duration: '1h 45m',
-    imageUrl: 'https://picsum.photos/seed/plate1/600/400',
+    imageUrl: 'https://images.unsplash.com/photo-1504754524776-8f4f37790774?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxmb29kJTIwcHJlc2VudGF0aW9ufGVufDB8fHx8MTcxNzYxNTU5NXww&ixlib=rb-4.0.3&q=80&w=1080',
     progress: 75,
   },
   {
@@ -96,7 +96,7 @@ export const mockLearningModules: LearningModule[] = [
     description: 'A beginner-friendly introduction to the world of programming with Python.',
     type: 'video',
     duration: '5h',
-    imageUrl: 'https://picsum.photos/seed/learn4/600/400',
+    imageUrl: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxjb2Rpbmd8ZW58MHx8fHwxNzE3NjE1NjM3fDA&ixlib=rb-4.0.3&q=80&w=1080',
     progress: 25,
   },
 ];
