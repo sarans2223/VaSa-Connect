@@ -28,8 +28,12 @@ export default function ProfilePage() {
 
   useEffect(() => {
     const storedName = localStorage.getItem('userName');
+    const storedEmail = localStorage.getItem('userEmail');
     if (storedName) {
       setUser(prevUser => ({ ...prevUser, name: storedName }));
+    }
+    if (storedEmail) {
+      setUser(prevUser => ({ ...prevUser, email: storedEmail }));
     }
   }, []);
 
@@ -101,7 +105,7 @@ export default function ProfilePage() {
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="email">Email</Label>
-                  <Input id="email" type="email" defaultValue={user.email} disabled />
+                  <Input id="email" type="email" value={user.email} disabled />
                 </div>
               </div>
               <div className="space-y-2">

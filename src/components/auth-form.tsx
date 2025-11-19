@@ -49,6 +49,7 @@ export function AuthForm({ type }: AuthFormProps) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -57,6 +58,7 @@ export function AuthForm({ type }: AuthFormProps) {
     if (type === 'signup') {
       localStorage.setItem('userName', name);
     }
+    localStorage.setItem('userEmail', email);
     
     // Simulate API call
     setTimeout(() => {
@@ -107,6 +109,8 @@ export function AuthForm({ type }: AuthFormProps) {
                   placeholder="savitri@example.com"
                   required
                   className="pl-10"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                 />
               </div>
             </div>
