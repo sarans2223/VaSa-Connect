@@ -1,9 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { KeyRound, Building, UserPlus } from "lucide-react";
+import { KeyRound, Building } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -62,15 +61,6 @@ export function OnsiteAuthForm() {
             </Button>
           </form>
         </CardContent>
-        <CardFooter className="flex-col items-center justify-center text-sm space-y-2">
-            <p>New to the onsite program?</p>
-            <Button variant="outline" asChild>
-                <Link href="/onsite-register">
-                    <UserPlus className="mr-2 h-4 w-4" />
-                    New Panchayat Registration
-                </Link>
-            </Button>
-        </CardFooter>
       </Card>
     </div>
   );
