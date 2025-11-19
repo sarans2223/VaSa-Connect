@@ -1,3 +1,4 @@
+
 import {
   Card,
   CardContent,
@@ -47,9 +48,14 @@ export default function JobsPage() {
                   <SelectContent>
                     <SelectItem value="all">All Locations</SelectItem>
                     <SelectItem value="mumbai">Mumbai, MH</SelectItem>
-                    <SelectItem value="delhi">Delhi, NCR</SelectItem>
-                    <SelectItem value="bangalore">Bangalore, KA</SelectItem>
                     <SelectItem value="pune">Pune, MH</SelectItem>
+                    <SelectItem value="nagpur">Nagpur, MH</SelectItem>
+                    <SelectItem value="bangalore">Bangalore, KA</SelectItem>
+                    <SelectItem value="mysuru">Mysuru, KA</SelectItem>
+                    <SelectItem value="mangaluru">Mangaluru, KA</SelectItem>
+                    <SelectItem value="gurgaon">Gurgaon, HR</SelectItem>
+                    <SelectItem value="faridabad">Faridabad, HR</SelectItem>
+                    <SelectItem value="delhi">Delhi, NCR</SelectItem>
                     <SelectItem value="jaipur">Jaipur, RJ</SelectItem>
                     <SelectItem value="chennai">Chennai, TN</SelectItem>
                     <SelectItem value="coimbatore">Coimbatore, TN</SelectItem>
