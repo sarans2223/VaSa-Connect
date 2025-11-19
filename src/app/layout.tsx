@@ -4,7 +4,7 @@ import { Toaster } from "@/components/ui/toaster";
 
 export const metadata: Metadata = {
   title: "VaSa",
-  description: "VaSa: Women's Empowerment Hub",
+  description: "Her Dreams, Our Mission! - VaSa: Women's Empowerment Hub",
 };
 
 export default function RootLayout({

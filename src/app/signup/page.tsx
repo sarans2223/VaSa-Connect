@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
     title: 'Sign Up | VaSa',
-    description: "Create an account with VaSa.",
+    description: "Create an account with VaSa. Her Dreams, Our Mission!",
 };
 
 export default function SignupPage() {

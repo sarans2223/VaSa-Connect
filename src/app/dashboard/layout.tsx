@@ -4,7 +4,7 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Dashboard | VaSa",
-  description: "Your personal dashboard on VaSa.",
+  description: "Her Dreams, Our Mission!",
 };
 
 export default function DashboardLayout({
