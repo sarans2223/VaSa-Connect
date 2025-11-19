@@ -12,7 +12,8 @@ import {
   UserPlus,
   Users,
   BookOpen,
-  UserCircle
+  UserCircle,
+  DollarSign
 } from "lucide-react";
 
 import { cn } from "@/lib/utils";
@@ -40,6 +41,7 @@ const regularMenuItems = [
     { href: "/dashboard/learning", label: "Learning Hub", icon: BookOpen },
     { href: "/dashboard/teams", label: "My Team", icon: Users },
     { href: "/dashboard/profile", label: "My Profile", icon: UserCircle },
+    { href: "/dashboard/monetization", label: "Monetization", icon: DollarSign },
 ];
 
 export function DashboardNav() {
