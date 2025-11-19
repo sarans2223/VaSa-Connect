@@ -5,11 +5,11 @@ export const mockUser: User = {
   name: 'Savitri Bai',
   email: 'savitri.bai@example.com',
   avatarUrl: 'https://picsum.photos/seed/user1/100/100',
-  skills: ['House Decoration', 'Plate Decoration for Function', 'Event Planning', 'Catering'],
-  experience: '5+ years as a full-stack developer and team lead in the tech industry. Passionate about building scalable applications and mentoring junior developers.',
+  skills: ['House Decoration', 'Plate Decoration for Function', 'Event Planning', 'Catering', 'Cooking'],
+  experience: 'Over 5 years of experience in managing household functions, organizing community events, and providing high-quality catering services. Specializes in traditional and contemporary decor.',
   desiredJobType: 'Full-time',
   locationPreferences: 'Remote',
-  industryPreferences: ['Technology', 'Education'],
+  industryPreferences: ['Hospitality', 'Events', 'Home Services'],
   profileCompletion: 75,
 };
 
