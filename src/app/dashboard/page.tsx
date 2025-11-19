@@ -1,3 +1,6 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { ArrowRight, BookOpen, Briefcase, UserCircle, Users } from "lucide-react";
 import {
@@ -43,11 +46,22 @@ const featureCards = [
 ];
 
 export default function DashboardPage() {
+  const [userName, setUserName] = useState('');
+
+  useEffect(() => {
+    const storedName = localStorage.getItem('userName');
+    if (storedName) {
+      setUserName(storedName.split(" ")[0]);
+    } else {
+      setUserName(mockUser.name.split(" ")[0]);
+    }
+  }, []);
+
   return (
     <div className="p-4 sm:p-6 lg:p-8 space-y-8">
       <div className="space-y-2">
         <h1 className="text-3xl font-bold tracking-tight">
-          Welcome back, {mockUser.name.split(" ")[0]}!
+          Welcome back, {userName}!
         </h1>
         <p className="text-muted-foreground">
           Here&apos;s your central hub for safety, growth, and opportunity.

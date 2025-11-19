@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState }from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Github, KeyRound, Mail, User, Users } from "lucide-react";
@@ -48,10 +48,16 @@ const GoogleIcon = (props: React.SVGProps<SVGSVGElement>) => (
 export function AuthForm({ type }: AuthFormProps) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+  const [name, setName] = useState('');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
+
+    if (type === 'signup') {
+      localStorage.setItem('userName', name);
+    }
+    
     // Simulate API call
     setTimeout(() => {
       router.push("/dashboard");
@@ -80,7 +86,14 @@ export function AuthForm({ type }: AuthFormProps) {
                 <Label htmlFor="name">Full Name</Label>
                 <div className="relative">
                   <User className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                  <Input id="name" placeholder="Savitri Bai" required className="pl-10" />
+                  <Input 
+                    id="name" 
+                    placeholder="Savitri Bai" 
+                    required 
+                    className="pl-10" 
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                  />
                 </div>
               </div>
             )}
