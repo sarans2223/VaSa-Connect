@@ -47,22 +47,102 @@ export default function JobsPage() {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="all">All Locations</SelectItem>
-                    <SelectItem value="mumbai">Mumbai, MH</SelectItem>
-                    <SelectItem value="pune">Pune, MH</SelectItem>
-                    <SelectItem value="nagpur">Nagpur, MH</SelectItem>
+                    <SelectItem value="remote">Remote</SelectItem>
+                    {/* Andhra Pradesh */}
+                    <SelectItem value="visakhapatnam">Visakhapatnam, AP</SelectItem>
+                    <SelectItem value="vijayawada">Vijayawada, AP</SelectItem>
+                    <SelectItem value="guntur">Guntur, AP</SelectItem>
+                    {/* Arunachal Pradesh */}
+                    <SelectItem value="itanagar">Itanagar, AR</SelectItem>
+                    <SelectItem value="tawang">Tawang, AR</SelectItem>
+                    {/* Assam */}
+                    <SelectItem value="guwahati">Guwahati, AS</SelectItem>
+                    <SelectItem value="dibrugarh">Dibrugarh, AS</SelectItem>
+                    <SelectItem value="silchar">Silchar, AS</SelectItem>
+                    {/* Bihar */}
+                    <SelectItem value="patna">Patna, BR</SelectItem>
+                    <SelectItem value="gaya">Gaya, BR</SelectItem>
+                    <SelectItem value="muzaffarpur">Muzaffarpur, BR</SelectItem>
+                    {/* Chhattisgarh */}
+                    <SelectItem value="raipur">Raipur, CG</SelectItem>
+                    <SelectItem value="bilaspur">Bilaspur, CG</SelectItem>
+                    {/* Goa */}
+                    <SelectItem value="panaji">Panaji, GA</SelectItem>
+                    <SelectItem value="margao">Margao, GA</SelectItem>
+                    {/* Gujarat */}
+                    <SelectItem value="ahmedabad">Ahmedabad, GJ</SelectItem>
+                    <SelectItem value="surat">Surat, GJ</SelectItem>
+                    <SelectItem value="vadodara">Vadodara, GJ</SelectItem>
+                    {/* Haryana */}
+                    <SelectItem value="gurgaon">Gurgaon, HR</SelectItem>
+                    <SelectItem value="faridabad">Faridabad, HR</SelectItem>
+                    <SelectItem value="panipat">Panipat, HR</SelectItem>
+                    {/* Himachal Pradesh */}
+                    <SelectItem value="shimla">Shimla, HP</SelectItem>
+                    <SelectItem value="manali">Manali, HP</SelectItem>
+                    {/* Jharkhand */}
+                    <SelectItem value="ranchi">Ranchi, JH</SelectItem>
+                    <SelectItem value="jamshedpur">Jamshedpur, JH</SelectItem>
+                    {/* Karnataka */}
                     <SelectItem value="bangalore">Bangalore, KA</SelectItem>
                     <SelectItem value="mysuru">Mysuru, KA</SelectItem>
                     <SelectItem value="mangaluru">Mangaluru, KA</SelectItem>
-                    <SelectItem value="gurgaon">Gurgaon, HR</SelectItem>
-                    <SelectItem value="faridabad">Faridabad, HR</SelectItem>
-                    <SelectItem value="delhi">Delhi, NCR</SelectItem>
+                    {/* Kerala */}
+                    <SelectItem value="thiruvananthapuram">Thiruvananthapuram, KL</SelectItem>
+                    <SelectItem value="kochi">Kochi, KL</SelectItem>
+                    <SelectItem value="kozhikode">Kozhikode, KL</SelectItem>
+                    {/* Madhya Pradesh */}
+                    <SelectItem value="indore">Indore, MP</SelectItem>
+                    <SelectItem value="bhopal">Bhopal, MP</SelectItem>
+                    <SelectItem value="jabalpur">Jabalpur, MP</SelectItem>
+                    {/* Maharashtra */}
+                    <SelectItem value="mumbai">Mumbai, MH</SelectItem>
+                    <SelectItem value="pune">Pune, MH</SelectItem>
+                    <SelectItem value="nagpur">Nagpur, MH</SelectItem>
+                    {/* Manipur */}
+                    <SelectItem value="imphal">Imphal, MN</SelectItem>
+                    {/* Meghalaya */}
+                    <SelectItem value="shillong">Shillong, ML</SelectItem>
+                    {/* Mizoram */}
+                    <SelectItem value="aizawl">Aizawl, MZ</SelectItem>
+                    {/* Nagaland */}
+                    <SelectItem value="kohima">Kohima, NL</SelectItem>
+                    <SelectItem value="dimapur">Dimapur, NL</SelectItem>
+                    {/* Odisha */}
+                    <SelectItem value="bhubaneswar">Bhubaneswar, OD</SelectItem>
+                    <SelectItem value="cuttack">Cuttack, OD</SelectItem>
+                    {/* Punjab */}
+                    <SelectItem value="ludhiana">Ludhiana, PB</SelectItem>
+                    <SelectItem value="amritsar">Amritsar, PB</SelectItem>
+                    {/* Rajasthan */}
                     <SelectItem value="jaipur">Jaipur, RJ</SelectItem>
+                    <SelectItem value="jodhpur">Jodhpur, RJ</SelectItem>
+                    <SelectItem value="udaipur">Udaipur, RJ</SelectItem>
+                    {/* Sikkim */}
+                    <SelectItem value="gangtok">Gangtok, SK</SelectItem>
+                    {/* Tamil Nadu */}
                     <SelectItem value="chennai">Chennai, TN</SelectItem>
                     <SelectItem value="coimbatore">Coimbatore, TN</SelectItem>
                     <SelectItem value="madurai">Madurai, TN</SelectItem>
-                    <SelectItem value="tiruchirappalli">Tiruchirappalli, TN</SelectItem>
-                    <SelectItem value="salem">Salem, TN</SelectItem>
-                    <SelectItem value="remote">Remote</SelectItem>
+                    {/* Telangana */}
+                    <SelectItem value="hyderabad">Hyderabad, TG</SelectItem>
+                    <SelectItem value="warangal">Warangal, TG</SelectItem>
+                    {/* Tripura */}
+                    <SelectItem value="agartala">Agartala, TR</SelectItem>
+                    {/* Uttar Pradesh */}
+                    <SelectItem value="lucknow">Lucknow, UP</SelectItem>
+                    <SelectItem value="kanpur">Kanpur, UP</SelectItem>
+                    <SelectItem value="agra">Agra, UP</SelectItem>
+                    {/* Uttarakhand */}
+                    <SelectItem value="dehradun">Dehradun, UK</SelectItem>
+                    <SelectItem value="haridwar">Haridwar, UK</SelectItem>
+                    {/* West Bengal */}
+                    <SelectItem value="kolkata">Kolkata, WB</SelectItem>
+                    <SelectItem value="darjeeling">Darjeeling, WB</SelectItem>
+                    {/* Union Territories */}
+                    <SelectItem value="delhi">Delhi, NCR</SelectItem>
+                    <SelectItem value="chandigarh">Chandigarh, CH</SelectItem>
+                    <SelectItem value="puducherry">Puducherry, PY</SelectItem>
                   </SelectContent>
               </Select>
               <Select>
