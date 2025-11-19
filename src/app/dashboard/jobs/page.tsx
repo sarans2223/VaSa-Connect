@@ -51,6 +51,11 @@ export default function JobsPage() {
                     <SelectItem value="bangalore">Bangalore, KA</SelectItem>
                     <SelectItem value="pune">Pune, MH</SelectItem>
                     <SelectItem value="jaipur">Jaipur, RJ</SelectItem>
+                    <SelectItem value="chennai">Chennai, TN</SelectItem>
+                    <SelectItem value="coimbatore">Coimbatore, TN</SelectItem>
+                    <SelectItem value="madurai">Madurai, TN</SelectItem>
+                    <SelectItem value="tiruchirappalli">Tiruchirappalli, TN</SelectItem>
+                    <SelectItem value="salem">Salem, TN</SelectItem>
                     <SelectItem value="remote">Remote</SelectItem>
                   </SelectContent>
               </Select>
