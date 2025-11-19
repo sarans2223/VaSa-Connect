@@ -1,3 +1,6 @@
+"use client";
+
+import { useState, useEffect } from "react";
 import {
   Avatar,
   AvatarFallback,
@@ -16,14 +19,24 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
 import { Textarea } from "@/components/ui/textarea";
-import { mockUser } from "@/lib/data";
-import { User, Edit, Save } from "lucide-react";
+import { mockUser as defaultUser } from "@/lib/data";
+import { User as UserIcon, Edit, Save } from "lucide-react";
+import type { User } from "@/lib/types";
 
 export default function ProfilePage() {
+  const [user, setUser] = useState<User>(defaultUser);
+
+  useEffect(() => {
+    const storedName = localStorage.getItem('userName');
+    if (storedName) {
+      setUser(prevUser => ({ ...prevUser, name: storedName }));
+    }
+  }, []);
+
   return (
     <div className="p-4 sm:p-6 lg:p-8 space-y-8">
       <div className="flex items-center gap-4">
-        <User className="h-8 w-8 text-primary" />
+        <UserIcon className="h-8 w-8 text-primary" />
         <h1 className="text-3xl font-bold tracking-tight">My Profile</h1>
       </div>
       <div className="grid gap-8 lg:grid-cols-3">
@@ -31,20 +44,20 @@ export default function ProfilePage() {
           <Card>
             <CardHeader className="items-center text-center">
               <Avatar className="h-24 w-24 mb-4">
-                <AvatarImage src={mockUser.avatarUrl} alt={mockUser.name} />
-                <AvatarFallback>{mockUser.name.charAt(0)}</AvatarFallback>
+                <AvatarImage src={user.avatarUrl} alt={user.name} />
+                <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
               </Avatar>
-              <CardTitle className="text-2xl">{mockUser.name}</CardTitle>
-              <CardDescription>{mockUser.email}</CardDescription>
+              <CardTitle className="text-2xl">{user.name}</CardTitle>
+              <CardDescription>{user.email}</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="space-y-2">
                 <div className="flex justify-between text-sm">
                   <span className="font-medium">Profile Completion</span>
-                  <span>{mockUser.profileCompletion}%</span>
+                  <span>{user.profileCompletion}%</span>
                 </div>
                 <Progress
-                  value={mockUser.profileCompletion}
+                  value={user.profileCompletion}
                   className="h-2"
                 />
               </div>
@@ -59,7 +72,7 @@ export default function ProfilePage() {
             </CardHeader>
             <CardContent>
               <div className="flex flex-wrap gap-2">
-                {mockUser.skills.map((skill) => (
+                {user.skills.map((skill) => (
                   <Badge key={skill} variant="secondary" className="text-sm">
                     {skill}
                   </Badge>
@@ -84,18 +97,18 @@ export default function ProfilePage() {
               <div className="grid sm:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="name">Full Name</Label>
-                  <Input id="name" defaultValue={mockUser.name} />
+                  <Input id="name" defaultValue={user.name} />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="email">Email</Label>
-                  <Input id="email" type="email" defaultValue={mockUser.email} disabled />
+                  <Input id="email" type="email" defaultValue={user.email} disabled />
                 </div>
               </div>
               <div className="space-y-2">
                 <Label htmlFor="experience">Experience Summary</Label>
                 <Textarea
                   id="experience"
-                  defaultValue={mockUser.experience}
+                  defaultValue={user.experience}
                   className="min-h-[120px]"
                   placeholder="Tell us about your professional experience..."
                 />
@@ -103,16 +116,16 @@ export default function ProfilePage() {
               <div className="grid sm:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="job-type">Desired Job Type</Label>
-                  <Input id="job-type" defaultValue={mockUser.desiredJobType} />
+                  <Input id="job-type" defaultValue={user.desiredJobType} />
                 </div>
                  <div className="space-y-2">
                   <Label htmlFor="location">Location Preferences</Label>
-                  <Input id="location" defaultValue={mockUser.locationPreferences} />
+                  <Input id="location" defaultValue={user.locationPreferences} />
                 </div>
               </div>
                <div className="space-y-2">
                   <Label htmlFor="industries">Industry Preferences</Label>
-                  <Input id="industries" defaultValue={mockUser.industryPreferences.join(', ')} placeholder="e.g., Technology, Healthcare, Education" />
+                  <Input id="industries" defaultValue={user.industryPreferences.join(', ')} placeholder="e.g., Technology, Healthcare, Education" />
                 </div>
                 <div className="flex justify-end">
                     <Button className="bg-gradient-to-r from-[#E0BBE4] to-[#957DAD] hover:opacity-90 text-primary-foreground">

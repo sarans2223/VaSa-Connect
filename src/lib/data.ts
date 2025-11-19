@@ -5,7 +5,7 @@ export const mockUser: User = {
   name: 'Savitri Bai',
   email: 'savitri.bai@example.com',
   avatarUrl: 'https://picsum.photos/seed/user1/100/100',
-  skills: ['React', 'Node.js', 'TypeScript', 'Project Management', 'Public Speaking'],
+  skills: ['House Decoration', 'Plate Decoration for Function', 'Event Planning', 'Catering'],
   experience: '5+ years as a full-stack developer and team lead in the tech industry. Passionate about building scalable applications and mentoring junior developers.',
   desiredJobType: 'Full-time',
   locationPreferences: 'Remote',
