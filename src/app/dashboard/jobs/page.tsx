@@ -37,10 +37,23 @@ export default function JobsPage() {
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
                 <Input placeholder="Search by title or skill..." className="pl-10" />
               </div>
-              <div className="relative">
-                <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                <Input placeholder="Location" className="pl-10" />
-              </div>
+              <Select>
+                  <SelectTrigger>
+                    <div className="flex items-center gap-2">
+                        <MapPin className="h-5 w-5 text-muted-foreground" />
+                        <SelectValue placeholder="Location" />
+                    </div>
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Locations</SelectItem>
+                    <SelectItem value="mumbai">Mumbai, MH</SelectItem>
+                    <SelectItem value="delhi">Delhi, NCR</SelectItem>
+                    <SelectItem value="bangalore">Bangalore, KA</SelectItem>
+                    <SelectItem value="pune">Pune, MH</SelectItem>
+                    <SelectItem value="jaipur">Jaipur, RJ</SelectItem>
+                    <SelectItem value="remote">Remote</SelectItem>
+                  </SelectContent>
+              </Select>
               <Select>
                 <SelectTrigger>
                   <SelectValue placeholder="Job Type" />
@@ -57,10 +70,15 @@ export default function JobsPage() {
                   <SelectValue placeholder="Industry" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="tech">Technology</SelectItem>
-                  <SelectItem value="design">Design</SelectItem>
-                  <SelectItem value="software">Software</SelectItem>
-                  <SelectItem value="data">Data Science</SelectItem>
+                  <SelectItem value="all">All Industries</SelectItem>
+                  <SelectItem value="hospitality">Hospitality</SelectItem>
+                  <SelectItem value="events">Events</SelectItem>
+                  <SelectItem value="home-services">Home Services</SelectItem>
+                  <SelectItem value="domestic-services">Domestic Services</SelectItem>
+                  <SelectItem value="child-care">Child Care</SelectItem>
+                  <SelectItem value="healthcare">Healthcare</SelectItem>
+                  <SelectItem value="art-craft">Art & Craft</SelectItem>
+                  <SelectItem value="catering">Catering</SelectItem>
                 </SelectContent>
               </Select>
             </div>
