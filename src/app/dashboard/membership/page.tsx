@@ -1,3 +1,4 @@
+
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -23,7 +24,9 @@ const membershipTiers = [
     ],
     buttonText: "Current Plan",
     variant: "secondary",
-    icon: Leaf
+    icon: Leaf,
+    iconClassName: "text-green-500",
+    highlight: false,
   },
   {
     name: "Vasa Bloom",
@@ -39,7 +42,8 @@ const membershipTiers = [
     buttonText: "Upgrade to Bloom",
     variant: "default",
     highlight: true,
-    icon: Gem
+    icon: Gem,
+    iconClassName: "text-sky-500",
   },
   {
     name: "Vasa Empower",
@@ -55,7 +59,8 @@ const membershipTiers = [
     ],
     buttonText: "Upgrade to Empower",
     variant: "default",
-    icon: Crown
+    icon: Crown,
+    iconClassName: "text-yellow-500",
   }
 ]
 
@@ -76,7 +81,7 @@ export default function MembershipPage() {
           return (
             <Card key={tier.name} className={`flex flex-col h-full ${tier.highlight ? 'border-2 border-primary shadow-2xl transform scale-105' : ''}`}>
               <CardHeader className="items-center text-center">
-                 <Icon className={`h-12 w-12 mb-4 ${tier.highlight ? 'text-primary' : 'text-muted-foreground'}`} />
+                 <Icon className={`h-12 w-12 mb-4 ${tier.highlight ? 'text-primary' : tier.iconClassName || 'text-muted-foreground'}`} />
                 <CardTitle className={`text-3xl font-extrabold ${tier.highlight ? 'bg-clip-text text-transparent bg-gradient-to-r from-pink-400 via-purple-500 to-indigo-500' : ''}`}>
                     {tier.name}
                 </CardTitle>
