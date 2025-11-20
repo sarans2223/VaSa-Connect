@@ -15,6 +15,7 @@ import {
   UserCircle,
   DollarSign,
   Gem,
+  Shield,
 } from "lucide-react";
 
 import { cn } from "@/lib/utils";
@@ -44,6 +45,7 @@ const regularMenuItems = [
     { href: "/dashboard/profile", label: "My Profile", icon: UserCircle },
     { href: "/dashboard/monetization", label: "Monetization", icon: DollarSign },
     { href: "/dashboard/membership", label: "Membership", icon: Gem },
+    { href: "/dashboard/safety", label: "Safety Settings", icon: Shield },
 ];
 
 export function DashboardNav() {
