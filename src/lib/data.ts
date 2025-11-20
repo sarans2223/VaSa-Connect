@@ -119,8 +119,8 @@ export const mockLearningModules: LearningModule[] = [
 export const mockTeams: Team[] = [
   {
     id: 'team-1',
-    name: 'Artisans United',
-    description: 'A collective of women artisans creating and selling handmade crafts.',
+    name: 'Sakthi Women Catering',
+    description: 'A collective of talented home chefs providing catering for local events and functions.',
     members: [
       { id: 'user-1', name: 'Savitri Bai', avatarUrl: 'https://picsum.photos/seed/user1/100/100' },
       { id: 'user-2', name: 'Priya Kaur', avatarUrl: 'https://picsum.photos/seed/user2/100/100' },
@@ -129,10 +129,19 @@ export const mockTeams: Team[] = [
   },
   {
     id: 'team-2',
-    name: 'Tech Forward',
-    description: 'A group for women in tech to collaborate on projects and support each other.',
+    name: 'Pengal Farm Working & Co',
+    description: 'A team dedicated to organic farming, and selling fresh produce at local markets.',
     members: [
       { id: 'user-1', name: 'Savitri Bai', avatarUrl: 'https://picsum.photos/seed/user1/100/100' },
+    ],
+  },
+  {
+    id: 'team-3',
+    name: 'Kalaiveena Artisans',
+    description: 'A group for women artisans to collaborate on projects, share techniques, and sell handmade crafts.',
+    members: [
+      { id: 'user-4', name: 'Meena Kumari', avatarUrl: 'https://picsum.photos/seed/user4/100/100' },
+      { id: 'user-5', name: 'Lakshmi Devi', avatarUrl: 'https://picsum.photos/seed/user5/100/100' },
     ],
   },
 ];
