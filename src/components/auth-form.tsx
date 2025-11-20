@@ -4,7 +4,7 @@
 import { useState }from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Github, KeyRound, Mail, User, Users } from "lucide-react";
+import { Github, KeyRound, Mail, User, Users, Eye, EyeOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -54,6 +54,7 @@ export function AuthForm({ type }: AuthFormProps) {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const { toast } = useToast();
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -147,14 +148,23 @@ export function AuthForm({ type }: AuthFormProps) {
               <Label htmlFor="password">Password</Label>
               <div className="relative">
                 <KeyRound className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                <Input 
-                  id="password" 
-                  type="password" 
-                  required 
-                  className="pl-10"
+                <Input
+                  id="password"
+                  type={showPassword ? 'text' : 'password'}
+                  required
+                  className="pl-10 pr-10"
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)} 
+                  onChange={(e) => setPassword(e.target.value)}
                 />
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  className="absolute right-1 top-1/2 h-7 w-7 -translate-y-1/2 text-muted-foreground"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                </Button>
               </div>
             </div>
             <Button disabled={isLoading} type="submit" className="w-full font-semibold bg-gradient-to-r from-[#E0BBE4] to-[#957DAD] hover:opacity-90 transition-opacity text-primary-foreground">

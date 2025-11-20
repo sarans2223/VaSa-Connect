@@ -1,9 +1,10 @@
+
 "use client";
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from 'next/link';
-import { KeyRound, Building } from "lucide-react";
+import { KeyRound, Building, Eye, EyeOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -19,6 +20,7 @@ import { Label } from "@/components/ui/label";
 export function OnsiteAuthForm() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -54,7 +56,21 @@ export function OnsiteAuthForm() {
               <Label htmlFor="password">Panchayat Unique Password</Label>
               <div className="relative">
                 <KeyRound className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                <Input id="password" type="password" required className="pl-10" />
+                <Input
+                  id="password"
+                  type={showPassword ? 'text' : 'password'}
+                  required
+                  className="pl-10 pr-10"
+                />
+                 <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  className="absolute right-1 top-1/2 h-7 w-7 -translate-y-1/2 text-muted-foreground"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                </Button>
               </div>
             </div>
             <Button disabled={isLoading} type="submit" className="w-full font-semibold bg-gradient-to-r from-[#E0BBE4] to-[#957DAD] hover:opacity-90 transition-opacity text-primary-foreground">
