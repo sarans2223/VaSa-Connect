@@ -9,6 +9,7 @@ export type User = {
   locationPreferences: string;
   industryPreferences: string[];
   rating: number;
+  membership: 'Rise' | 'Bloom' | 'Empower';
 };
 
 export type Job = {

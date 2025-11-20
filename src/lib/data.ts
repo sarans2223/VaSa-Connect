@@ -11,6 +11,7 @@ export const mockUser: User = {
   locationPreferences: 'Remote',
   industryPreferences: ['Hospitality', 'Events', 'Home Services'],
   rating: 4.5,
+  membership: 'Rise',
 };
 
 export const mockJobs: Job[] = [

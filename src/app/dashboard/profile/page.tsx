@@ -21,8 +21,27 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
 import { mockUser as defaultUser } from "@/lib/data";
-import { User as UserIcon, Edit, Save, UploadCloud, PiggyBank, Star } from "lucide-react";
+import { User as UserIcon, Edit, Save, UploadCloud, PiggyBank, Star, Leaf, Flower2, Gem } from "lucide-react";
 import type { User } from "@/lib/types";
+
+const membershipBadges = {
+  Rise: {
+    label: "Vasa Rise Member",
+    icon: Leaf,
+    className: "bg-green-100 text-green-800 border-green-200 hover:bg-green-100",
+  },
+  Bloom: {
+    label: "Vasa Bloom Member",
+    icon: Flower2,
+    className: "bg-pink-100 text-pink-800 border-pink-200 hover:bg-pink-100",
+  },
+  Empower: {
+    label: "Vasa Empower Member",
+    icon: Gem,
+    className: "bg-purple-100 text-purple-800 border-purple-200 hover:bg-purple-100",
+  },
+};
+
 
 export default function ProfilePage() {
   const [user, setUser] = useState<User>(defaultUser);
@@ -52,6 +71,18 @@ export default function ProfilePage() {
     return stars;
   };
 
+  const MembershipBadge = () => {
+    const badge = membershipBadges[user.membership];
+    if (!badge) return null;
+    const Icon = badge.icon;
+    return (
+      <Badge variant="outline" className={`mt-2 ${badge.className}`}>
+        <Icon className="mr-2 h-4 w-4" />
+        {badge.label}
+      </Badge>
+    );
+  };
+
   return (
     <div className="p-4 sm:p-6 lg:p-8 space-y-8">
        <div className="flex items-center justify-between gap-4">
@@ -76,6 +107,7 @@ export default function ProfilePage() {
               </Avatar>
               <CardTitle className="text-2xl">{user.name}</CardTitle>
               <CardDescription>{user.email}</CardDescription>
+              <MembershipBadge />
             </CardHeader>
             <CardContent className="space-y-4">
                <div className="space-y-2">
