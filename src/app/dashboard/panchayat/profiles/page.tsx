@@ -56,10 +56,22 @@ export default function ProfilesListPage() {
 
   const sortedAndFilteredProfiles = mockProfiles
     .sort((a, b) => {
-        // Sorts "Not Yet Assigned" (jobsCompleted: 0) before "Assigned"
-        if (a.jobsCompleted === 0 && b.jobsCompleted > 0) return -1;
-        if (a.jobsCompleted > 0 && b.jobsCompleted === 0) return 1;
-        return a.name.localeCompare(b.name); // Secondary sort by name
+        // Separate into assigned and not-yet-assigned
+        const aIsAssigned = a.jobsCompleted > 0;
+        const bIsAssigned = b.jobsCompleted > 0;
+
+        if (!aIsAssigned && bIsAssigned) return -1; // a (not assigned) comes before b (assigned)
+        if (aIsAssigned && !bIsAssigned) return 1;  // b (not assigned) comes before a (assigned)
+
+        // If both are assigned, sort by jobsCompleted descending
+        if (aIsAssigned && bIsAssigned) {
+            if (b.jobsCompleted !== a.jobsCompleted) {
+                return b.jobsCompleted - a.jobsCompleted;
+            }
+        }
+        
+        // For profiles with the same assignment status and job count, sort by name
+        return a.name.localeCompare(b.name);
     })
     .filter(profile => {
         if (filter === 'assigned') {
