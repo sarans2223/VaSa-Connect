@@ -7,7 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { BarChart, CheckCircle } from "lucide-react";
+import { BarChart, CheckCircle, UserPlus } from "lucide-react";
 
 
 const mockJobs = [
@@ -67,6 +67,12 @@ export default function JobStatusPage() {
                     <Button className="bg-green-600 hover:bg-green-700 text-white">
                         <CheckCircle className="mr-2 h-4 w-4" />
                         Mark Completed
+                    </Button>
+                )}
+                {job.status === 'Yet To Assign' && (
+                    <Button>
+                        <UserPlus className="mr-2 h-4 w-4" />
+                        Assign Workers
                     </Button>
                 )}
             </CardFooter>
