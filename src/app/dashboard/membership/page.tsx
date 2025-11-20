@@ -7,76 +7,101 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Gem, Award, Star, Bell, CheckCircle } from "lucide-react";
+import { Gem, CheckCircle, Award, Star, Bell } from "lucide-react";
 
-const premiumBenefits = [
-    {
-        icon: Award,
-        title: "Skill Tests & Certification",
-        description: "Prove your expertise by taking skill tests and earn official certificates upon passing.",
-    },
-    {
-        icon: Star,
-        title: "Premium Profile Badge",
-        description: "Stand out to recruiters with a special badge on your profile, marking you as a top worker.",
-    },
-    {
-        icon: Bell,
-        title: "Priority Job Notifications",
-        description: "Be the first to know about new job opportunities that match your profile.",
-    },
-    {
-        icon: CheckCircle,
-        title: "Enhanced Visibility",
-        description: "Your profile will be highlighted and recommended to top recruiters in your domain.",
-    }
+const membershipTiers = [
+  {
+    name: "Vasa Rise",
+    tagline: "Every woman rising in life",
+    price: "Free",
+    priceSuffix: "",
+    benefits: [
+      "Access to job listings",
+      "Create a professional profile",
+      "Join community teams",
+      "Access free learning modules",
+    ],
+    buttonText: "Current Plan",
+    variant: "secondary"
+  },
+  {
+    name: "Vasa Bloom",
+    tagline: "Blooming into strength and skills",
+    price: "₹99",
+    priceSuffix: "/month",
+    benefits: [
+      "Everything in Vasa Rise, plus:",
+      "Skill Tests & Basic Certification",
+      "Priority Job Notifications",
+      "'Blooming' profile badge",
+    ],
+    buttonText: "Upgrade to Bloom",
+    variant: "default",
+    highlight: true,
+  },
+  {
+    name: "Vasa Empower",
+    tagline: "Highest empowerment + opportunities",
+    price: "₹199",
+    priceSuffix: "/month",
+    benefits: [
+      "Everything in Vasa Bloom, plus:",
+      "Advanced Certifications",
+      "Enhanced profile visibility to recruiters",
+      "'Empowered' premium profile badge",
+      "Direct mentorship opportunities",
+    ],
+    buttonText: "Upgrade to Empower",
+    variant: "default"
+  }
 ]
 
 export default function MembershipPage() {
   return (
     <div className="p-4 sm:p-6 lg:p-8">
-      <div className="flex items-center gap-4 mb-8">
-        <Gem className="h-8 w-8 text-primary" />
-        <h1 className="text-3xl font-bold tracking-tight">Unlock Premium</h1>
+      <div className="text-center mb-12">
+        <div className="flex items-center justify-center gap-4 mb-4">
+            <Gem className="h-10 w-10 text-primary" />
+            <h1 className="text-4xl font-bold tracking-tight">Unlock Your Potential</h1>
+        </div>
+        <p className="text-lg text-muted-foreground max-w-2xl mx-auto">Choose a plan that fits your journey. Her Dreams, Our Mission!</p>
       </div>
 
-      <div className="flex justify-center">
-        <Card className="max-w-2xl w-full shadow-2xl border-2 border-accent/50 bg-gradient-to-br from-card to-accent/5">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+        {membershipTiers.map((tier) => (
+          <Card key={tier.name} className={`flex flex-col h-full ${tier.highlight ? 'border-2 border-primary shadow-2xl transform scale-105' : ''}`}>
             <CardHeader className="text-center">
-                <CardTitle className="text-4xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-pink-400 via-purple-500 to-indigo-500">
-                    VaSa Premium
-                </CardTitle>
-                <CardDescription className="text-lg">
-                    Accelerate your career and unlock exclusive benefits.
-                </CardDescription>
+              <CardTitle className={`text-3xl font-extrabold ${tier.highlight ? 'bg-clip-text text-transparent bg-gradient-to-r from-pink-400 via-purple-500 to-indigo-500' : ''}`}>
+                  {tier.name}
+              </CardTitle>
+              <CardDescription className="text-base h-10">
+                  {tier.tagline}
+              </CardDescription>
             </CardHeader>
-            <CardContent className="space-y-8">
+            <CardContent className="flex-grow space-y-8">
                 <div className="text-center">
-                    <p className="text-5xl font-bold">₹199<span className="text-lg font-normal text-muted-foreground">/month</span></p>
+                    <p className="text-5xl font-bold">{tier.price}<span className="text-lg font-normal text-muted-foreground">{tier.priceSuffix}</span></p>
                 </div>
                 <div className="space-y-4">
-                    <h3 className="font-semibold text-lg text-center">Your Premium Benefits:</h3>
-                    <ul className="space-y-4">
-                        {premiumBenefits.map(benefit => (
-                            <li key={benefit.title} className="flex items-start gap-4">
-                                <div className="flex-shrink-0 bg-accent/20 text-accent p-2 rounded-full">
-                                    <benefit.icon className="h-6 w-6" />
+                    <ul className="space-y-3">
+                        {tier.benefits.map((benefit, index) => (
+                            <li key={index} className="flex items-start gap-3">
+                                <div className="flex-shrink-0 text-green-500 mt-1">
+                                    <CheckCircle className="h-5 w-5" />
                                 </div>
-                                <div>
-                                    <p className="font-semibold">{benefit.title}</p>
-                                    <p className="text-sm text-muted-foreground">{benefit.description}</p>
-                                </div>
+                                <span className="text-muted-foreground">{benefit}</span>
                             </li>
                         ))}
                     </ul>
                 </div>
             </CardContent>
             <CardFooter>
-                 <Button size="lg" className="w-full text-lg h-12 bg-gradient-to-r from-[#E0BBE4] to-[#957DAD] hover:opacity-90 text-primary-foreground shadow-lg">
-                    Become a Premium Member
+                 <Button size="lg" className={`w-full text-lg h-12 shadow-lg ${tier.variant === 'default' ? 'bg-gradient-to-r from-[#E0BBE4] to-[#957DAD] hover:opacity-90 text-primary-foreground' : 'bg-secondary text-secondary-foreground hover:bg-secondary/80'}`} disabled={tier.variant === 'secondary'}>
+                    {tier.buttonText}
                  </Button>
             </CardFooter>
-        </Card>
+          </Card>
+        ))}
       </div>
     </div>
   );
