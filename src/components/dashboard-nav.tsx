@@ -122,7 +122,7 @@ export function DashboardNav() {
   };
 
   const NavLink = ({ item, inSheet }: { item: typeof menuItems[0], inSheet?: boolean}) => {
-    const isActive = item.href === pathname;
+    const isActive = pathname === item.href;
     const Component = inSheet ? SheetClose : 'div';
     const props = inSheet ? { asChild: true } : {};
     return (
