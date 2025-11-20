@@ -72,7 +72,7 @@ export default function ProfilePage() {
                  </div>
                  <Button variant="outline" className="w-full">
                     <UploadCloud className="mr-2 h-4 w-4" />
-                    Upload Aadhaar
+                    Upload PAN Card
                  </Button>
               </div>
             </CardContent>
