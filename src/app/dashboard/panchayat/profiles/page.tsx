@@ -38,15 +38,22 @@ const statusColors = {
 export default function ProfilesListPage() {
   const [filter, setFilter] = useState('all');
 
-  const filteredProfiles = mockProfiles.filter(profile => {
-      if (filter === 'assigned') {
-          return profile.jobsCompleted > 0;
-      }
-      if (filter === 'not-yet-assigned') {
-          return profile.jobsCompleted === 0;
-      }
-      return true;
-  });
+  const sortedAndFilteredProfiles = mockProfiles
+    .sort((a, b) => {
+        // Sorts "Not Yet Assigned" (jobsCompleted: 0) before "Assigned"
+        if (a.jobsCompleted === 0 && b.jobsCompleted > 0) return -1;
+        if (a.jobsCompleted > 0 && b.jobsCompleted === 0) return 1;
+        return a.name.localeCompare(b.name); // Secondary sort by name
+    })
+    .filter(profile => {
+        if (filter === 'assigned') {
+            return profile.jobsCompleted > 0;
+        }
+        if (filter === 'not-yet-assigned') {
+            return profile.jobsCompleted === 0;
+        }
+        return true;
+    });
 
   return (
     <div className="p-4 sm:p-6 lg:p-8 space-y-8">
@@ -77,7 +84,7 @@ export default function ProfilesListPage() {
       </Card>
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {filteredProfiles.map((profile) => {
+        {sortedAndFilteredProfiles.map((profile) => {
            const status = profile.jobsCompleted > 0 ? 'Assigned' : 'Not Yet Assigned';
            return (
             <Card key={profile.id}>
