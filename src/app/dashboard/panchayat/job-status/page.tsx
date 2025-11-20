@@ -23,6 +23,14 @@ const statusColors = {
 }
 
 export default function JobStatusPage() {
+  const statusOrder = {
+    'Yet To Assign': 1,
+    'Worker Assigned': 2,
+    'Completed': 3,
+  };
+
+  const sortedJobs = mockJobs.sort((a, b) => statusOrder[a.status as keyof typeof statusOrder] - statusOrder[b.status as keyof typeof statusOrder]);
+  
   return (
     <div className="p-4 sm:p-6 lg:p-8 space-y-8">
       <div className="flex items-center gap-4">
@@ -31,7 +39,7 @@ export default function JobStatusPage() {
       </div>
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {mockJobs.map((job) => (
+        {sortedJobs.map((job) => (
           <Card key={job.id}>
             <CardHeader>
               <div className="flex justify-between items-start">
