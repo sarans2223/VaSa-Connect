@@ -17,18 +17,15 @@ import {
   Gem,
   Shield,
   UserSearch,
+  Menu,
 } from "lucide-react";
-
 import { cn } from "@/lib/utils";
 import {
-  Sidebar,
-  SidebarContent,
-  SidebarHeader,
-  SidebarMenu,
-  SidebarMenuItem,
-  SidebarMenuButton,
-  SidebarFooter,
-} from "@/components/ui/sidebar";
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import { Button } from "@/components/ui/button";
 
 const panchayatMenuItems = [
   { href: "/dashboard/panchayat", label: "Dashboard", icon: LayoutDashboard },
@@ -55,6 +52,7 @@ export function DashboardNav() {
   const [userName, setUserName] = useState('');
 
   const isPanchayatPath = pathname.startsWith('/dashboard/panchayat');
+  const menuItems = isPanchayatPath ? panchayatMenuItems : regularMenuItems;
 
   useEffect(() => {
     if (!isPanchayatPath) {
@@ -66,127 +64,85 @@ export function DashboardNav() {
       }
     }
   }, [isPanchayatPath, pathname]);
-  
-  if (isPanchayatPath) {
-      return (
-        <Sidebar
-          variant="sidebar"
-          collapsible="icon"
-          className="border-r"
-          style={{
-            "--sidebar-width": "16rem",
-            "--sidebar-width-icon": "3.5rem",
-          } as React.CSSProperties}
-        >
-          <SidebarHeader>
-            <Link href="/dashboard/panchayat" className="flex items-center gap-2.5">
-              <Siren className="h-8 w-8 text-primary" />
-              <h1 className="text-xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-[#E0BBE4] via-[#957DAD] to-[#D291BC] group-data-[collapsible=icon]:hidden">
-                VaSa Panchayat
-              </h1>
-            </Link>
-          </SidebarHeader>
 
-          <SidebarContent>
-            <SidebarMenu>
-              {panchayatMenuItems.map((item) => (
-                <SidebarMenuItem key={item.href}>
-                  <SidebarMenuButton
-                    asChild
-                    isActive={pathname.startsWith(item.href) && (item.href !== '/dashboard/panchayat' || pathname === '/dashboard/panchayat')}
-                    tooltip={{ children: item.label, side: "right" }}
-                  >
-                    <Link href={item.href}>
-                      <item.icon />
-                      <span>{item.label}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarContent>
-
-          <SidebarFooter className="group-data-[collapsible=icon]:-mt-2">
-            <div className="flex items-center justify-between p-2">
-               <div className="flex items-center gap-2 overflow-hidden">
-                <div className="flex flex-col truncate group-data-[collapsible=icon]:hidden">
-                  <span className="font-semibold text-sm">Panchayat Member</span>
-                </div>
-               </div>
-
-              <SidebarMenuButton
-                asChild
-                className="h-8 w-8 !p-0 group-data-[collapsible=icon]:w-full"
-                tooltip={{ children: "Log Out", side: "right" }}
-              >
-                <Link href="/login">
-                  <LogOut />
-                </Link>
-              </SidebarMenuButton>
-            </div>
-          </SidebarFooter>
-        </Sidebar>
-      );
-  }
-
-  // Regular user navigation
   return (
-       <Sidebar
-          variant="sidebar"
-          collapsible="icon"
-          className="border-r"
-          style={{
-            "--sidebar-width": "16rem",
-            "--sidebar-width-icon": "3.5rem",
-          } as React.CSSProperties}
-        >
-          <SidebarHeader>
-            <Link href="/dashboard" className="flex items-center gap-2.5">
-              <Siren className="h-8 w-8 text-primary" />
-              <h1 className="text-xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-[#E0BBE4] via-[#957DAD] to-[#D291BC] group-data-[collapsible=icon]:hidden">
-                VaSa
-              </h1>
+    <header className="sticky top-0 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6 z-50">
+      <nav className="hidden flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6">
+        <Link href={isPanchayatPath ? "/dashboard/panchayat" : "/dashboard"} className="flex items-center gap-2 text-lg font-semibold md:text-base">
+          <Siren className="h-6 w-6 text-primary" />
+          <span className="sr-only">VaSa</span>
+        </Link>
+        {menuItems.map((item) => (
+          <Link
+            key={item.href}
+            href={item.href}
+            className={cn(
+                "transition-colors hover:text-foreground",
+                pathname.startsWith(item.href) && (item.href.length === pathname.length || pathname[item.href.length] === '/') ? "text-foreground font-semibold" : "text-muted-foreground"
+            )}
+          >
+            {item.label}
+          </Link>
+        ))}
+      </nav>
+      <Sheet>
+        <SheetTrigger asChild>
+          <Button
+            variant="outline"
+            size="icon"
+            className="shrink-0 md:hidden"
+          >
+            <Menu className="h-5 w-5" />
+            <span className="sr-only">Toggle navigation menu</span>
+          </Button>
+        </SheetTrigger>
+        <SheetContent side="left">
+          <nav className="grid gap-6 text-lg font-medium">
+            <Link href={isPanchayatPath ? "/dashboard/panchayat" : "/dashboard"} className="flex items-center gap-2 text-lg font-semibold">
+              <Siren className="h-6 w-6 text-primary" />
+              <span className="sr-only">VaSa</span>
             </Link>
-          </SidebarHeader>
-
-          <SidebarContent>
-            <SidebarMenu>
-              {regularMenuItems.map((item) => (
-                <SidebarMenuItem key={item.href}>
-                  <SidebarMenuButton
-                    asChild
-                    isActive={pathname === item.href || (item.href !== '/dashboard' && pathname.startsWith(item.href))}
-                    tooltip={{ children: item.label, side: "right" }}
-                  >
-                    <Link href={item.href}>
-                      <item.icon />
-                      <span>{item.label}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarContent>
-
-          <SidebarFooter className="group-data-[collapsible=icon]:-mt-2">
-             <div className="flex items-center justify-between p-2">
-               <div className="flex items-center gap-2 overflow-hidden">
-                 <div className="flex flex-col truncate group-data-[collapsible=icon]:hidden">
-                   {userName && <span className="font-semibold text-sm">{userName}</span>}
-                 </div>
-               </div>
-
-              <SidebarMenuButton
-                asChild
-                className="h-8 w-8 !p-0 group-data-[collapsible=icon]:w-full"
-                tooltip={{ children: "Log Out", side: "right" }}
+             {menuItems.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={cn(
+                    "hover:text-foreground",
+                    pathname.startsWith(item.href) && (item.href.length === pathname.length || pathname[item.href.length] === '/') ? "text-foreground" : "text-muted-foreground"
+                )}
               >
-                <Link href="/login">
-                  <LogOut />
-                </Link>
-              </SidebarMenuButton>
-            </div>
-          </SidebarFooter>
-        </Sidebar>
-  )
+                {item.label}
+              </Link>
+            ))}
+             <div className="absolute bottom-4 left-4 right-4">
+                 <div className="flex items-center justify-between p-2 rounded-md bg-muted">
+                   <div className="flex items-center gap-2 overflow-hidden">
+                     <div className="flex flex-col truncate">
+                       <span className="font-semibold text-sm">{isPanchayatPath ? 'Panchayat Member' : userName}</span>
+                     </div>
+                   </div>
+                  <Button asChild variant="ghost" size="icon">
+                    <Link href="/login">
+                      <LogOut className="h-5 w-5" />
+                    </Link>
+                  </Button>
+                </div>
+              </div>
+          </nav>
+        </SheetContent>
+      </Sheet>
+       <div className="flex w-full items-center justify-end gap-4 md:ml-auto md:gap-2 lg:gap-4">
+          <div className="flex items-center gap-2 overflow-hidden">
+             <div className="flex-col truncate hidden md:flex">
+               <span className="font-semibold text-sm">{isPanchayatPath ? 'Panchayat Member' : userName}</span>
+             </div>
+           </div>
+          <Button asChild variant="ghost" size="icon" className="hidden md:inline-flex">
+            <Link href="/login">
+              <LogOut className="h-5 w-5" />
+            </Link>
+          </Button>
+      </div>
+    </header>
+  );
 }
