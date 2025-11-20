@@ -7,7 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Gem, CheckCircle, Award, Star, Bell } from "lucide-react";
+import { Gem, CheckCircle, Crown, Flower2 } from "lucide-react";
 
 const membershipTiers = [
   {
@@ -22,7 +22,8 @@ const membershipTiers = [
       "Access free learning modules",
     ],
     buttonText: "Current Plan",
-    variant: "secondary"
+    variant: "secondary",
+    icon: Flower2
   },
   {
     name: "Vasa Bloom",
@@ -38,6 +39,7 @@ const membershipTiers = [
     buttonText: "Upgrade to Bloom",
     variant: "default",
     highlight: true,
+    icon: Gem
   },
   {
     name: "Vasa Empower",
@@ -52,7 +54,8 @@ const membershipTiers = [
       "Direct mentorship opportunities",
     ],
     buttonText: "Upgrade to Empower",
-    variant: "default"
+    variant: "default",
+    icon: Crown
   }
 ]
 
@@ -68,40 +71,44 @@ export default function MembershipPage() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
-        {membershipTiers.map((tier) => (
-          <Card key={tier.name} className={`flex flex-col h-full ${tier.highlight ? 'border-2 border-primary shadow-2xl transform scale-105' : ''}`}>
-            <CardHeader className="text-center">
-              <CardTitle className={`text-3xl font-extrabold ${tier.highlight ? 'bg-clip-text text-transparent bg-gradient-to-r from-pink-400 via-purple-500 to-indigo-500' : ''}`}>
-                  {tier.name}
-              </CardTitle>
-              <CardDescription className="text-base h-10">
-                  {tier.tagline}
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="flex-grow space-y-8">
-                <div className="text-center">
-                    <p className="text-5xl font-bold">{tier.price}<span className="text-lg font-normal text-muted-foreground">{tier.priceSuffix}</span></p>
-                </div>
-                <div className="space-y-4">
-                    <ul className="space-y-3">
-                        {tier.benefits.map((benefit, index) => (
-                            <li key={index} className="flex items-start gap-3">
-                                <div className="flex-shrink-0 text-green-500 mt-1">
-                                    <CheckCircle className="h-5 w-5" />
-                                </div>
-                                <span className="text-muted-foreground">{benefit}</span>
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-            </CardContent>
-            <CardFooter>
-                 <Button size="lg" className={`w-full text-lg h-12 shadow-lg ${tier.variant === 'default' ? 'bg-gradient-to-r from-[#E0BBE4] to-[#957DAD] hover:opacity-90 text-primary-foreground' : 'bg-secondary text-secondary-foreground hover:bg-secondary/80'}`} disabled={tier.variant === 'secondary'}>
-                    {tier.buttonText}
-                 </Button>
-            </CardFooter>
-          </Card>
-        ))}
+        {membershipTiers.map((tier) => {
+          const Icon = tier.icon;
+          return (
+            <Card key={tier.name} className={`flex flex-col h-full ${tier.highlight ? 'border-2 border-primary shadow-2xl transform scale-105' : ''}`}>
+              <CardHeader className="items-center text-center">
+                 <Icon className={`h-12 w-12 mb-4 ${tier.highlight ? 'text-primary' : 'text-muted-foreground'}`} />
+                <CardTitle className={`text-3xl font-extrabold ${tier.highlight ? 'bg-clip-text text-transparent bg-gradient-to-r from-pink-400 via-purple-500 to-indigo-500' : ''}`}>
+                    {tier.name}
+                </CardTitle>
+                <CardDescription className="text-base h-10">
+                    {tier.tagline}
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="flex-grow space-y-8">
+                  <div className="text-center">
+                      <p className="text-5xl font-bold">{tier.price}<span className="text-lg font-normal text-muted-foreground">{tier.priceSuffix}</span></p>
+                  </div>
+                  <div className="space-y-4">
+                      <ul className="space-y-3">
+                          {tier.benefits.map((benefit, index) => (
+                              <li key={index} className="flex items-start gap-3">
+                                  <div className="flex-shrink-0 text-green-500 mt-1">
+                                      <CheckCircle className="h-5 w-5" />
+                                  </div>
+                                  <span className="text-muted-foreground">{benefit}</span>
+                              </li>
+                          ))}
+                      </ul>
+                  </div>
+              </CardContent>
+              <CardFooter>
+                   <Button size="lg" className={`w-full text-lg h-12 shadow-lg ${tier.variant === 'default' ? 'bg-gradient-to-r from-[#E0BBE4] to-[#957DAD] hover:opacity-90 text-primary-foreground' : 'bg-secondary text-secondary-foreground hover:bg-secondary/80'}`} disabled={tier.variant === 'secondary'}>
+                      {tier.buttonText}
+                   </Button>
+              </CardFooter>
+            </Card>
+          )
+        })}
       </div>
     </div>
   );
