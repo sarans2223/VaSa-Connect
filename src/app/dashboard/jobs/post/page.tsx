@@ -88,12 +88,23 @@ export default function PostJobPage() {
                 </div>
             </div>
 
-             <div className="space-y-2">
-                <Label htmlFor="num-workers">Number of Workers Needed</Label>
-                <div className="relative">
-                    <Users className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                    <Input id="num-workers" type="number" placeholder="e.g., 5" className="pl-10" />
-                </div>
+            <div className="space-y-2">
+              <Label htmlFor="num-workers">Number of Workers Needed</Label>
+              <div className="relative">
+                <Users className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground z-10" />
+                <Select>
+                  <SelectTrigger id="num-workers" className="pl-10">
+                    <SelectValue placeholder="Select number of workers" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {Array.from({ length: 20 }, (_, i) => i + 1).map((num) => (
+                      <SelectItem key={num} value={String(num)}>
+                        {num}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
 
             <div className="space-y-2">
