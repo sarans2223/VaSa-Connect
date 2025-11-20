@@ -67,7 +67,7 @@ export default function TeamsPage() {
                         </div>
 
                          <div className="space-y-3">
-                            <h4 className="font-semibold">Suggested Collaborators</h4>
+                            <h4 className="font-semibold">Add Members</h4>
                             <div className="flex flex-wrap gap-4">
                                 {suggestedUsers.map(user => (
                                     <div key={user.name} className="flex items-center gap-2 rounded-full border p-1 pr-3 bg-secondary/50">
