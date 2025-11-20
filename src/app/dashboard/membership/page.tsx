@@ -83,7 +83,7 @@ export default function MembershipPage() {
             <Card key={tier.name} className={`flex flex-col h-full ${tier.name === 'Vasa Bloom' ? 'shadow-2xl transform scale-105' : ''}`}>
               <CardHeader className="items-center text-center">
                  <Icon className={`h-12 w-12 mb-4 ${tier.name === 'Vasa Bloom' ? tier.iconClassName : tier.iconClassName || 'text-muted-foreground'}`} />
-                <CardTitle className={`text-3xl font-extrabold ${tier.name === 'Vasa Bloom' ? 'bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-sky-500 to-cyan-400' : ''} ${tier.name === 'Vasa Empower' ? 'bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 to-amber-600' : ''}`}>
+                <CardTitle className={`text-3xl font-extrabold ${tier.name === 'Vasa Rise' ? 'text-green-600' : ''} ${tier.name === 'Vasa Bloom' ? 'bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-sky-500 to-cyan-400' : ''} ${tier.name === 'Vasa Empower' ? 'bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 to-amber-600' : ''}`}>
                     {tier.name}
                 </CardTitle>
                 <CardDescription className="text-base h-10">
