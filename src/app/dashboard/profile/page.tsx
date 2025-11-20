@@ -20,7 +20,7 @@ import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
 import { Textarea } from "@/components/ui/textarea";
 import { mockUser as defaultUser } from "@/lib/data";
-import { User as UserIcon, Edit, Save } from "lucide-react";
+import { User as UserIcon, Edit, Save, UploadCloud } from "lucide-react";
 import type { User } from "@/lib/types";
 
 export default function ProfilePage() {
@@ -54,7 +54,7 @@ export default function ProfilePage() {
               <CardTitle className="text-2xl">{user.name}</CardTitle>
               <CardDescription>{user.email}</CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="space-y-4">
               <div className="space-y-2">
                 <div className="flex justify-between text-sm">
                   <span className="font-medium">Profile Completion</span>
@@ -64,6 +64,16 @@ export default function ProfilePage() {
                   value={user.profileCompletion}
                   className="h-2"
                 />
+              </div>
+              <div className="space-y-3 border-t pt-4">
+                 <div className="flex justify-between items-center text-sm">
+                    <span className="font-medium">Profile Verification</span>
+                    <Badge variant="destructive">Not Verified</Badge>
+                 </div>
+                 <Button variant="outline" className="w-full">
+                    <UploadCloud className="mr-2 h-4 w-4" />
+                    Upload Aadhaar
+                 </Button>
               </div>
             </CardContent>
           </Card>
