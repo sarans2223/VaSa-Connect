@@ -16,7 +16,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { UserSearch, Upload } from "lucide-react";
+import { UserSearch, Upload, Users } from "lucide-react";
 
 export default function PostJobPage() {
   return (
@@ -85,6 +85,14 @@ export default function PostJobPage() {
                 <div className="space-y-2">
                     <Label htmlFor="industry">Industry</Label>
                     <Input id="industry" placeholder="e.g., Technology" />
+                </div>
+            </div>
+
+             <div className="space-y-2">
+                <Label htmlFor="num-workers">Number of Workers Needed</Label>
+                <div className="relative">
+                    <Users className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                    <Input id="num-workers" type="number" placeholder="e.g., 5" className="pl-10" />
                 </div>
             </div>
 
