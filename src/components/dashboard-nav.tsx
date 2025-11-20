@@ -66,6 +66,17 @@ export function DashboardNav() {
     }
   }, [isPanchayatPath]);
 
+  const UserNameDisplay = ({ inSheet }: { inSheet?: boolean }) => {
+    if (isPanchayatPath) {
+      return <span className="font-semibold text-sm">Panchayat Member</span>;
+    }
+    return (
+      <Link href="/dashboard/profile" className="font-semibold text-sm hover:underline">
+        {userName}
+      </Link>
+    );
+  };
+
   return (
     <header className="sticky top-0 flex h-14 items-center gap-4 border-b bg-background px-4 sm:px-6 z-30">
         <Sheet>
@@ -106,7 +117,7 @@ export function DashboardNav() {
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2 overflow-hidden">
                     <div className="flex flex-col truncate">
-                        <span className="font-semibold text-sm">{isPanchayatPath ? 'Panchayat Member' : userName}</span>
+                        <UserNameDisplay inSheet />
                     </div>
                     </div>
                     <Button asChild variant="ghost" size="icon">
@@ -127,7 +138,7 @@ export function DashboardNav() {
             </div>
             <div className="ml-auto flex items-center gap-2 overflow-hidden">
                 <div className="flex flex-col truncate text-right">
-                    <span className="font-semibold text-sm">{isPanchayatPath ? 'Panchayat Member' : userName}</span>
+                    <UserNameDisplay />
                 </div>
                  <Button asChild variant="ghost" size="icon">
                   <Link href="/login">
