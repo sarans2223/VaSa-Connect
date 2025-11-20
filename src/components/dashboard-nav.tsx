@@ -26,6 +26,8 @@ import {
   SheetContent,
   SheetTrigger,
   SheetClose,
+  SheetHeader,
+  SheetTitle,
 } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 
@@ -117,12 +119,13 @@ export function DashboardNav() {
             </Button>
           </SheetTrigger>
           <SheetContent side="left" className="flex flex-col p-0">
-            <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
+             <SheetHeader className="p-4 border-b">
+                <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
                 <Link href={isPanchayatPath ? "/dashboard/panchayat" : "/dashboard"} className="flex items-center gap-2 font-semibold">
                   <Siren className="h-6 w-6 text-primary" />
                   <span className="">VaSa</span>
                 </Link>
-            </div>
+             </SheetHeader>
             <nav className="flex-1 grid gap-2 p-2 text-sm font-medium lg:p-4">
               {menuItems.map((item) => (
                  <SheetClose asChild key={item.href}>
@@ -130,7 +133,7 @@ export function DashboardNav() {
                     href={item.href}
                     className={cn(
                         "flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary",
-                        pathname.startsWith(item.href) && (item.href.length === pathname.length || pathname[item.href.length] === '/') ? "bg-secondary text-primary" : ""
+                        pathname.startsWith(item.href) && (item.href.length === pathname.length || pathname[item.href.length] === '/') ? "bg-muted text-primary" : ""
                     )}
                     >
                     <item.icon className="h-4 w-4" />
