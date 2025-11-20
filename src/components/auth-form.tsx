@@ -53,6 +53,7 @@ export function AuthForm({ type }: AuthFormProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
+  const [password, setPassword] = useState("");
   const { toast } = useToast();
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -72,6 +73,20 @@ export function AuthForm({ type }: AuthFormProps) {
       }
       localStorage.setItem('userName', name);
     }
+
+    if (type === "login") {
+      if (email.toLowerCase() === mockUser.email.toLowerCase() && password !== "password123") {
+         toast({
+          title: "Login Error",
+          description: "Invalid password. Please try again.",
+          variant: "destructive",
+        });
+        setIsLoading(false);
+        return;
+      }
+    }
+
+
     localStorage.setItem('userEmail', email);
     
     // Simulate API call
@@ -132,7 +147,14 @@ export function AuthForm({ type }: AuthFormProps) {
               <Label htmlFor="password">Password</Label>
               <div className="relative">
                 <KeyRound className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                <Input id="password" type="password" required className="pl-10" />
+                <Input 
+                  id="password" 
+                  type="password" 
+                  required 
+                  className="pl-10"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)} 
+                />
               </div>
             </div>
             <Button disabled={isLoading} type="submit" className="w-full font-semibold bg-gradient-to-r from-[#E0BBE4] to-[#957DAD] hover:opacity-90 transition-opacity text-primary-foreground">
@@ -197,3 +219,5 @@ export function AuthForm({ type }: AuthFormProps) {
     </div>
   );
 }
+
+    
