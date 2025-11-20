@@ -19,7 +19,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { mockTeams, mockUser } from "@/lib/data";
-import { PlusCircle, Users, Send, Sparkles, Eye } from "lucide-react";
+import { PlusCircle, Users, Send, Sparkles, Eye, UserPlus } from "lucide-react";
 import type { Team } from '@/lib/types';
 import { suggestTeamsForUser, type SuggestTeamsForUserOutput } from '@/ai/flows/ai-suggest-teams';
 import { Separator } from '@/components/ui/separator';
@@ -93,6 +93,13 @@ export default function TeamsPage() {
                 id="team-description"
                 placeholder="What is the purpose of your team?"
               />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="team-members">Add Members (Optional)</Label>
+               <div className="relative">
+                <UserPlus className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                <Input id="team-members" placeholder="Enter member emails, separated by commas" className="pl-10" />
+              </div>
             </div>
             <Button className="w-full sm:w-auto bg-gradient-to-r from-[#E0BBE4] to-[#957DAD] hover:opacity-90 text-primary-foreground">
               <PlusCircle className="mr-2 h-4 w-4" />
