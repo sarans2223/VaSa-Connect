@@ -16,14 +16,14 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { PlusCircle, Upload } from "lucide-react";
+import { UserSearch, Upload } from "lucide-react";
 
 export default function PostJobPage() {
   return (
     <div className="p-4 sm:p-6 lg:p-8">
       <div className="flex items-center gap-4 mb-8">
-        <PlusCircle className="h-8 w-8 text-primary" />
-        <h1 className="text-3xl font-bold tracking-tight">Post a New Job</h1>
+        <UserSearch className="h-8 w-8 text-primary" />
+        <h1 className="text-3xl font-bold tracking-tight">Hire Talent</h1>
       </div>
       <Card>
         <CardHeader>
@@ -40,13 +40,13 @@ export default function PostJobPage() {
                 <Input id="job-title" placeholder="e.g., Senior Frontend Developer" />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="company-name">Company Name</Label>
+                <Label htmlFor="company-name">Company Name (Optional)</Label>
                 <Input id="company-name" placeholder="e.g., Innovate Inc." />
               </div>
             </div>
 
             <div className="space-y-2">
-                <Label htmlFor="logo">Company Logo</Label>
+                <Label htmlFor="logo">Company Logo (Optional)</Label>
                 <div className="flex items-center gap-4">
                     <Button variant="outline" asChild>
                        <label htmlFor="logo-upload" className="cursor-pointer">
