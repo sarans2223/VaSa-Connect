@@ -127,20 +127,22 @@ export function DashboardNav() {
                 </Link>
              </SheetHeader>
             <nav className="flex-1 grid gap-2 p-2 text-sm font-medium lg:p-4">
-              {menuItems.map((item) => (
+              {menuItems.map((item) => {
+                 const isActive = item.href === pathname;
+                 return (
                  <SheetClose asChild key={item.href}>
                     <Link
                     href={item.href}
                     className={cn(
                         "flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary",
-                        pathname.startsWith(item.href) && (item.href.length === pathname.length || pathname[item.href.length] === '/') ? "bg-muted text-primary" : ""
+                        isActive ? "bg-muted text-primary" : ""
                     )}
                     >
                     <item.icon className="h-4 w-4" />
                     {item.label}
                     </Link>
                 </SheetClose>
-              ))}
+              )})}
             </nav>
               <div className="mt-auto p-4 border-t">
                 <div className="flex items-center justify-between">
