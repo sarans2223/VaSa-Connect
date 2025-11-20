@@ -29,6 +29,8 @@ const mockProfiles = [
   { id: '4', name: 'Anjali Sharma', jobsCompleted: 1, benefitedAmount: 1500 },
   { id: '5', name: 'Sita Rai', jobsCompleted: 0, benefitedAmount: 0 },
   { id: '6', name: 'Rina Das', jobsCompleted: 3, benefitedAmount: 7500 },
+  { id: '7', name: 'Sunita Devi', jobsCompleted: 0, benefitedAmount: 0 },
+  { id: '8', name: 'Pooja Singh', jobsCompleted: 0, benefitedAmount: 0 },
 ];
 
 const statusColors = {
@@ -36,11 +38,11 @@ const statusColors = {
   'Not Yet Assigned': 'bg-yellow-100 text-yellow-800 border-yellow-200',
 }
 
-const overviewStatusDetails: { [key: string]: { label: string; className: string } } = {
-  Empower: { label: 'Empower', className: 'bg-purple-100 text-purple-800 border-purple-200' },
-  Progress: { label: 'Progress', className: 'bg-indigo-100 text-indigo-800 border-indigo-200' },
-  Rise: { label: 'Rise', className: 'bg-green-100 text-green-800 border-green-200' },
-  Begin: { label: 'Begin', className: 'bg-gray-100 text-gray-800 border-gray-200' },
+const overviewStatusDetails: { [key: string]: { label: string; className: string; level: number } } = {
+  Empower: { label: 'Empower', className: 'bg-purple-100 text-purple-800 border-purple-200', level: 3 },
+  Progress: { label: 'Progress', className: 'bg-indigo-100 text-indigo-800 border-indigo-200', level: 2 },
+  Rise: { label: 'Rise', className: 'bg-green-100 text-green-800 border-green-200', level: 1 },
+  Begin: { label: 'Begin', className: 'bg-gray-100 text-gray-800 border-gray-200', level: 0 },
 };
 
 const getOverviewStatus = (jobsCompleted: number) => {
@@ -63,10 +65,12 @@ export default function ProfilesListPage() {
         if (!aIsAssigned && bIsAssigned) return -1; // a (not assigned) comes before b (assigned)
         if (aIsAssigned && !bIsAssigned) return 1;  // b (not assigned) comes before a (assigned)
 
-        // If both are assigned, sort by jobsCompleted descending
+        // If both are assigned, sort by overview status level descending
         if (aIsAssigned && bIsAssigned) {
-            if (b.jobsCompleted !== a.jobsCompleted) {
-                return b.jobsCompleted - a.jobsCompleted;
+            const aStatus = getOverviewStatus(a.jobsCompleted);
+            const bStatus = getOverviewStatus(b.jobsCompleted);
+            if (overviewStatusDetails[bStatus].level !== overviewStatusDetails[aStatus].level) {
+                return overviewStatusDetails[bStatus].level - overviewStatusDetails[aStatus].level;
             }
         }
         
