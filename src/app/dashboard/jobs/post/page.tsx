@@ -1,3 +1,8 @@
+
+'use client';
+
+import * as React from 'react';
+import { format } from 'date-fns';
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -16,9 +21,27 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { UserSearch, Upload, Users } from "lucide-react";
+import { UserSearch, Upload, Users, CalendarIcon } from "lucide-react";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
+import { Calendar } from '@/components/ui/calendar';
+import { cn } from '@/lib/utils';
+
 
 export default function PostJobPage() {
+  const [fromDate, setFromDate] = React.useState<Date>();
+  const [toDate, setToDate] = React.useState<Date>();
+
+  const timeOptions = Array.from({ length: 24 * 2 }, (_, i) => {
+    const hours = Math.floor(i / 2);
+    const minutes = i % 2 === 0 ? '00' : '30';
+    const formattedHours = hours.toString().padStart(2, '0');
+    return `${formattedHours}:${minutes}`;
+  });
+
   return (
     <div className="p-4 sm:p-6 lg:p-8">
       <div className="flex items-center gap-4 mb-8">
@@ -57,6 +80,85 @@ export default function PostJobPage() {
                     <Input id="logo-upload" type="file" className="hidden" />
                     <span className="text-sm text-muted-foreground">PNG, JPG up to 5MB</span>
                 </div>
+            </div>
+
+            <div className="grid sm:grid-cols-2 gap-6">
+              <div className="grid grid-cols-2 gap-4">
+                 <div className="space-y-2">
+                    <Label htmlFor="from-date">From Date</Label>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <Button
+                          variant={'outline'}
+                          className={cn(
+                            'w-full justify-start text-left font-normal',
+                            !fromDate && 'text-muted-foreground'
+                          )}
+                        >
+                          <CalendarIcon className="mr-2 h-4 w-4" />
+                          {fromDate ? format(fromDate, 'PPP') : <span>Pick a date</span>}
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-auto p-0">
+                        <Calendar
+                          mode="single"
+                          selected={fromDate}
+                          onSelect={setFromDate}
+                          initialFocus
+                        />
+                      </PopoverContent>
+                    </Popover>
+                  </div>
+                   <div className="space-y-2">
+                    <Label htmlFor="from-time">From Time</Label>
+                    <Select>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select time" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {timeOptions.map(time => <SelectItem key={time} value={time}>{time}</SelectItem>)}
+                      </SelectContent>
+                    </Select>
+                  </div>
+              </div>
+               <div className="grid grid-cols-2 gap-4">
+                 <div className="space-y-2">
+                    <Label htmlFor="to-date">To Date</Label>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <Button
+                          variant={'outline'}
+                          className={cn(
+                            'w-full justify-start text-left font-normal',
+                            !toDate && 'text-muted-foreground'
+                          )}
+                        >
+                          <CalendarIcon className="mr-2 h-4 w-4" />
+                          {toDate ? format(toDate, 'PPP') : <span>Pick a date</span>}
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-auto p-0">
+                        <Calendar
+                          mode="single"
+                          selected={toDate}
+                          onSelect={setToDate}
+                          initialFocus
+                        />
+                      </PopoverContent>
+                    </Popover>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="to-time">To Time</Label>
+                     <Select>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select time" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {timeOptions.map(time => <SelectItem key={time} value={time}>{time}</SelectItem>)}
+                      </SelectContent>
+                    </Select>
+                  </div>
+              </div>
             </div>
 
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -121,3 +223,5 @@ export default function PostJobPage() {
     </div>
   );
 }
+
+    
