@@ -61,6 +61,7 @@ const membershipTiers = [
     variant: "default",
     icon: Crown,
     iconClassName: "text-yellow-500",
+    highlight: true,
   }
 ]
 
@@ -79,10 +80,10 @@ export default function MembershipPage() {
         {membershipTiers.map((tier) => {
           const Icon = tier.icon;
           return (
-            <Card key={tier.name} className={`flex flex-col h-full ${tier.highlight ? 'border-2 border-primary shadow-2xl transform scale-105' : ''}`}>
+            <Card key={tier.name} className={`flex flex-col h-full ${tier.name === 'Vasa Bloom' ? 'border-2 border-primary shadow-2xl transform scale-105' : ''}`}>
               <CardHeader className="items-center text-center">
-                 <Icon className={`h-12 w-12 mb-4 ${tier.highlight ? 'text-primary' : tier.iconClassName || 'text-muted-foreground'}`} />
-                <CardTitle className={`text-3xl font-extrabold ${tier.highlight ? 'bg-clip-text text-transparent bg-gradient-to-r from-pink-400 via-purple-500 to-indigo-500' : ''}`}>
+                 <Icon className={`h-12 w-12 mb-4 ${tier.name === 'Vasa Bloom' ? 'text-primary' : tier.iconClassName || 'text-muted-foreground'}`} />
+                <CardTitle className={`text-3xl font-extrabold ${tier.name === 'Vasa Bloom' ? 'bg-clip-text text-transparent bg-gradient-to-r from-pink-400 via-purple-500 to-indigo-500' : ''} ${tier.name === 'Vasa Empower' ? 'bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 to-amber-600' : ''}`}>
                     {tier.name}
                 </CardTitle>
                 <CardDescription className="text-base h-10">
