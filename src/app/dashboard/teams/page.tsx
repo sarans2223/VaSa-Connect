@@ -19,17 +19,19 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { mockTeams, mockUser } from "@/lib/data";
-import { PlusCircle, Users, Send, Sparkles } from "lucide-react";
+import { PlusCircle, Users, Send, Sparkles, Eye } from "lucide-react";
 import type { Team } from '@/lib/types';
 import { suggestTeamsForUser, type SuggestTeamsForUserOutput } from '@/ai/flows/ai-suggest-teams';
 import { Separator } from '@/components/ui/separator';
 import { Skeleton } from '@/components/ui/skeleton';
+import { useToast } from '@/hooks/use-toast';
 
 
 export default function TeamsPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [suggestedTeams, setSuggestedTeams] = useState<SuggestTeamsForUserOutput['suggestedTeams'] | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const { toast } = useToast();
 
   const handleFindTeams = async () => {
     setIsLoading(true);
@@ -39,7 +41,7 @@ export default function TeamsPage() {
       const result = await suggestTeamsForUser({
         userSkills: mockUser.skills,
         allTeams: mockTeams.map(t => ({ name: t.name, description: t.description, memberCount: t.members.length })),
-        numberOfSuggestions: 3,
+        numberOfSuggestions: 5,
       });
       setSuggestedTeams(result.suggestedTeams);
     } catch (e) {
@@ -49,6 +51,21 @@ export default function TeamsPage() {
       setIsLoading(false);
     }
   };
+  
+  const handleJoinRequest = (teamName: string) => {
+    toast({
+      title: 'Request Sent!',
+      description: `Your request to join ${teamName} has been sent for approval.`,
+    });
+  };
+
+  const handleViewDetails = (teamName: string) => {
+    toast({
+      title: 'Details',
+      description: `Viewing details for ${teamName}. Full page coming soon!`,
+    });
+  };
+
 
   return (
     <div className="p-4 sm:p-6 lg:p-8 space-y-8">
@@ -90,7 +107,7 @@ export default function TeamsPage() {
       <div>
         <h2 className="text-2xl font-bold tracking-tight mb-4">Your Teams</h2>
         <div className="grid gap-6 md:grid-cols-1 lg:grid-cols-2">
-           {mockTeams.map(team => (
+           {mockTeams.slice(0,2).map(team => (
                 <Card key={team.id}>
                     <CardHeader>
                         <CardTitle>{team.name}</CardTitle>
@@ -113,7 +130,7 @@ export default function TeamsPage() {
                         </div>
 
                         <div className="space-y-2">
-                            <h4 className="font-semibold">Invite to Team</h4>
+                            <h4 className="font-semibold">Add Members</h4>
                             <div className="flex gap-2">
                                 <Input placeholder="Enter email to invite" type="email" />
                                 <Button>
@@ -148,17 +165,15 @@ export default function TeamsPage() {
                         <CardHeader>
                             <Skeleton className="h-6 w-3/4" />
                             <Skeleton className="h-4 w-full mt-2" />
+                            <Skeleton className="h-4 w-2/3 mt-1" />
                         </CardHeader>
                         <CardContent>
                             <Skeleton className="h-4 w-1/4 mb-2" />
-                            <div className="flex -space-x-2">
-                                <Skeleton className="h-10 w-10 rounded-full" />
-                                <Skeleton className="h-10 w-10 rounded-full" />
-                                <Skeleton className="h-10 w-10 rounded-full" />
-                            </div>
+                            <Skeleton className="h-4 w-3/4" />
                         </CardContent>
-                         <CardFooter>
+                         <CardFooter className="gap-2">
                             <Skeleton className="h-10 w-28" />
+                            <Skeleton className="h-10 w-32" />
                         </CardFooter>
                     </Card>
                 ))}
@@ -168,20 +183,28 @@ export default function TeamsPage() {
         {suggestedTeams && (
             <div className="grid gap-6 md:grid-cols-1 lg:grid-cols-2">
             {suggestedTeams.map((team) => (
-                <Card key={team.name}>
-                <CardHeader>
-                    <CardTitle>{team.name}</CardTitle>
-                    <CardDescription>{team.description}</CardDescription>
-                </CardHeader>
-                <CardContent>
-                    <p className="text-sm font-medium text-muted-foreground">{team.memberCount} members</p>
-                </CardContent>
-                <CardFooter>
-                    <Button>
-                        <PlusCircle className="mr-2 h-4 w-4" />
-                        Request to Join
-                    </Button>
-                </CardFooter>
+                <Card key={team.name} className="flex flex-col">
+                  <CardHeader>
+                      <CardTitle>{team.name}</CardTitle>
+                      <CardDescription>{team.description}</CardDescription>
+                  </CardHeader>
+                  <CardContent className="flex-grow space-y-4">
+                      <p className="text-sm font-medium text-muted-foreground">{team.memberCount} members</p>
+                      <div>
+                        <p className="text-sm font-semibold">Why it's a good match:</p>
+                        <p className="text-sm text-muted-foreground italic">"{team.reason}"</p>
+                      </div>
+                  </CardContent>
+                  <CardFooter className="gap-2">
+                      <Button variant="outline" onClick={() => handleViewDetails(team.name)}>
+                          <Eye className="mr-2 h-4 w-4" />
+                          View Details
+                      </Button>
+                      <Button onClick={() => handleJoinRequest(team.name)}>
+                          <PlusCircle className="mr-2 h-4 w-4" />
+                          Request to Join
+                      </Button>
+                  </CardFooter>
                 </Card>
             ))}
             </div>

@@ -144,4 +144,30 @@ export const mockTeams: Team[] = [
       { id: 'user-5', name: 'Lakshmi Devi', avatarUrl: 'https://picsum.photos/seed/user5/100/100' },
     ],
   },
+  {
+    id: 'team-4',
+    name: 'Chennai ChildMinders',
+    description: 'A reliable network of experienced nannies and babysitters in the Chennai area.',
+    members: [
+      { id: 'user-6', name: 'Geeta', avatarUrl: 'https://picsum.photos/seed/user6/100/100' },
+      { id: 'user-7', name: 'Sunita', avatarUrl: 'https://picsum.photos/seed/user7/100/100' },
+    ],
+  },
+  {
+    id: 'team-5',
+    name: 'Bangalore Bakers Collective',
+    description: 'Passionate bakers creating custom cakes and pastries for all occasions.',
+    members: [
+       { id: 'user-8', name: 'Anjali', avatarUrl: 'https://picsum.photos/seed/user8/100/100' },
+       { id: 'user-9', name: 'Pooja', avatarUrl: 'https://picsum.photos/seed/user9/100/100' },
+    ],
+  },
+    {
+    id: 'team-6',
+    name: 'Jaipur HandiCrafts',
+    description: 'A team of artisans creating and selling traditional Jaipuri textiles and crafts.',
+    members: [
+        { id: 'user-10', name: 'Rani', avatarUrl: 'https://picsum.photos/seed/user10/100/100' },
+    ],
+  },
 ];
