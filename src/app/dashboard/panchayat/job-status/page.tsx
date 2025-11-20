@@ -1,3 +1,6 @@
+
+'use client';
+import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -70,9 +73,11 @@ export default function JobStatusPage() {
                     </Button>
                 )}
                 {job.status === 'Yet To Assign' && (
-                    <Button>
-                        <UserPlus className="mr-2 h-4 w-4" />
-                        Assign Workers
+                    <Button asChild>
+                        <Link href="/dashboard/panchayat/assign-worker">
+                            <UserPlus className="mr-2 h-4 w-4" />
+                            Assign Workers
+                        </Link>
                     </Button>
                 )}
             </CardFooter>

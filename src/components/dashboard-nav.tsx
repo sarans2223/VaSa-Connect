@@ -35,6 +35,7 @@ const panchayatMenuItems = [
   { href: "/dashboard/panchayat/profiles", label: "Profiles Already Added", icon: Users },
   { href: "/dashboard/panchayat/post-job", label: "Job Post & Match", icon: Briefcase },
   { href: "/dashboard/panchayat/job-status", label: "Job Current Status", icon: BarChart },
+  { href: "/dashboard/panchayat/assign-worker", label: "Assign Worker", icon: UserPlus },
 ];
 
 const regularMenuItems = [
