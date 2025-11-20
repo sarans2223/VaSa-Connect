@@ -8,7 +8,7 @@ export type User = {
   desiredJobType: string;
   locationPreferences: string;
   industryPreferences: string[];
-  profileCompletion: number;
+  rating: number;
 };
 
 export type Job = {

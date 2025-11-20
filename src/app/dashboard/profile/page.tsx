@@ -21,7 +21,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
 import { mockUser as defaultUser } from "@/lib/data";
-import { User as UserIcon, Edit, Save, UploadCloud, PiggyBank } from "lucide-react";
+import { User as UserIcon, Edit, Save, UploadCloud, PiggyBank, Star } from "lucide-react";
 import type { User } from "@/lib/types";
 
 export default function ProfilePage() {
@@ -37,6 +37,20 @@ export default function ProfilePage() {
       setUser(prevUser => ({ ...prevUser, email: storedEmail }));
     }
   }, []);
+
+  const renderStars = (rating: number) => {
+    const stars = [];
+    for (let i = 1; i <= 5; i++) {
+      if (i <= rating) {
+        stars.push(<Star key={i} className="h-5 w-5 text-yellow-400 fill-yellow-400" />);
+      } else if (i - 0.5 <= rating) {
+        stars.push(<Star key={i} className="h-5 w-5 text-yellow-400 fill-yellow-200" />);
+      } else {
+        stars.push(<Star key={i} className="h-5 w-5 text-gray-300" />);
+      }
+    }
+    return stars;
+  };
 
   return (
     <div className="p-4 sm:p-6 lg:p-8 space-y-8">
@@ -64,15 +78,14 @@ export default function ProfilePage() {
               <CardDescription>{user.email}</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="space-y-2">
-                <div className="flex justify-between text-sm">
-                  <span className="font-medium">Profile Completion</span>
-                  <span>{user.profileCompletion}%</span>
+               <div className="space-y-2">
+                <div className="flex justify-between items-center text-sm">
+                  <span className="font-medium">Rating</span>
+                  <div className="flex items-center gap-1">
+                    {renderStars(user.rating)}
+                    <span className="font-bold ml-1">{user.rating.toFixed(1)}</span>
+                  </div>
                 </div>
-                <Progress
-                  value={user.profileCompletion}
-                  className="h-2"
-                />
               </div>
               <div className="space-y-3 border-t pt-4">
                  <div className="flex justify-between items-center text-sm">
