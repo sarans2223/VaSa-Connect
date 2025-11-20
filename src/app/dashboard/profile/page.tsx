@@ -33,7 +33,7 @@ const membershipBadges = {
   Bloom: {
     label: "Vasa Bloom Member",
     icon: Gem,
-    className: "bg-sky-100 text-sky-800 border-sky-200 hover:bg-sky-100",
+    className: "bg-blue-100 text-blue-800 border-blue-200 hover:bg-blue-100",
   },
   Empower: {
     label: "Vasa Empower Member",

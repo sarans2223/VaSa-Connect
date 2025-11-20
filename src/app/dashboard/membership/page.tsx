@@ -43,7 +43,7 @@ const membershipTiers = [
     variant: "default",
     highlight: true,
     icon: Gem,
-    iconClassName: "text-sky-500",
+    iconClassName: "text-blue-400",
   },
   {
     name: "Vasa Empower",
@@ -80,10 +80,10 @@ export default function MembershipPage() {
         {membershipTiers.map((tier) => {
           const Icon = tier.icon;
           return (
-            <Card key={tier.name} className={`flex flex-col h-full ${tier.name === 'Vasa Bloom' ? 'border-2 border-primary shadow-2xl transform scale-105' : ''}`}>
+            <Card key={tier.name} className={`flex flex-col h-full ${tier.name === 'Vasa Bloom' ? 'border-2 border-blue-400 shadow-2xl transform scale-105' : ''}`}>
               <CardHeader className="items-center text-center">
-                 <Icon className={`h-12 w-12 mb-4 ${tier.name === 'Vasa Bloom' ? 'text-primary' : tier.iconClassName || 'text-muted-foreground'}`} />
-                <CardTitle className={`text-3xl font-extrabold ${tier.name === 'Vasa Bloom' ? 'bg-clip-text text-transparent bg-gradient-to-r from-pink-400 via-purple-500 to-indigo-500' : ''} ${tier.name === 'Vasa Empower' ? 'bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 to-amber-600' : ''}`}>
+                 <Icon className={`h-12 w-12 mb-4 ${tier.name === 'Vasa Bloom' ? 'text-blue-400' : tier.iconClassName || 'text-muted-foreground'}`} />
+                <CardTitle className={`text-3xl font-extrabold ${tier.name === 'Vasa Bloom' ? 'bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-sky-500 to-cyan-400' : ''} ${tier.name === 'Vasa Empower' ? 'bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 to-amber-600' : ''}`}>
                     {tier.name}
                 </CardTitle>
                 <CardDescription className="text-base h-10">
