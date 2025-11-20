@@ -16,6 +16,7 @@ import {
   DollarSign,
   Gem,
   Shield,
+  UserSearch,
 } from "lucide-react";
 
 import { cn } from "@/lib/utils";
@@ -40,6 +41,7 @@ const panchayatMenuItems = [
 const regularMenuItems = [
     { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
     { href: "/dashboard/jobs", label: "Job Search", icon: Briefcase },
+    { href: "/dashboard/jobs/post", label: "Hire Talent", icon: UserSearch },
     { href: "/dashboard/learning", label: "Learning Hub", icon: BookOpen },
     { href: "/dashboard/teams", label: "My Team", icon: Users },
     { href: "/dashboard/profile", label: "My Profile", icon: UserCircle },
