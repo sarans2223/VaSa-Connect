@@ -140,7 +140,7 @@ export function DashboardNav() {
           <SheetContent side="left" className="flex flex-col p-0">
              <SheetHeader className="p-4 border-b">
                 <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
-                <Link href={isPanchayatPath ? "/dashboard/panchayat" : "/dashboard"} className="flex items-center gap-2 font-semibold">
+                <Link href={isPanchayatPath ? "/dashboard/panchayat" : "/dashboard"} className="flex items-center gap-2 font-bold">
                   <span className="">VaSa</span>
                 </Link>
              </SheetHeader>
@@ -165,7 +165,7 @@ export function DashboardNav() {
         </Sheet>
         <div className="flex w-full items-center gap-4 md:ml-auto md:gap-2 lg:gap-4">
             <div className="w-full flex-1">
-                <Link href={isPanchayatPath ? "/dashboard/panchayat" : "/dashboard"} className="flex items-center gap-2 font-semibold">
+                <Link href={isPanchayatPath ? "/dashboard/panchayat" : "/dashboard"} className="flex items-center gap-2 font-bold">
                   <span className="">VaSa</span>
                 </Link>
             </div>
