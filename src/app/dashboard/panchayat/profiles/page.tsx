@@ -28,7 +28,7 @@ const mockProfiles = [
   { id: '3', name: 'Meena Kumari', jobsCompleted: 3, benefitedAmount: 6000 },
   { id: '4', name: 'Anjali Sharma', jobsCompleted: 1, benefitedAmount: 1500 },
   { id: '5', name: 'Sita Rai', jobsCompleted: 0, benefitedAmount: 0 },
-  { id: '6', name: 'Rina Das', jobsCompleted: 3, benefitedAmount: 7500 },
+  { id: '6', name: 'Rina Das', jobsCompleted: 5, benefitedAmount: 12500 },
   { id: '7', name: 'Sunita Devi', jobsCompleted: 0, benefitedAmount: 0 },
   { id: '8', name: 'Pooja Singh', jobsCompleted: 0, benefitedAmount: 0 },
 ];
