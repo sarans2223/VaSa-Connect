@@ -2,6 +2,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Link from "next/link";
 import {
   Avatar,
   AvatarFallback,
@@ -19,9 +20,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
-import { Textarea } from "@/components/ui/textarea";
 import { mockUser as defaultUser } from "@/lib/data";
-import { User as UserIcon, Edit, Save, UploadCloud, Landmark, PiggyBank } from "lucide-react";
+import { User as UserIcon, Edit, Save, UploadCloud, PiggyBank } from "lucide-react";
 import type { User } from "@/lib/types";
 
 export default function ProfilePage() {
@@ -40,9 +40,17 @@ export default function ProfilePage() {
 
   return (
     <div className="p-4 sm:p-6 lg:p-8 space-y-8">
-      <div className="flex items-center gap-4">
-        <UserIcon className="h-8 w-8 text-primary" />
-        <h1 className="text-3xl font-bold tracking-tight">My Profile</h1>
+       <div className="flex items-center justify-between gap-4">
+        <div className="flex items-center gap-4">
+            <UserIcon className="h-8 w-8 text-primary" />
+            <h1 className="text-3xl font-bold tracking-tight">My Profile</h1>
+        </div>
+        <Button asChild>
+            <Link href="/dashboard/profile/edit">
+                <Edit className="mr-2 h-4 w-4" />
+                Edit Profile
+            </Link>
+        </Button>
       </div>
       <div className="grid gap-8 lg:grid-cols-3">
         <div className="lg:col-span-1 space-y-8">
@@ -135,61 +143,45 @@ export default function ProfilePage() {
                     {skill}
                   </Badge>
                 ))}
-                <Button variant="outline" size="sm" className="h-auto">
-                  <Edit className="mr-2 h-3 w-3" /> Edit Skills
-                </Button>
               </div>
             </CardContent>
           </Card>
         </div>
 
         <div className="lg:col-span-2 space-y-8">
-          <Card>
+           <Card>
             <CardHeader>
-              <CardTitle>Edit Profile Information</CardTitle>
+              <CardTitle>Profile Information</CardTitle>
               <CardDescription>
-                Keep your information up-to-date.
+                Your professional summary and preferences.
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
-              <div className="grid sm:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="name">Full Name</Label>
-                  <Input id="name" defaultValue={user.name} />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="email">Email</Label>
-                  <Input id="email" type="email" value={user.email} disabled />
-                </div>
-              </div>
               <div className="space-y-2">
-                <Label htmlFor="experience">Experience Summary</Label>
-                <Textarea
-                  id="experience"
-                  defaultValue={user.experience}
-                  className="min-h-[120px]"
-                  placeholder="Tell us about your professional experience..."
-                />
+                <Label>Experience Summary</Label>
+                <p className="text-sm text-muted-foreground p-3 bg-muted rounded-md min-h-[120px]">
+                    {user.experience}
+                </p>
               </div>
               <div className="grid sm:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="job-type">Desired Job Type</Label>
-                  <Input id="job-type" defaultValue={user.desiredJobType} />
+                  <Label>Desired Job Type</Label>
+                  <p className="text-sm font-medium p-3 bg-muted rounded-md">{user.desiredJobType}</p>
                 </div>
                  <div className="space-y-2">
-                  <Label htmlFor="location">Location Preferences</Label>
-                  <Input id="location" defaultValue={user.locationPreferences} />
+                  <Label>Location Preferences</Label>
+                  <p className="text-sm font-medium p-3 bg-muted rounded-md">{user.locationPreferences}</p>
                 </div>
               </div>
                <div className="space-y-2">
-                  <Label htmlFor="industries">Industry Preferences</Label>
-                  <Input id="industries" defaultValue={user.industryPreferences.join(', ')} placeholder="e.g., Technology, Healthcare, Education" />
-                </div>
-                <div className="flex justify-end">
-                    <Button className="bg-gradient-to-r from-[#E0BBE4] to-[#957DAD] hover:opacity-90 text-primary-foreground">
-                        <Save className="mr-2 h-4 w-4" />
-                        Save Changes
-                    </Button>
+                  <Label>Industry Preferences</Label>
+                  <div className="flex flex-wrap gap-2">
+                    {user.industryPreferences.map((industry) => (
+                        <Badge key={industry} variant="secondary" className="text-sm">
+                            {industry}
+                        </Badge>
+                    ))}
+                    </div>
                 </div>
             </CardContent>
           </Card>
