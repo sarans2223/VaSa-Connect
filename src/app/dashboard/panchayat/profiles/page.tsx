@@ -24,8 +24,8 @@ import { Search, Users, Eye, Edit, Trash2, Star } from "lucide-react";
 // Mock data for demonstration
 const mockProfiles = [
   { id: '1', name: 'Lakshmi Priya', jobsCompleted: 2, benefitedAmount: 5000 },
-  { id: '2', name: 'Kavita Devi', jobsCompleted: 3, benefitedAmount: 6200 },
-  { id: '3', name: 'Meena Kumari', jobsCompleted: 5, benefitedAmount: 12000 },
+  { id: '2', name: 'Kavita Devi', jobsCompleted: 0, benefitedAmount: 0 },
+  { id: '3', name: 'Meena Kumari', jobsCompleted: 0, benefitedAmount: 0 },
   { id: '4', name: 'Anjali Sharma', jobsCompleted: 1, benefitedAmount: 1500 },
   { id: '5', name: 'Sita Rai', jobsCompleted: 0, benefitedAmount: 0 },
   { id: '6', name: 'Rina Das', jobsCompleted: 3, benefitedAmount: 7500 },
