@@ -1,3 +1,4 @@
+
 "use client";
 
 import Link from "next/link";
@@ -70,10 +71,33 @@ export function DashboardNav() {
     if (isPanchayatPath) {
       return <span className="font-semibold text-sm">Panchayat Member</span>;
     }
+
+    const isProfilePage = pathname === '/dashboard/profile';
+
+    if (inSheet) {
+      return (
+         <SheetClose asChild>
+            <Link
+              href="/dashboard/profile"
+              className={cn(
+                "flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary",
+                isProfilePage && "bg-muted text-primary"
+              )}
+            >
+              <UserCircle className="h-4 w-4" />
+              {userName}
+            </Link>
+          </SheetClose>
+      )
+    }
+
     return (
-      <Link href="/dashboard/profile" className="font-semibold text-sm hover:underline">
-        {userName}
-      </Link>
+      <Button asChild variant={isProfilePage ? 'secondary' : 'ghost'} size="sm">
+        <Link href="/dashboard/profile" className="flex items-center gap-2">
+            <UserCircle className="h-5 w-5" />
+            {userName}
+        </Link>
+      </Button>
     );
   };
 
@@ -137,7 +161,7 @@ export function DashboardNav() {
                 </Link>
             </div>
             <div className="ml-auto flex items-center gap-2 overflow-hidden">
-                <div className="flex flex-col truncate text-right">
+                <div className="flex items-center gap-2">
                     <UserNameDisplay />
                 </div>
                  <Button asChild variant="ghost" size="icon">
