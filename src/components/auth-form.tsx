@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState }from "react";
@@ -16,6 +17,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
+import { useToast } from "@/hooks/use-toast";
+import { mockUser } from "@/lib/data";
 
 interface AuthFormProps {
   type: "login" | "signup";
@@ -50,12 +53,23 @@ export function AuthForm({ type }: AuthFormProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
+  const { toast } = useToast();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
 
     if (type === 'signup') {
+      // Simulate checking if email exists. In a real app, this would be a backend check.
+      if (email.toLowerCase() === mockUser.email.toLowerCase()) {
+        toast({
+          title: "Registration Error",
+          description: "An account with this email address already exists.",
+          variant: "destructive",
+        });
+        setIsLoading(false);
+        return;
+      }
       localStorage.setItem('userName', name);
     }
     localStorage.setItem('userEmail', email);
