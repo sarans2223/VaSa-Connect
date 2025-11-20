@@ -7,7 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Gem, CheckCircle, Crown, Flower2 } from "lucide-react";
+import { Gem, CheckCircle, Crown, Leaf } from "lucide-react";
 
 const membershipTiers = [
   {
@@ -23,7 +23,7 @@ const membershipTiers = [
     ],
     buttonText: "Current Plan",
     variant: "secondary",
-    icon: Flower2
+    icon: Leaf
   },
   {
     name: "Vasa Bloom",

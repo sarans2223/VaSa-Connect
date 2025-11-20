@@ -21,13 +21,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
 import { mockUser as defaultUser } from "@/lib/data";
-import { User as UserIcon, Edit, Save, UploadCloud, PiggyBank, Star, Flower2, Gem, Crown } from "lucide-react";
+import { User as UserIcon, Edit, Save, UploadCloud, PiggyBank, Star, Leaf, Gem, Crown } from "lucide-react";
 import type { User } from "@/lib/types";
 
 const membershipBadges = {
   Rise: {
     label: "Vasa Rise Member",
-    icon: Flower2,
+    icon: Leaf,
     className: "bg-green-100 text-green-800 border-green-200 hover:bg-green-100",
   },
   Bloom: {
