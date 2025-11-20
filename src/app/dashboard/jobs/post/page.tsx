@@ -29,8 +29,6 @@ import {
 } from '@/components/ui/popover';
 import { Calendar } from '@/components/ui/calendar';
 import { cn } from '@/lib/utils';
-import { Separator } from '@/components/ui/separator';
-import { JobCard } from '../../components/job-card';
 import { mockJobs } from '@/lib/data';
 
 
@@ -44,8 +42,6 @@ export default function PostJobPage() {
     const formattedHours = hours.toString().padStart(2, '0');
     return `${formattedHours}:${minutes}`;
   });
-
-  const sampleJobs = mockJobs.filter(job => ['Stree Shakti Styles', 'Mahila Mandan Events', 'Nari Khet Organics'].includes(job.companyName));
 
   return (
     <div className="p-4 sm:p-6 lg:p-8 space-y-8">
@@ -225,18 +221,6 @@ export default function PostJobPage() {
           </form>
         </CardContent>
       </Card>
-      <Separator />
-
-      <div className="space-y-6">
-        <h2 className="text-2xl font-bold tracking-tight">Available Jobs</h2>
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {sampleJobs.map((job) => (
-            <JobCard key={job.id} job={job} />
-          ))}
-        </div>
-      </div>
     </div>
   );
 }
-
-    
