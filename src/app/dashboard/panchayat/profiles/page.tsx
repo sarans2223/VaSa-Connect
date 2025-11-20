@@ -19,7 +19,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Search, Users, Eye, Edit, Trash2 } from "lucide-react";
+import { Search, Users, Eye, Edit, Trash2, Star } from "lucide-react";
 
 // Mock data for demonstration
 const mockProfiles = [
@@ -28,12 +28,28 @@ const mockProfiles = [
   { id: '3', name: 'Meena Kumari', jobsCompleted: 5, benefitedAmount: 12000 },
   { id: '4', name: 'Anjali Sharma', jobsCompleted: 1, benefitedAmount: 1500 },
   { id: '5', name: 'Sita Rai', jobsCompleted: 0, benefitedAmount: 0 },
+  { id: '6', name: 'Rina Das', jobsCompleted: 3, benefitedAmount: 7500 },
 ];
 
 const statusColors = {
   'Assigned': 'bg-blue-100 text-blue-800 border-blue-200',
   'Not Yet Assigned': 'bg-yellow-100 text-yellow-800 border-yellow-200',
 }
+
+const overviewStatusDetails: { [key: string]: { label: string; className: string } } = {
+  Empower: { label: 'Empower', className: 'bg-purple-100 text-purple-800 border-purple-200' },
+  Progress: { label: 'Progress', className: 'bg-indigo-100 text-indigo-800 border-indigo-200' },
+  Rise: { label: 'Rise', className: 'bg-green-100 text-green-800 border-green-200' },
+  Begin: { label: 'Begin', className: 'bg-gray-100 text-gray-800 border-gray-200' },
+};
+
+const getOverviewStatus = (jobsCompleted: number) => {
+  if (jobsCompleted >= 5) return 'Empower';
+  if (jobsCompleted >= 2) return 'Progress';
+  if (jobsCompleted >= 1) return 'Rise';
+  return 'Begin';
+};
+
 
 export default function ProfilesListPage() {
   const [filter, setFilter] = useState('all');
@@ -86,6 +102,9 @@ export default function ProfilesListPage() {
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {sortedAndFilteredProfiles.map((profile) => {
            const status = profile.jobsCompleted > 0 ? 'Assigned' : 'Not Yet Assigned';
+           const overviewStatus = getOverviewStatus(profile.jobsCompleted);
+           const overviewDetails = overviewStatusDetails[overviewStatus];
+
            return (
             <Card key={profile.id}>
                 <CardHeader>
@@ -104,6 +123,15 @@ export default function ProfilesListPage() {
                     <div className="flex justify-between text-sm">
                         <span className="font-medium text-muted-foreground">Amount Benefited:</span>
                         <span className="font-bold">₹{profile.benefitedAmount.toLocaleString()}</span>
+                    </div>
+                     <div className="flex justify-between items-center text-sm border-t pt-4 mt-4">
+                        <span className="font-medium text-muted-foreground flex items-center gap-2">
+                          <Star className="h-4 w-4" />
+                          Overview
+                        </span>
+                        <Badge className={overviewDetails.className}>
+                          {overviewDetails.label}
+                        </Badge>
                     </div>
                 </CardContent>
                 <CardFooter className="gap-2">
