@@ -60,7 +60,7 @@ export function DashboardNav() {
   const { toast } = useToast();
   const { user } = useUser();
   const [userName, setUserName] = useState('');
-  const [panchayatName, setPanchayatName] = useState('Sathyamangalam');
+  const [panchayatName, setPanchayatName] = useState('SARAN');
 
 
   const isPanchayatPath = pathname.startsWith('/dashboard/panchayat');
