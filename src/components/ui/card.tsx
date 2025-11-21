@@ -1,3 +1,4 @@
+
 "use client"
 
 import * as React from "react"
@@ -8,11 +9,6 @@ const Card = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement>
 >(({ className, ...props }, ref) => {
-  const [isClient, setIsClient] = React.useState(false);
-  React.useEffect(() => {
-    setIsClient(true);
-  }, []);
-
   return (
     <div
       ref={ref}
@@ -21,9 +17,7 @@ const Card = React.forwardRef<
         className
       )}
       {...props}
-    >
-      {isClient ? props.children : null}
-    </div>
+    />
   );
 });
 Card.displayName = "Card"

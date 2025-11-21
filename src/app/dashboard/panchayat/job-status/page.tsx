@@ -70,17 +70,21 @@ export default function JobStatusPage() {
   const { toast } = useToast();
 
   useEffect(() => {
-      try {
-        const storedJobs = localStorage.getItem('panchayatJobs');
-        if (storedJobs) {
-            setJobs(JSON.parse(storedJobs));
-        } else {
-            localStorage.setItem('panchayatJobs', JSON.stringify(initialJobs));
-            setJobs(initialJobs);
-        }
-      } catch (error) {
+    // This effect runs only on the client side
+    try {
+      const storedJobs = localStorage.getItem('panchayatJobs');
+      if (storedJobs) {
+          setJobs(JSON.parse(storedJobs));
+      } else {
+          // If nothing is in localStorage, set it with initialJobs
+          localStorage.setItem('panchayatJobs', JSON.stringify(initialJobs));
           setJobs(initialJobs);
       }
+    } catch (error) {
+        console.error("Failed to access localStorage or parse jobs:", error);
+        // Fallback to initial jobs if localStorage fails
+        setJobs(initialJobs);
+    }
   }, []);
 
   const handleMarkCompleted = (jobId: string, jobName: string) => {

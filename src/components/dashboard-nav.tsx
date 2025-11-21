@@ -3,7 +3,7 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import {
   BarChart,
   Briefcase,
@@ -59,7 +59,7 @@ export function DashboardNav() {
   const router = useRouter();
   const { toast } = useToast();
   const { user } = useUser();
-  const [userName, setUserName] = useState('');
+  const [userName, setUserName] = useState('User');
   const [panchayatName, setPanchayatName] = useState('SARAN');
 
 
@@ -73,11 +73,9 @@ export function DashboardNav() {
       const storedName = localStorage.getItem('userName');
       if (storedName) {
         setUserName(storedName);
-      } else {
-        setUserName('User'); // Fallback name
       }
     }
-  }, [user, pathname]);
+  }, [user]);
 
   const handleSignOut = async () => {
     try {
@@ -103,7 +101,7 @@ export function DashboardNav() {
   };
 
 
-  const UserNameDisplay = ({ inSheet }: { inSheet?: boolean }) => {
+  const UserNameDisplay = React.memo(function UserNameDisplay({ inSheet }: { inSheet?: boolean }) {
     if (isPanchayatPath) {
       return (
         <Button asChild variant={'ghost'} size="sm">
@@ -146,9 +144,9 @@ export function DashboardNav() {
         </Link>
       </Button>
     );
-  };
+  });
 
-  const NavLink = ({ item, inSheet }: { item: typeof menuItems[0], inSheet?: boolean}) => {
+  const NavLink = React.memo(function NavLink({ item, inSheet }: { item: typeof menuItems[0], inSheet?: boolean}) {
     const isActive = pathname === item.href;
     const Component = inSheet ? SheetClose : 'div';
     const props = inSheet ? { asChild: true } : {};
@@ -166,7 +164,7 @@ export function DashboardNav() {
           </Link>
       </Component>
     );
-  }
+  });
 
   return (
     <header className="sticky top-0 flex h-14 items-center gap-4 border-b bg-background px-4 sm:px-6 z-30">

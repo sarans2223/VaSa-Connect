@@ -82,6 +82,7 @@ export default function ProfilesListPage() {
         setProfiles(mockProfiles);
       }
     } catch (error) {
+      console.error("Failed to access localStorage or parse profiles:", error);
       setProfiles(mockProfiles);
     }
   }, []);
