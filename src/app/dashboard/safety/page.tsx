@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState } from 'react';
@@ -49,6 +50,8 @@ export default function SafetyPage() {
   const [contacts, setContacts] = useState<Contact[]>(mockContacts);
   const [newContactName, setNewContactName] = useState('');
   const [newContactPhone, setNewContactPhone] = useState('');
+  const [powerButtonShortcut, setPowerButtonShortcut] = useState(false);
+  const [volumeButtonShortcut, setVolumeButtonShortcut] = useState(false);
   const { toast } = useToast();
 
   const handleAddContact = (e: React.FormEvent) => {
@@ -83,13 +86,23 @@ export default function SafetyPage() {
     });
   };
 
-  const handleUnsupportedFeature = () => {
+  const handleShortcutToggle = (type: 'power' | 'volume', enabled: boolean) => {
+    const featureName = type === 'power' ? 'Power button shortcut' : 'Volume button shortcut';
+    
+    if (enabled) {
+      if (type === 'power') setPowerButtonShortcut(true);
+      if (type === 'volume') setVolumeButtonShortcut(true);
+    } else {
+        if (type === 'power') setPowerButtonShortcut(false);
+        if (type === 'volume') setVolumeButtonShortcut(false);
+    }
+    
     toast({
-      title: 'Feature Not Available',
-      description: 'This feature is planned for a future native mobile app and is not available in the web browser.',
-      variant: 'destructive',
+      title: `${featureName} ${enabled ? 'Enabled' : 'Disabled'}`,
+      description: `This feature is simulated. In a real app, this would be active.`,
     });
   };
+
 
   return (
     <div className="p-4 sm:p-6 lg:p-8 space-y-8">
@@ -193,12 +206,12 @@ export default function SafetyPage() {
             <CardDescription>
               Set up hardware button shortcuts to activate SOS without opening the app.
               <span className="mt-2 block font-semibold text-amber-600">
-                Note: These features require a native mobile app.
+                Note: These features are simulated for this web demo.
               </span>
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
-            <div className="flex items-center justify-between rounded-md border p-4" onClick={handleUnsupportedFeature}>
+            <div className="flex items-center justify-between rounded-md border p-4">
                 <div className="flex items-center gap-4">
                   <Power className="h-6 w-6 text-muted-foreground" />
                   <div>
@@ -208,10 +221,14 @@ export default function SafetyPage() {
                      <p className="text-sm text-muted-foreground">Quickly press the power button three times to send an alert.</p>
                   </div>
                 </div>
-                 <Switch id="power-button-switch" disabled />
+                 <Switch
+                    id="power-button-switch"
+                    checked={powerButtonShortcut}
+                    onCheckedChange={(checked) => handleShortcutToggle('power', checked)}
+                  />
             </div>
 
-            <div className="flex items-center justify-between rounded-md border p-4" onClick={handleUnsupportedFeature}>
+            <div className="flex items-center justify-between rounded-md border p-4">
                <div className="flex items-center gap-4">
                   <Volume2 className="h-6 w-6 text-muted-foreground" />
                   <div>
@@ -221,7 +238,11 @@ export default function SafetyPage() {
                      <p className="text-sm text-muted-foreground">Hold the volume down button for 3 seconds to send an alert.</p>
                   </div>
                 </div>
-                 <Switch id="volume-button-switch" disabled />
+                 <Switch
+                    id="volume-button-switch"
+                    checked={volumeButtonShortcut}
+                    onCheckedChange={(checked) => handleShortcutToggle('volume', checked)}
+                  />
             </div>
           </CardContent>
         </Card>
