@@ -1,3 +1,4 @@
+
 import type { User, Job, LearningModule, Team } from '@/lib/types';
 
 export const mockUser: User = {
@@ -124,7 +125,7 @@ export const mockLearningModules: LearningModule[] = [
     imageUrl: 'https://picsum.photos/seed/cook/600/400',
     progress: 40,
     language: 'en',
-    videoId: 'U1A64G7yT6A'
+    videoId: '1tVUj2g5A2s'
   },
   {
     id: 'learn-1-hi',
@@ -135,29 +136,29 @@ export const mockLearningModules: LearningModule[] = [
     imageUrl: 'https://picsum.photos/seed/cook2/600/400',
     progress: 20,
     language: 'hi',
-    videoId: 'L4oI3G3iW6A'
+    videoId: 'Gup8L4s-gPA'
   },
   {
     id: 'learn-2-en',
     title: 'Advanced Digital Marketing',
     description: 'Learn SEO, SEM, and social media strategies to boost your online presence.',
     type: 'video',
-    duration: '5 hours',
+    duration: '10 min',
     imageUrl: 'https://picsum.photos/seed/marketing/600/400',
     progress: 0,
     language: 'en',
-    videoId: 'Jb4p3S3An2s'
+    videoId: '722z2L2c4wU'
   },
     {
     id: 'learn-2-hi',
     title: 'Advanced Digital Marketing (Hindi)',
     description: 'Learn SEO, SEM, and social media strategies to boost your online presence, in Hindi.',
     type: 'video',
-    duration: '12 hours',
+    duration: '15 min',
     imageUrl: 'https://picsum.photos/seed/marketing2/600/400',
     progress: 0,
     language: 'hi',
-    videoId: 'rqg1Y5Mxi6c'
+    videoId: 'sO4-24r_ioU'
   },
   {
     id: 'learn-3-en',
@@ -186,22 +187,22 @@ export const mockLearningModules: LearningModule[] = [
     title: 'Introduction to Coding with Python (Hindi)',
     description: 'A beginner-friendly introduction to the world of programming with Python, in Hindi.',
     type: 'video',
-    duration: '2h',
+    duration: '1 hour',
     imageUrl: 'https://picsum.photos/seed/coding2/600/400',
     progress: 5,
     language: 'hi',
-    videoId: 'gfDE2a7MKjA'
+    videoId: 'v5-rF_63-v0'
   },
   {
     id: 'learn-5-ta',
     title: 'Introduction to Python (Tamil)',
     description: 'A beginner-friendly introduction to Python programming in Tamil.',
     type: 'video',
-    duration: '11 hours',
+    duration: '30 min',
     imageUrl: 'https://picsum.photos/seed/coding3/600/400',
     progress: 0,
     language: 'ta',
-    videoId: '4X-d22P9d5s'
+    videoId: 'ASrD2-iC0gY'
   },
   {
     id: 'learn-6-en',
