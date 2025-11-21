@@ -32,11 +32,24 @@ import { Calendar } from '@/components/ui/calendar';
 import { cn } from '@/lib/utils';
 import { mockJobs } from '@/lib/data';
 import { Badge } from '@/components/ui/badge';
-
+import type { Job } from '@/lib/types';
+import { useToast } from '@/hooks/use-toast';
 
 export default function PostJobPage() {
+  const [postedJobs, setPostedJobs] = React.useState<Job[]>(mockJobs.slice(0, 3));
+  const [jobTitle, setJobTitle] = React.useState('');
+  const [companyName, setCompanyName] = React.useState('');
+  const [location, setLocation] = React.useState('');
+  const [jobType, setJobType] = React.useState<'Full-time' | 'Part-time' | 'Contract' | 'Internship' | ''>('');
+  const [salary, setSalary] = React.useState('');
+  const [industry, setIndustry] = React.useState('');
+  const [description, setDescription] = React.useState('');
+  const [skills, setSkills] = React.useState('');
+  
   const [fromDate, setFromDate] = React.useState<Date>();
   const [toDate, setToDate] = React.useState<Date>();
+  const { toast } = useToast();
+
 
   const timeOptions = Array.from({ length: 24 * 2 }, (_, i) => {
     const hours = Math.floor(i / 2);
@@ -45,7 +58,49 @@ export default function PostJobPage() {
     return `${formattedHours}:${minutes}`;
   });
 
-  const recentlyPostedJobs = mockJobs.slice(0, 3);
+  const handlePostJob = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!jobTitle || !jobType || !location || !description || !skills) {
+      toast({
+        title: 'Missing Information',
+        description: 'Please fill out all required fields to post a job.',
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    const newJob: Job = {
+      id: `job-${Date.now()}`,
+      title: jobTitle,
+      companyName: companyName || 'Private Employer',
+      companyLogoUrl: 'https://picsum.photos/seed/newlogo/100/100',
+      location: location,
+      jobType: jobType as Job['jobType'],
+      salary: salary,
+      description: description,
+      skillsRequired: skills.split(',').map(s => s.trim()),
+      industry: industry || 'General',
+    };
+
+    setPostedJobs(prevJobs => [newJob, ...prevJobs]);
+
+    // Reset form fields
+    setJobTitle('');
+    setCompanyName('');
+    setLocation('');
+    setJobType('');
+    setSalary('');
+    setIndustry('');
+    setDescription('');
+    setSkills('');
+    setFromDate(undefined);
+    setToDate(undefined);
+
+    toast({
+        title: 'Job Posted!',
+        description: `${newJob.title} has been successfully posted.`,
+    });
+  };
 
   return (
     <div className="p-4 sm:p-6 lg:p-8 space-y-8">
@@ -61,15 +116,15 @@ export default function PostJobPage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form className="space-y-6">
+          <form onSubmit={handlePostJob} className="space-y-6">
             <div className="grid sm:grid-cols-2 gap-6">
               <div className="space-y-2">
                 <Label htmlFor="job-title">Job Title</Label>
-                <Input id="job-title" placeholder="e.g., Senior Frontend Developer" />
+                <Input id="job-title" placeholder="e.g., Senior Frontend Developer" value={jobTitle} onChange={e => setJobTitle(e.target.value)} required />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="company-name">Company Name (Optional)</Label>
-                <Input id="company-name" placeholder="e.g., Innovate Inc." />
+                <Input id="company-name" placeholder="e.g., Innovate Inc." value={companyName} onChange={e => setCompanyName(e.target.value)} />
               </div>
             </div>
 
@@ -169,29 +224,29 @@ export default function PostJobPage() {
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 <div className="space-y-2">
                     <Label htmlFor="location">Location</Label>
-                    <Input id="location" placeholder="e.g., New York, NY or Remote" />
+                    <Input id="location" placeholder="e.g., New York, NY or Remote" value={location} onChange={e => setLocation(e.target.value)} required />
                 </div>
                 <div className="space-y-2">
                     <Label htmlFor="job-type">Job Type</Label>
-                    <Select>
+                    <Select value={jobType} onValueChange={(value) => setJobType(value as any)} required>
                         <SelectTrigger id="job-type">
                             <SelectValue placeholder="Select job type" />
                         </SelectTrigger>
                         <SelectContent>
-                            <SelectItem value="full-time">Full-time</SelectItem>
-                            <SelectItem value="part-time">Part-time</SelectItem>
-                            <SelectItem value="contract">Contract</SelectItem>
-                            <SelectItem value="internship">Internship</SelectItem>
+                            <SelectItem value="Full-time">Full-time</SelectItem>
+                            <SelectItem value="Part-time">Part-time</SelectItem>
+                            <SelectItem value="Contract">Contract</SelectItem>
+                            <SelectItem value="Internship">Internship</SelectItem>
                         </SelectContent>
                     </Select>
                 </div>
                 <div className="space-y-2">
                     <Label htmlFor="salary">Salary Range (Optional)</Label>
-                    <Input id="salary" placeholder="e.g., $120,000 - $150,000" />
+                    <Input id="salary" placeholder="e.g., $120,000 - $150,000" value={salary} onChange={e => setSalary(e.target.value)} />
                 </div>
                 <div className="space-y-2">
                     <Label htmlFor="industry">Industry</Label>
-                    <Input id="industry" placeholder="e.g., Technology" />
+                    <Input id="industry" placeholder="e.g., Technology" value={industry} onChange={e => setIndustry(e.target.value)} />
                 </div>
             </div>
 
@@ -209,12 +264,15 @@ export default function PostJobPage() {
                 id="description"
                 placeholder="Provide a detailed description of the job role, responsibilities, and qualifications."
                 className="min-h-[150px]"
+                value={description}
+                onChange={e => setDescription(e.target.value)}
+                required
               />
             </div>
             
             <div className="space-y-2">
               <Label htmlFor="skills">Skills Required</Label>
-              <Input id="skills" placeholder="e.g., React, TypeScript, Figma (comma-separated)" />
+              <Input id="skills" placeholder="e.g., React, TypeScript, Figma (comma-separated)" value={skills} onChange={e => setSkills(e.target.value)} required />
             </div>
 
             <div className="flex justify-end">
@@ -234,7 +292,7 @@ export default function PostJobPage() {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          {recentlyPostedJobs.map((job) => (
+          {postedJobs.map((job) => (
             <div key={job.id} className="border p-4 rounded-lg flex flex-col sm:flex-row justify-between sm:items-center gap-4">
               <div className="flex items-center gap-4">
                 <div className="bg-muted p-3 rounded-full">
