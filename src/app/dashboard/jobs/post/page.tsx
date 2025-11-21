@@ -12,6 +12,14 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from '@/components/ui/dialog';
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -22,7 +30,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { UserSearch, Upload, Users, CalendarIcon, Briefcase } from "lucide-react";
+import { UserSearch, Upload, Users, CalendarIcon, Briefcase, MapPin, DollarSign } from "lucide-react";
 import {
   Popover,
   PopoverContent,
@@ -50,6 +58,7 @@ export default function PostJobPage() {
   const [toDate, setToDate] = React.useState<Date>();
   const { toast } = useToast();
 
+  const [selectedJob, setSelectedJob] = React.useState<Job | null>(null);
 
   const timeOptions = Array.from({ length: 24 * 2 }, (_, i) => {
     const hours = Math.floor(i / 2);
@@ -100,6 +109,10 @@ export default function PostJobPage() {
         title: 'Job Posted!',
         description: `${newJob.title} has been successfully posted.`,
     });
+  };
+
+  const handleViewDetails = (job: Job) => {
+    setSelectedJob(job);
   };
 
   return (
@@ -305,12 +318,66 @@ export default function PostJobPage() {
               </div>
               <div className="flex items-center gap-4">
                 <Badge variant="outline">{job.jobType}</Badge>
-                <Button variant="secondary" size="sm">View Details</Button>
+                <Button variant="secondary" size="sm" onClick={() => handleViewDetails(job)}>View Details</Button>
               </div>
             </div>
           ))}
         </CardContent>
       </Card>
+
+      {selectedJob && (
+        <Dialog open={!!selectedJob} onOpenChange={(isOpen) => !isOpen && setSelectedJob(null)}>
+          <DialogContent className="sm:max-w-2xl">
+            <DialogHeader>
+              <DialogTitle className="text-2xl">{selectedJob.title}</DialogTitle>
+              <DialogDescription>
+                {selectedJob.companyName}
+              </DialogDescription>
+            </DialogHeader>
+            <div className="space-y-6 py-4">
+                <div className="text-sm text-muted-foreground flex flex-wrap gap-x-4 gap-y-2">
+                    <div className="flex items-center gap-1.5">
+                        <Briefcase className="h-4 w-4" />
+                        <span>{selectedJob.jobType}</span>
+                    </div>
+                    <div className="flex items-center gap-1.5">
+                        <MapPin className="h-4 w-4" />
+                        <span>{selectedJob.location}</span>
+                    </div>
+                    {selectedJob.salary && (
+                        <div className="flex items-center gap-1.5">
+                        <DollarSign className="h-4 w-4" />
+                        <span>{selectedJob.salary}</span>
+                        </div>
+                    )}
+                </div>
+
+                <div>
+                    <h4 className="font-semibold mb-2">Job Description</h4>
+                    <p className="text-sm text-muted-foreground">{selectedJob.description}</p>
+                </div>
+
+                <div>
+                    <h4 className="font-semibold mb-2">Skills Required</h4>
+                    <div className="flex flex-wrap gap-2">
+                        {selectedJob.skillsRequired.map((skill) => (
+                            <Badge key={skill} variant="secondary">{skill}</Badge>
+                        ))}
+                    </div>
+                </div>
+                 <div>
+                    <h4 className="font-semibold mb-2">Industry</h4>
+                    <p className="text-sm text-muted-foreground">{selectedJob.industry}</p>
+                </div>
+            </div>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setSelectedJob(null)}>Close</Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      )}
     </div>
   );
 }
+
+    
