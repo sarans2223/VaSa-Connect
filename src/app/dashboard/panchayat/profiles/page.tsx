@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -20,8 +20,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Search, Users, Eye, Edit, Trash2, Star } from "lucide-react";
+import { useToast } from '@/hooks/use-toast';
 
-// Mock data for demonstration
+// Mock data for demonstration, used as a fallback
 const mockProfiles = [
   { id: '1', name: 'Lakshmi Priya', jobsCompleted: 2, benefitedAmount: 5000 },
   { id: '2', name: 'Kavita Devi', jobsCompleted: 2, benefitedAmount: 4500 },
@@ -52,20 +53,52 @@ const getOverviewStatus = (jobsCompleted: number) => {
   return 'Begin';
 };
 
+type Profile = typeof mockProfiles[0];
 
 export default function ProfilesListPage() {
+  const [profiles, setProfiles] = useState<Profile[]>([]);
   const [filter, setFilter] = useState('all');
+  const [searchQuery, setSearchQuery] = useState('');
+  const { toast } = useToast();
 
-  const sortedAndFilteredProfiles = mockProfiles
+  useEffect(() => {
+    try {
+      const storedProfiles = localStorage.getItem('panchayatProfiles');
+      if (storedProfiles) {
+        setProfiles(JSON.parse(storedProfiles));
+      } else {
+        localStorage.setItem('panchayatProfiles', JSON.stringify(mockProfiles));
+        setProfiles(mockProfiles);
+      }
+    } catch (error) {
+      setProfiles(mockProfiles);
+    }
+  }, []);
+
+  const handleDeleteProfile = (profileId: string) => {
+    const updatedProfiles = profiles.filter(p => p.id !== profileId);
+    setProfiles(updatedProfiles);
+    localStorage.setItem('panchayatProfiles', JSON.stringify(updatedProfiles));
+    toast({
+      title: 'Profile Deleted',
+      description: 'The profile has been successfully removed.',
+    });
+  };
+
+  const sortedAndFilteredProfiles = profiles
+    .filter(profile => {
+      const matchesSearch = profile.name.toLowerCase().includes(searchQuery.toLowerCase());
+      if (!matchesSearch) return false;
+
+      if (filter === 'assigned') return profile.jobsCompleted > 0;
+      if (filter === 'not-yet-assigned') return profile.jobsCompleted === 0;
+      return true;
+    })
     .sort((a, b) => {
-        // Separate into assigned and not-yet-assigned
         const aIsAssigned = a.jobsCompleted > 0;
         const bIsAssigned = b.jobsCompleted > 0;
-
-        if (!aIsAssigned && bIsAssigned) return -1; // a (not assigned) comes before b (assigned)
-        if (aIsAssigned && !bIsAssigned) return 1;  // b (not assigned) comes before a (assigned)
-
-        // If both are assigned, sort by overview status level descending
+        if (!aIsAssigned && bIsAssigned) return -1;
+        if (aIsAssigned && !bIsAssigned) return 1;
         if (aIsAssigned && bIsAssigned) {
             const aStatus = getOverviewStatus(a.jobsCompleted);
             const bStatus = getOverviewStatus(b.jobsCompleted);
@@ -73,18 +106,7 @@ export default function ProfilesListPage() {
                 return overviewStatusDetails[bStatus].level - overviewStatusDetails[aStatus].level;
             }
         }
-        
-        // For profiles with the same assignment status and job count, sort by name
         return a.name.localeCompare(b.name);
-    })
-    .filter(profile => {
-        if (filter === 'assigned') {
-            return profile.jobsCompleted > 0;
-        }
-        if (filter === 'not-yet-assigned') {
-            return profile.jobsCompleted === 0;
-        }
-        return true;
     });
 
   return (
@@ -99,7 +121,12 @@ export default function ProfilesListPage() {
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 items-center">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-              <Input placeholder="Search by name or mobile..." className="pl-10" />
+              <Input 
+                placeholder="Search by name..." 
+                className="pl-10" 
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
             </div>
             <Select value={filter} onValueChange={setFilter}>
               <SelectTrigger>
@@ -153,7 +180,9 @@ export default function ProfilesListPage() {
                 <CardFooter className="gap-2">
                     <Button variant="outline" size="sm"><Eye className="mr-2 h-4 w-4"/>View</Button>
                     <Button variant="outline" size="sm"><Edit className="mr-2 h-4 w-4"/>Edit</Button>
-                    <Button variant="destructive" size="sm"><Trash2 className="mr-2 h-4 w-4"/>Delete</Button>
+                    <Button variant="destructive" size="sm" onClick={() => handleDeleteProfile(profile.id)}>
+                      <Trash2 className="mr-2 h-4 w-4"/>Delete
+                    </Button>
                 </CardFooter>
             </Card>
            );
