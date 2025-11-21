@@ -1,5 +1,7 @@
 
+'use client';
 
+import { useState } from 'react';
 import {
   Card,
   CardContent,
@@ -18,8 +20,34 @@ import { JobCard } from "../components/job-card";
 import { JobSearchClient } from "./components/job-search-client";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
+import type { Job } from '@/lib/types';
+
 
 export default function JobsPage() {
+    const [searchQuery, setSearchQuery] = useState('');
+    const [location, setLocation] = useState('all');
+    const [jobType, setJobType] = useState('all');
+    const [industry, setIndustry] = useState('all');
+    const [filteredJobs, setFilteredJobs] = useState<Job[]>(mockJobs);
+
+    const handleSearch = () => {
+        const lowercasedQuery = searchQuery.toLowerCase();
+        const newFilteredJobs = mockJobs.filter(job => {
+            const matchesQuery = lowercasedQuery ? 
+                job.title.toLowerCase().includes(lowercasedQuery) ||
+                job.skillsRequired.some(skill => skill.toLowerCase().includes(lowercasedQuery))
+                : true;
+
+            const matchesLocation = location !== 'all' ? job.location.toLowerCase().includes(location.split(',')[0].toLowerCase()) : true;
+            const matchesJobType = jobType !== 'all' ? job.jobType.toLowerCase() === jobType.toLowerCase() : true;
+            const matchesIndustry = industry !== 'all' ? job.industry.toLowerCase().replace(/ & /g, '-').replace(/ /g, '-') === industry : true;
+            
+            return matchesQuery && matchesLocation && matchesJobType && matchesIndustry;
+        });
+        setFilteredJobs(newFilteredJobs);
+    };
+
+
   return (
     <div className="p-4 sm:p-6 lg:p-8 space-y-8">
       <div className="flex items-center gap-4">
@@ -38,9 +66,14 @@ export default function JobsPage() {
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 items-center">
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                <Input placeholder="Search by title or skill..." className="pl-10" />
+                <Input 
+                    placeholder="Search by title or skill..." 
+                    className="pl-10" 
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                />
               </div>
-              <Select>
+              <Select value={location} onValueChange={setLocation}>
                   <SelectTrigger>
                     <div className="flex items-center gap-2">
                         <MapPin className="h-5 w-5 text-muted-foreground" />
@@ -120,18 +153,19 @@ export default function JobsPage() {
                     <SelectItem value="warangal">Warangal, TG</SelectItem>
                   </SelectContent>
               </Select>
-              <Select>
+              <Select value={jobType} onValueChange={setJobType}>
                 <SelectTrigger>
                   <SelectValue placeholder="Job Type" />
                 </SelectTrigger>
                 <SelectContent>
+                  <SelectItem value="all">All Job Types</SelectItem>
                   <SelectItem value="full-time">Full-time</SelectItem>
                   <SelectItem value="part-time">Part-time</SelectItem>
                   <SelectItem value="contract">Contract</SelectItem>
                   <SelectItem value="internship">Internship</SelectItem>
                 </SelectContent>
               </Select>
-              <Select>
+              <Select value={industry} onValueChange={setIndustry}>
                 <SelectTrigger>
                   <SelectValue placeholder="Industry" />
                 </SelectTrigger>
@@ -145,11 +179,13 @@ export default function JobsPage() {
                   <SelectItem value="healthcare">Healthcare</SelectItem>
                   <SelectItem value="home-services">Home Services</SelectItem>
                   <SelectItem value="hospitality">Hospitality</SelectItem>
+                  <SelectItem value="fashion">Fashion</SelectItem>
+                  <SelectItem value="agriculture">Agriculture</SelectItem>
                 </SelectContent>
               </Select>
             </div>
              <div className="flex justify-end">
-                <Button>
+                <Button onClick={handleSearch}>
                     <Search className="mr-2 h-4 w-4" />
                     Search
                 </Button>
@@ -157,11 +193,18 @@ export default function JobsPage() {
           </CardContent>
         </Card>
 
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {mockJobs.map((job) => (
-            <JobCard key={job.id} job={job} />
-          ))}
-        </div>
+        {filteredJobs.length > 0 ? (
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {filteredJobs.map((job) => (
+              <JobCard key={job.id} job={job} />
+            ))}
+          </div>
+        ) : (
+          <div className="text-center py-12 text-muted-foreground">
+            <h3 className="text-xl font-semibold">No Jobs Found</h3>
+            <p>Your search did not match any job listings. Try different filters.</p>
+          </div>
+        )}
       </div>
     </div>
   );
