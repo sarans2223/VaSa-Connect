@@ -47,6 +47,7 @@ export default function TeamsPage() {
 
   const [myTeams, setMyTeams] = useState<Team[]>(mockTeams.slice(0, 2));
   const [newMemberEmails, setNewMemberEmails] = useState<Record<string, string>>({});
+  const [showAddMember, setShowAddMember] = useState<Record<string, boolean>>({});
 
 
   const handleFindTeams = async () => {
@@ -101,6 +102,11 @@ export default function TeamsPage() {
 
     // Clear the input field after sending
     setNewMemberEmails(prev => ({ ...prev, [teamId]: '' }));
+    setShowAddMember(prev => ({ ...prev, [teamId]: false }));
+  };
+
+  const toggleAddMember = (teamId: string) => {
+    setShowAddMember(prev => ({ ...prev, [teamId]: !prev[teamId] }));
   };
 
 
@@ -167,26 +173,28 @@ export default function TeamsPage() {
                                         <AvatarFallback>{member.name.charAt(0)}</AvatarFallback>
                                     </Avatar>
                                 ))}
-                                <Button variant="outline" size="icon" className="rounded-full h-10 w-10 bg-muted hover:bg-secondary">
+                                <Button variant="outline" size="icon" className="rounded-full h-10 w-10 bg-muted hover:bg-secondary" onClick={() => toggleAddMember(team.id)}>
                                     <PlusCircle className="h-5 w-5" />
                                 </Button>
                             </div>
                         </div>
 
-                        <div className="space-y-2">
-                            <h4 className="font-semibold">Add Members</h4>
-                            <div className="flex gap-2">
-                                <Input 
-                                    placeholder="Enter email to invite" 
-                                    type="email" 
-                                    value={newMemberEmails[team.id] || ''}
-                                    onChange={(e) => handleNewMemberEmailChange(team.id, e.target.value)}
-                                />
-                                <Button onClick={() => handleInviteMember(team.id, team.name)}>
-                                    <Send className="h-4 w-4" />
-                                </Button>
-                            </div>
-                        </div>
+                        {showAddMember[team.id] && (
+                          <div className="space-y-2 pt-4 border-t">
+                              <h4 className="font-semibold">Add Members</h4>
+                              <div className="flex gap-2">
+                                  <Input 
+                                      placeholder="Enter email to invite" 
+                                      type="email" 
+                                      value={newMemberEmails[team.id] || ''}
+                                      onChange={(e) => handleNewMemberEmailChange(team.id, e.target.value)}
+                                  />
+                                  <Button onClick={() => handleInviteMember(team.id, team.name)}>
+                                      <Send className="h-4 w-4" />
+                                  </Button>
+                              </div>
+                          </div>
+                        )}
                     </CardContent>
                 </Card>
             ))}
@@ -293,5 +301,3 @@ export default function TeamsPage() {
     </div>
   );
 }
-
-    
