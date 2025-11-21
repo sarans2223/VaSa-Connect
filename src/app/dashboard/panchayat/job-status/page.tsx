@@ -10,7 +10,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { BarChart, CheckCircle, UserPlus } from "lucide-react";
+import { BarChart, CheckCircle, UserPlus, Trash2 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 
@@ -77,6 +77,17 @@ export default function JobStatusPage() {
       });
   };
 
+  const handleDeleteJob = (jobId: string, jobName: string) => {
+    const updatedJobs = jobs.filter(job => job.id !== jobId);
+    setJobs(updatedJobs);
+    localStorage.setItem('panchayatJobs', JSON.stringify(updatedJobs));
+    toast({
+        title: 'Job Deleted',
+        description: `The job "${jobName}" has been permanently deleted.`,
+        variant: 'destructive',
+    });
+  };
+
   const statusOrder: { [key in JobStatus]: number } = {
     'Yet To Assign': 1,
     'Worker Assigned': 2,
@@ -94,7 +105,7 @@ export default function JobStatusPage() {
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {sortedJobs.map((job) => (
-          <Card key={job.id}>
+          <Card key={job.id} className="flex flex-col">
             <CardHeader>
               <div className="flex justify-between items-start">
                   <CardTitle className="text-lg">{job.name}</CardTitle>
@@ -103,7 +114,7 @@ export default function JobStatusPage() {
                   </Badge>
               </div>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className="space-y-4 flex-grow">
                 <div>
                     <h4 className="text-sm font-semibold text-muted-foreground mb-2">Assigned Workers</h4>
                     {job.workerNames.length > 0 ? (
@@ -115,22 +126,26 @@ export default function JobStatusPage() {
                     )}
                 </div>
             </CardContent>
-            <CardFooter className="gap-2">
-                <Button variant="outline">View Details</Button>
+            <CardFooter className="gap-2 flex-wrap">
+                <Button variant="outline" size="sm">View Details</Button>
                 {job.status === 'Worker Assigned' && (
-                    <Button className="bg-green-600 hover:bg-green-700 text-white" onClick={() => handleMarkCompleted(job.id, job.name)}>
+                    <Button size="sm" className="bg-green-600 hover:bg-green-700 text-white" onClick={() => handleMarkCompleted(job.id, job.name)}>
                         <CheckCircle className="mr-2 h-4 w-4" />
                         Mark Completed
                     </Button>
                 )}
                 {job.status === 'Yet To Assign' && (
-                    <Button asChild>
+                    <Button asChild size="sm">
                         <Link href="/dashboard/panchayat/assign-worker">
                             <UserPlus className="mr-2 h-4 w-4" />
                             Assign Workers
                         </Link>
                     </Button>
                 )}
+                <Button variant="destructive" size="sm" onClick={() => handleDeleteJob(job.id, job.name)}>
+                    <Trash2 className="mr-2 h-4 w-4" />
+                    Delete Job
+                </Button>
             </CardFooter>
           </Card>
         ))}
