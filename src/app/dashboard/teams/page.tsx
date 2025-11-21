@@ -45,6 +45,10 @@ export default function TeamsPage() {
   const [error, setError] = useState<string | null>(null);
   const { toast } = useToast();
 
+  const [myTeams, setMyTeams] = useState<Team[]>(mockTeams.slice(0, 2));
+  const [newMemberEmails, setNewMemberEmails] = useState<Record<string, string>>({});
+
+
   const handleFindTeams = async () => {
     setIsLoading(true);
     setError(null);
@@ -73,6 +77,30 @@ export default function TeamsPage() {
 
   const handleViewDetails = (team: SuggestedTeam) => {
     setSelectedTeam(team);
+  };
+  
+  const handleNewMemberEmailChange = (teamId: string, email: string) => {
+    setNewMemberEmails(prev => ({ ...prev, [teamId]: email }));
+  };
+
+  const handleInviteMember = (teamId: string, teamName: string) => {
+    const email = newMemberEmails[teamId];
+    if (!email) {
+      toast({
+        title: 'Error',
+        description: 'Please enter an email address to send an invitation.',
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    toast({
+      title: 'Invitation Sent!',
+      description: `An invitation has been sent to ${email} to join ${teamName}.`,
+    });
+
+    // Clear the input field after sending
+    setNewMemberEmails(prev => ({ ...prev, [teamId]: '' }));
   };
 
 
@@ -123,7 +151,7 @@ export default function TeamsPage() {
       <div>
         <h2 className="text-2xl font-bold tracking-tight mb-4">Your Teams</h2>
         <div className="grid gap-6 md:grid-cols-1 lg:grid-cols-2">
-           {mockTeams.slice(0,2).map(team => (
+           {myTeams.map(team => (
                 <Card key={team.id}>
                     <CardHeader>
                         <CardTitle>{team.name}</CardTitle>
@@ -148,8 +176,13 @@ export default function TeamsPage() {
                         <div className="space-y-2">
                             <h4 className="font-semibold">Add Members</h4>
                             <div className="flex gap-2">
-                                <Input placeholder="Enter email to invite" type="email" />
-                                <Button>
+                                <Input 
+                                    placeholder="Enter email to invite" 
+                                    type="email" 
+                                    value={newMemberEmails[team.id] || ''}
+                                    onChange={(e) => handleNewMemberEmailChange(team.id, e.target.value)}
+                                />
+                                <Button onClick={() => handleInviteMember(team.id, team.name)}>
                                     <Send className="h-4 w-4" />
                                 </Button>
                             </div>
@@ -260,3 +293,5 @@ export default function TeamsPage() {
     </div>
   );
 }
+
+    
