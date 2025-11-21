@@ -1,3 +1,4 @@
+
 import Image from "next/image";
 import {
   Card,
@@ -9,7 +10,7 @@ import {
 } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { mockLearningModules } from "@/lib/data";
-import { BookOpen, Clock, Languages } from "lucide-react";
+import { BookOpen, Clock, Languages, Play, Rewind } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import {
   Select,
@@ -18,6 +19,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
 
 
 export default function LearningPage() {
@@ -80,11 +82,21 @@ export default function LearningPage() {
                 <Clock className="mr-1.5 h-4 w-4" />
                 <span>{module.duration}</span>
               </div>
-              <div>
+              <div className="w-full">
                 <Progress value={module.progress} className="h-2 w-full" />
                 <span className="text-xs text-muted-foreground mt-1">
                   {module.progress}% Complete
                 </span>
+              </div>
+              <div className="flex w-full items-center gap-2 pt-2">
+                <Button size="sm" className="w-full">
+                  <Play className="mr-2 h-4 w-4" />
+                  Resume
+                </Button>
+                <Button size="sm" variant="outline" className="w-full">
+                  <Rewind className="mr-2 h-4 w-4" />
+                  Rewind
+                </Button>
               </div>
             </CardFooter>
           </Card>
