@@ -27,7 +27,7 @@ import {
   SheetClose,
 } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
-import { useAuth, signOut } from "@/firebase/auth";
+import { signOut } from "@/firebase/auth";
 import { useToast } from "@/hooks/use-toast";
 import { useUser } from "@/firebase";
 
@@ -58,7 +58,7 @@ export function DashboardNav() {
   const pathname = usePathname();
   const router = useRouter();
   const { toast } = useToast();
-  const user = useUser();
+  const { user } = useUser();
   const [userName, setUserName] = useState('');
 
   const isPanchayatPath = pathname.startsWith('/dashboard/panchayat');
@@ -84,6 +84,7 @@ export function DashboardNav() {
       await signOut();
       localStorage.removeItem('userName');
       localStorage.removeItem('userEmail');
+      localStorage.removeItem('user');
       toast({
         title: "Signed Out",
         description: "You have been successfully signed out.",

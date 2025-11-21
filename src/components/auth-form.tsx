@@ -67,6 +67,11 @@ type AuthFormProps = {
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d).{8,}$/; // 8+ chars, 1 letter, 1 number
 
+type AuthFormProps = {
+  type: 'login' | 'signup';
+};
+
+
 export function AuthForm({ type }: AuthFormProps) {
   const router = useRouter();
   const { toast } = useToast();
