@@ -70,35 +70,46 @@ export default function AssignWorkerPage() {
 
       <Card>
         <CardContent className="p-4">
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 items-center">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-              <Input placeholder="Search by name or skill..." className="pl-10" />
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 items-end">
+                <div className="relative lg:col-span-1">
+                    <Label htmlFor="search-input">Search</Label>
+                    <Search className="absolute left-3 top-9 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                    <Input id="search-input" placeholder="Name or skill..." className="pl-10" />
+                </div>
+                <div className="space-y-2">
+                    <Label>Skill</Label>
+                    <Select>
+                    <SelectTrigger>
+                        <SelectValue placeholder="Filter by skill" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="all">All Skills</SelectItem>
+                        <SelectItem value="cooking">Cooking</SelectItem>
+                        <SelectItem value="farming">Farming</SelectItem>
+                        <SelectItem value="tailoring">Tailoring</SelectItem>
+                        <SelectItem value="cleaning">Cleaning</SelectItem>
+                    </SelectContent>
+                    </Select>
+                </div>
+                <div className="space-y-2">
+                    <Label>Job</Label>
+                    <Select>
+                    <SelectTrigger>
+                        <SelectValue placeholder="Select a job to assign" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="job-1">Catering Project</SelectItem>
+                        <SelectItem value="job-2">Harvesting</SelectItem>
+                        <SelectItem value="job-3">Office Cleaning</SelectItem>
+                        <SelectItem value="job-4">Nanny Position</SelectItem>
+                    </SelectContent>
+                    </Select>
+                </div>
+                <Button className="w-full">
+                    <Search className="mr-2 h-4 w-4" />
+                    Search
+                </Button>
             </div>
-            <Select>
-              <SelectTrigger>
-                <SelectValue placeholder="Filter by skill" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Skills</SelectItem>
-                <SelectItem value="cooking">Cooking</SelectItem>
-                <SelectItem value="farming">Farming</SelectItem>
-                <SelectItem value="tailoring">Tailoring</SelectItem>
-                <SelectItem value="cleaning">Cleaning</SelectItem>
-              </SelectContent>
-            </Select>
-            <Select>
-              <SelectTrigger>
-                <SelectValue placeholder="Select a job to assign" />
-              </SelectTrigger>
-              <SelectContent>
-                 <SelectItem value="job-1">Catering Project</SelectItem>
-                 <SelectItem value="job-2">Harvesting</SelectItem>
-                 <SelectItem value="job-3">Office Cleaning</SelectItem>
-                 <SelectItem value="job-4">Nanny Position</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
         </CardContent>
       </Card>
 
