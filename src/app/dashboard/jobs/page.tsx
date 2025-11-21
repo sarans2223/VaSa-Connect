@@ -15,12 +15,21 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { mockJobs } from "@/lib/data";
-import { Briefcase, Search, MapPin } from "lucide-react";
+import { Briefcase, Search, MapPin, DollarSign } from "lucide-react";
 import { JobCard } from "../components/job-card";
 import { JobSearchClient } from "./components/job-search-client";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import type { Job } from '@/lib/types';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from '@/components/ui/dialog';
+import { Badge } from '@/components/ui/badge';
 
 
 export default function JobsPage() {
@@ -29,6 +38,7 @@ export default function JobsPage() {
     const [jobType, setJobType] = useState('all');
     const [industry, setIndustry] = useState('all');
     const [filteredJobs, setFilteredJobs] = useState<Job[]>(mockJobs);
+    const [selectedJob, setSelectedJob] = useState<Job | null>(null);
 
     const handleSearch = () => {
         const lowercasedQuery = searchQuery.toLowerCase();
@@ -45,6 +55,10 @@ export default function JobsPage() {
             return matchesQuery && matchesLocation && matchesJobType && matchesIndustry;
         });
         setFilteredJobs(newFilteredJobs);
+    };
+
+    const handleViewDetails = (job: Job) => {
+        setSelectedJob(job);
     };
 
 
@@ -196,7 +210,7 @@ export default function JobsPage() {
         {filteredJobs.length > 0 ? (
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {filteredJobs.map((job) => (
-              <JobCard key={job.id} job={job} />
+              <JobCard key={job.id} job={job} onViewDetails={() => handleViewDetails(job)} />
             ))}
           </div>
         ) : (
@@ -206,6 +220,58 @@ export default function JobsPage() {
           </div>
         )}
       </div>
+
+      {selectedJob && (
+        <Dialog open={!!selectedJob} onOpenChange={(isOpen) => !isOpen && setSelectedJob(null)}>
+          <DialogContent className="sm:max-w-2xl">
+            <DialogHeader>
+              <DialogTitle className="text-2xl">{selectedJob.title}</DialogTitle>
+              <DialogDescription>
+                {selectedJob.companyName}
+              </DialogDescription>
+            </DialogHeader>
+            <div className="space-y-6 py-4">
+                <div className="text-sm text-muted-foreground flex flex-wrap gap-x-4 gap-y-2">
+                    <div className="flex items-center gap-1.5">
+                        <Briefcase className="h-4 w-4" />
+                        <span>{selectedJob.jobType}</span>
+                    </div>
+                    <div className="flex items-center gap-1.5">
+                        <MapPin className="h-4 w-4" />
+                        <span>{selectedJob.location}</span>
+                    </div>
+                    {selectedJob.salary && (
+                        <div className="flex items-center gap-1.5">
+                        <DollarSign className="h-4 w-4" />
+                        <span>{selectedJob.salary}</span>
+                        </div>
+                    )}
+                </div>
+
+                <div>
+                    <h4 className="font-semibold mb-2">Job Description</h4>
+                    <p className="text-sm text-muted-foreground">{selectedJob.description}</p>
+                </div>
+
+                <div>
+                    <h4 className="font-semibold mb-2">Skills Required</h4>
+                    <div className="flex flex-wrap gap-2">
+                        {selectedJob.skillsRequired.map((skill) => (
+                            <Badge key={skill} variant="secondary">{skill}</Badge>
+                        ))}
+                    </div>
+                </div>
+                 <div>
+                    <h4 className="font-semibold mb-2">Industry</h4>
+                    <p className="text-sm text-muted-foreground">{selectedJob.industry}</p>
+                </div>
+            </div>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setSelectedJob(null)}>Close</Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      )}
     </div>
   );
 }

@@ -15,9 +15,16 @@ import { MapPin, Briefcase, DollarSign, ArrowRight } from "lucide-react";
 type JobCardProps = {
   job: Job;
   relevanceScore?: number;
+  onViewDetails?: (job: Job) => void;
 };
 
-export function JobCard({ job, relevanceScore }: JobCardProps) {
+export function JobCard({ job, relevanceScore, onViewDetails }: JobCardProps) {
+  const handleViewDetailsClick = () => {
+    if (onViewDetails) {
+      onViewDetails(job);
+    }
+  };
+  
   return (
     <Card className="transition-all hover:shadow-lg flex flex-col">
       <CardHeader className="flex-row gap-4 items-start">
@@ -64,7 +71,10 @@ export function JobCard({ job, relevanceScore }: JobCardProps) {
         </div>
       </CardContent>
       <CardFooter>
-        <Button className="w-full bg-gradient-to-r from-[#E0BBE4] to-[#957DAD] hover:opacity-90 text-primary-foreground">
+        <Button 
+          className="w-full bg-gradient-to-r from-[#E0BBE4] to-[#957DAD] hover:opacity-90 text-primary-foreground"
+          onClick={handleViewDetailsClick}
+        >
           View Details
           <ArrowRight className="ml-2 h-4 w-4" />
         </Button>

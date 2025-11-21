@@ -9,12 +9,24 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Card } from "@/components/ui/card";
 import { JobCard } from "../../components/job-card";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import type { Job } from '@/lib/types';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from '@/components/ui/dialog';
+import { Briefcase, MapPin, DollarSign } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 
 
 export function JobSearchClient() {
     const [isLoading, setIsLoading] = useState(false);
     const [matchedJobs, setMatchedJobs] = useState<MatchJobsToUsersOutput | null>(null);
     const [error, setError] = useState<string | null>(null);
+    const [selectedJob, setSelectedJob] = useState<Job | null>(null);
 
     const handleMatchJobs = async () => {
         setIsLoading(true);
@@ -49,6 +61,10 @@ export function JobSearchClient() {
         } finally {
             setIsLoading(false);
         }
+    };
+
+    const handleViewDetails = (job: Job) => {
+        setSelectedJob(job);
     };
     
     return (
@@ -105,10 +121,62 @@ export function JobSearchClient() {
                         {matchedJobs.map(matchedJob => {
                             const originalJob = mockJobs.find(j => j.title === matchedJob.jobTitle);
                             if (!originalJob) return null;
-                            return <JobCard key={originalJob.id} job={originalJob} relevanceScore={matchedJob.relevanceScore} />;
+                            return <JobCard key={originalJob.id} job={originalJob} relevanceScore={matchedJob.relevanceScore} onViewDetails={() => handleViewDetails(originalJob)} />;
                         })}
                     </div>
                 </div>
+            )}
+
+            {selectedJob && (
+                <Dialog open={!!selectedJob} onOpenChange={(isOpen) => !isOpen && setSelectedJob(null)}>
+                <DialogContent className="sm:max-w-2xl">
+                    <DialogHeader>
+                    <DialogTitle className="text-2xl">{selectedJob.title}</DialogTitle>
+                    <DialogDescription>
+                        {selectedJob.companyName}
+                    </DialogDescription>
+                    </DialogHeader>
+                    <div className="space-y-6 py-4">
+                        <div className="text-sm text-muted-foreground flex flex-wrap gap-x-4 gap-y-2">
+                            <div className="flex items-center gap-1.5">
+                                <Briefcase className="h-4 w-4" />
+                                <span>{selectedJob.jobType}</span>
+                            </div>
+                            <div className="flex items-center gap-1.5">
+                                <MapPin className="h-4 w-4" />
+                                <span>{selectedJob.location}</span>
+                            </div>
+                            {selectedJob.salary && (
+                                <div className="flex items-center gap-1.5">
+                                <DollarSign className="h-4 w-4" />
+                                <span>{selectedJob.salary}</span>
+                                </div>
+                            )}
+                        </div>
+
+                        <div>
+                            <h4 className="font-semibold mb-2">Job Description</h4>
+                            <p className="text-sm text-muted-foreground">{selectedJob.description}</p>
+                        </div>
+
+                        <div>
+                            <h4 className="font-semibold mb-2">Skills Required</h4>
+                            <div className="flex flex-wrap gap-2">
+                                {selectedJob.skillsRequired.map((skill) => (
+                                    <Badge key={skill} variant="secondary">{skill}</Badge>
+                                ))}
+                            </div>
+                        </div>
+                        <div>
+                            <h4 className="font-semibold mb-2">Industry</h4>
+                            <p className="text-sm text-muted-foreground">{selectedJob.industry}</p>
+                        </div>
+                    </div>
+                    <DialogFooter>
+                    <Button variant="outline" onClick={() => setSelectedJob(null)}>Close</Button>
+                    </DialogFooter>
+                </DialogContent>
+                </Dialog>
             )}
 
         </div>
