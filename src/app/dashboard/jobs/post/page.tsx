@@ -30,7 +30,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { UserSearch, Upload, Users, CalendarIcon, Briefcase, MapPin, DollarSign } from "lucide-react";
+import { UserSearch, Upload, Users, CalendarIcon, Briefcase, MapPin, DollarSign, CheckCircle } from "lucide-react";
 import {
   Popover,
   PopoverContent,
@@ -114,6 +114,15 @@ export default function PostJobPage() {
   const handleViewDetails = (job: Job) => {
     setSelectedJob(job);
   };
+
+  const handleMarkAsCompleted = (jobId: string, jobTitle: string) => {
+    setPostedJobs(prevJobs => prevJobs.filter(job => job.id !== jobId));
+    toast({
+      title: 'Job Completed',
+      description: `The job "${jobTitle}" has been marked as completed and removed.`,
+    });
+  };
+
 
   return (
     <div className="p-4 sm:p-6 lg:p-8 space-y-8">
@@ -305,23 +314,33 @@ export default function PostJobPage() {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          {postedJobs.map((job) => (
-            <div key={job.id} className="border p-4 rounded-lg flex flex-col sm:flex-row justify-between sm:items-center gap-4">
-              <div className="flex items-center gap-4">
-                <div className="bg-muted p-3 rounded-full">
-                  <Briefcase className="h-6 w-6 text-primary" />
+          {postedJobs.length > 0 ? (
+            postedJobs.map((job) => (
+              <div key={job.id} className="border p-4 rounded-lg flex flex-col sm:flex-row justify-between sm:items-center gap-4">
+                <div className="flex items-center gap-4">
+                  <div className="bg-muted p-3 rounded-full">
+                    <Briefcase className="h-6 w-6 text-primary" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold">{job.title}</h3>
+                    <p className="text-sm text-muted-foreground">{job.companyName} &middot; {job.location}</p>
+                  </div>
                 </div>
-                <div>
-                  <h3 className="font-semibold">{job.title}</h3>
-                  <p className="text-sm text-muted-foreground">{job.companyName} &middot; {job.location}</p>
+                <div className="flex items-center gap-2">
+                  <Badge variant="outline">{job.jobType}</Badge>
+                  <Button variant="secondary" size="sm" onClick={() => handleViewDetails(job)}>View Details</Button>
+                  <Button variant="ghost" size="sm" className="text-green-600 hover:bg-green-100 hover:text-green-700" onClick={() => handleMarkAsCompleted(job.id, job.title)}>
+                      <CheckCircle className="mr-2 h-4 w-4" />
+                      Mark as Completed
+                  </Button>
                 </div>
               </div>
-              <div className="flex items-center gap-4">
-                <Badge variant="outline">{job.jobType}</Badge>
-                <Button variant="secondary" size="sm" onClick={() => handleViewDetails(job)}>View Details</Button>
-              </div>
+            ))
+          ) : (
+             <div className="text-center text-muted-foreground py-8">
+                <p>No jobs posted yet. Post one using the form above!</p>
             </div>
-          ))}
+          )}
         </CardContent>
       </Card>
 
@@ -379,5 +398,3 @@ export default function PostJobPage() {
     </div>
   );
 }
-
-    
