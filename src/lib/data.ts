@@ -147,7 +147,7 @@ export const mockLearningModules: LearningModule[] = [
     imageUrl: 'https://picsum.photos/seed/marketing/600/400',
     progress: 0,
     language: 'en',
-    videoId: '722z2L2c4wU'
+    videoId: 'sO4-24r_ioU'
   },
     {
     id: 'learn-2-hi',
@@ -158,7 +158,7 @@ export const mockLearningModules: LearningModule[] = [
     imageUrl: 'https://picsum.photos/seed/marketing2/600/400',
     progress: 0,
     language: 'hi',
-    videoId: 'sO4-24r_ioU'
+    videoId: '52hR-dJM3M0'
   },
   {
     id: 'learn-3-en',
