@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState } from 'react';
@@ -25,11 +26,22 @@ import { suggestTeamsForUser, type SuggestTeamsForUserOutput } from '@/ai/flows/
 import { Separator } from '@/components/ui/separator';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useToast } from '@/hooks/use-toast';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from '@/components/ui/dialog';
+
+type SuggestedTeam = SuggestTeamsForUserOutput['suggestedTeams'][0];
 
 
 export default function TeamsPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [suggestedTeams, setSuggestedTeams] = useState<SuggestTeamsForUserOutput['suggestedTeams'] | null>(null);
+  const [selectedTeam, setSelectedTeam] = useState<SuggestedTeam | null>(null);
   const [error, setError] = useState<string | null>(null);
   const { toast } = useToast();
 
@@ -59,11 +71,8 @@ export default function TeamsPage() {
     });
   };
 
-  const handleViewDetails = (teamName: string) => {
-    toast({
-      title: 'Details',
-      description: `Viewing details for ${teamName}. Full page coming soon!`,
-    });
+  const handleViewDetails = (team: SuggestedTeam) => {
+    setSelectedTeam(team);
   };
 
 
@@ -203,7 +212,7 @@ export default function TeamsPage() {
                       </div>
                   </CardContent>
                   <CardFooter className="gap-2">
-                      <Button variant="outline" onClick={() => handleViewDetails(team.name)}>
+                      <Button variant="outline" onClick={() => handleViewDetails(team)}>
                           <Eye className="mr-2 h-4 w-4" />
                           View Details
                       </Button>
@@ -217,6 +226,36 @@ export default function TeamsPage() {
             </div>
         )}
       </div>
+
+        {selectedTeam && (
+            <Dialog open={!!selectedTeam} onOpenChange={(isOpen) => !isOpen && setSelectedTeam(null)}>
+            <DialogContent className="sm:max-w-lg">
+                <DialogHeader>
+                <DialogTitle className="text-2xl">{selectedTeam.name}</DialogTitle>
+                <DialogDescription>
+                    {selectedTeam.description}
+                </DialogDescription>
+                </DialogHeader>
+                <div className="space-y-4 py-4">
+                    <div className="flex items-center gap-2 text-muted-foreground">
+                        <Users className="h-5 w-5" />
+                        <span className="font-semibold">{selectedTeam.memberCount} Members</span>
+                    </div>
+                     <div>
+                        <h4 className="font-semibold mb-2">AI Recommendation</h4>
+                        <p className="text-sm text-muted-foreground italic">"{selectedTeam.reason}"</p>
+                    </div>
+                </div>
+                <DialogFooter>
+                    <Button variant="outline" onClick={() => setSelectedTeam(null)}>Close</Button>
+                    <Button onClick={() => { handleJoinRequest(selectedTeam.name); setSelectedTeam(null); }}>
+                        <PlusCircle className="mr-2 h-4 w-4" />
+                        Request to Join
+                    </Button>
+                </DialogFooter>
+            </DialogContent>
+            </Dialog>
+        )}
 
     </div>
   );
