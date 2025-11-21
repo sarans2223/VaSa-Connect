@@ -29,6 +29,8 @@ import { useToast } from "@/hooks/use-toast";
 export default function LearningPage() {
   const { toast } = useToast();
   const [language, setLanguage] = useState('all');
+  // State to force re-render of iframes
+  const [videoKeys, setVideoKeys] = useState<Record<string, number>>({});
 
   const handleResume = (title: string) => {
     toast({
@@ -37,7 +39,9 @@ export default function LearningPage() {
     });
   };
 
-  const handleRewind = (title: string) => {
+  const handleRewind = (moduleId: string, title: string) => {
+    // Change the key of the video to force the iframe to re-render
+    setVideoKeys(prev => ({ ...prev, [moduleId]: (prev[moduleId] || 0) + 1 }));
     toast({
       title: "Rewinding Video",
       description: `Playing "${title}" from the beginning.`,
@@ -84,6 +88,7 @@ export default function LearningPage() {
               <div className="relative aspect-video">
                  {module.type === 'video' && module.videoId ? (
                   <iframe
+                    key={videoKeys[module.id] || 0}
                     src={`https://www.youtube.com/embed/${module.videoId}`}
                     title={module.title}
                     frameBorder="0"
@@ -130,7 +135,7 @@ export default function LearningPage() {
                     <Play className="mr-2 h-4 w-4" />
                     Resume
                   </Button>
-                  <Button size="sm" variant="outline" className="w-full" onClick={() => handleRewind(module.title)}>
+                  <Button size="sm" variant="outline" className="w-full" onClick={() => handleRewind(module.id, module.title)}>
                     <Rewind className="mr-2 h-4 w-4" />
                     Rewind
                   </Button>
