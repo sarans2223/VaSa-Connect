@@ -107,17 +107,17 @@ export default function EditProfilePage() {
             <div className="grid sm:grid-cols-2 gap-6">
               <div className="space-y-2">
                 <Label htmlFor="name">Job Seeker Name</Label>
-                <Input id="name" value={profile.name} onChange={handleInputChange} required />
+                <Input id="name" value={profile.name || ''} onChange={handleInputChange} required />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="mobileNo">Mobile No</Label>
-                <Input id="mobileNo" type="tel" value={profile.mobileNo} onChange={handleInputChange} required />
+                <Input id="mobileNo" type="tel" value={profile.mobileNo || ''} onChange={handleInputChange} required />
               </div>
             </div>
 
             <div className="space-y-2">
                 <Label htmlFor="aadhaarId">Aadhaar ID</Label>
-                <Input id="aadhaarId" value={profile.aadhaarId} onChange={handleInputChange} required />
+                <Input id="aadhaarId" value={profile.aadhaarId || ''} onChange={handleInputChange} required />
             </div>
             
             <div className="space-y-2">
