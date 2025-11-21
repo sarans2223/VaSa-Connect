@@ -10,7 +10,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { BarChart, CheckCircle, UserPlus, Trash2 } from "lucide-react";
+import { BarChart, CheckCircle, UserPlus, Trash2, Eye } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 
@@ -30,8 +30,8 @@ const initialJobs = [
     { id: '12', name: 'Papad Making', workerNames: ['Shanti', 'Kamla'], status: 'Completed' },
     { id: '13', name: 'Spice Grinding', workerNames: [], status: 'Yet To Assign' },
     { id: '14', name: 'Cattle Rearing', workerNames: ['Laxmi'], status: 'Worker Assigned' },
-    { id: '15', 'name': 'Embroidery Work', workerNames: ['Sunita Devi'], status: 'Completed' },
-    { id: '16', 'name': 'Driving for local transport', workerNames: ['Pooja Singh'], status: 'Worker Assigned' },
+    { id: '15', name: 'Embroidery Work', workerNames: ['Sunita Devi'], status: 'Completed' },
+    { id: '16', name: 'Driving for local transport', workerNames: ['Pooja Singh'], status: 'Worker Assigned' },
 ];
 
 type JobStatus = 'Completed' | 'Worker Assigned' | 'Yet To Assign';
@@ -129,25 +129,26 @@ export default function JobStatusPage() {
                 </div>
             </CardContent>
             <CardFooter className="gap-2 flex-wrap">
-                <Button variant="outline" size="sm">View Details</Button>
-                {job.status === 'Worker Assigned' && (
+                <Button variant="outline" size="sm">
+                  <Eye className="mr-2 h-4 w-4" />
+                  View Details
+                </Button>
+                <Button asChild size="sm">
+                    <Link href="/dashboard/panchayat/assign-worker">
+                        <UserPlus className="mr-2 h-4 w-4" />
+                        Assign Workers
+                    </Link>
+                </Button>
+                <Button variant="destructive" size="sm" onClick={() => handleDeleteJob(job.id, job.name)}>
+                    <Trash2 className="mr-2 h-4 w-4" />
+                    Delete Job
+                </Button>
+                 {job.status === 'Worker Assigned' && (
                     <Button size="sm" className="bg-green-600 hover:bg-green-700 text-white" onClick={() => handleMarkCompleted(job.id, job.name)}>
                         <CheckCircle className="mr-2 h-4 w-4" />
                         Mark Completed
                     </Button>
                 )}
-                {job.status === 'Yet To Assign' && (
-                    <Button asChild size="sm">
-                        <Link href="/dashboard/panchayat/assign-worker">
-                            <UserPlus className="mr-2 h-4 w-4" />
-                            Assign Workers
-                        </Link>
-                    </Button>
-                )}
-                <Button variant="destructive" size="sm" onClick={() => handleDeleteJob(job.id, job.name)}>
-                    <Trash2 className="mr-2 h-4 w-4" />
-                    Delete Job
-                </Button>
             </CardFooter>
           </Card>
         ))}
