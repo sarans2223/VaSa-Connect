@@ -22,6 +22,7 @@ import {
 import { Search, UserPlus, Star, CheckSquare, Square, UserCheck } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from '@/hooks/use-toast';
+import { mockJobs } from '@/lib/data';
 
 const allProfiles = [
   { id: '1', name: 'Lakshmi Priya', skills: ['Cooking', 'Tailoring'], rating: 4.5, jobsCompleted: 2, job: 'Catering Project' },
@@ -156,15 +157,16 @@ export default function AssignWorkerPage() {
                 <div className="space-y-2">
                     <Label>Job</Label>
                     <Select>
-                    <SelectTrigger>
-                        <SelectValue placeholder="Select a job to assign" />
-                    </SelectTrigger>
-                    <SelectContent>
-                        <SelectItem value="job-1">Catering Project</SelectItem>
-                        <SelectItem value="job-2">Harvesting</SelectItem>
-                        <SelectItem value="job-3">Office Cleaning</SelectItem>
-                        <SelectItem value="job-4">Nanny Position</SelectItem>
-                    </SelectContent>
+                        <SelectTrigger>
+                            <SelectValue placeholder="Select a job to assign" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            {mockJobs.slice(0, 3).map(job => (
+                                <SelectItem key={job.id} value={job.id}>
+                                    {job.title}
+                                </SelectItem>
+                            ))}
+                        </SelectContent>
                     </Select>
                 </div>
                 <Button className="w-full">
@@ -238,5 +240,3 @@ export default function AssignWorkerPage() {
     </div>
   );
 }
-
-    
