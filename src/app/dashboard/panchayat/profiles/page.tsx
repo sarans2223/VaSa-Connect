@@ -2,6 +2,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -11,6 +12,14 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from '@/components/ui/dialog';
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -19,19 +28,19 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Search, Users, Eye, Edit, Trash2, Star } from "lucide-react";
+import { Search, Users, Eye, Edit, Trash2, Star, Briefcase, DollarSign } from "lucide-react";
 import { useToast } from '@/hooks/use-toast';
 
 // Mock data for demonstration, used as a fallback
 const mockProfiles = [
-  { id: '1', name: 'Lakshmi Priya', jobsCompleted: 2, benefitedAmount: 5000 },
-  { id: '2', name: 'Kavita Devi', jobsCompleted: 2, benefitedAmount: 4500 },
-  { id: '3', name: 'Meena Kumari', jobsCompleted: 3, benefitedAmount: 6000 },
-  { id: '4', name: 'Anjali Sharma', jobsCompleted: 1, benefitedAmount: 1500 },
-  { id: '5', name: 'Sita Rai', jobsCompleted: 0, benefitedAmount: 0 },
-  { id: '6', name: 'Rina Das', jobsCompleted: 5, benefitedAmount: 12500 },
-  { id: '7', name: 'Sunita Devi', jobsCompleted: 0, benefitedAmount: 0 },
-  { id: '8', name: 'Pooja Singh', jobsCompleted: 0, benefitedAmount: 0 },
+  { id: '1', name: 'Lakshmi Priya', jobsCompleted: 2, benefitedAmount: 5000, mobileNo: '9876543210', aadhaarId: '123456789012', skills: ['Cooking', 'Tailoring'] },
+  { id: '2', name: 'Kavita Devi', jobsCompleted: 2, benefitedAmount: 4500, mobileNo: '9876543211', aadhaarId: '123456789013', skills: ['Farming'] },
+  { id: '3', name: 'Meena Kumari', jobsCompleted: 3, benefitedAmount: 6000, mobileNo: '9876543212', aadhaarId: '123456789014', skills: ['Herding', 'Farming'] },
+  { id: '4', name: 'Anjali Sharma', jobsCompleted: 1, benefitedAmount: 1500, mobileNo: '9876543213', aadhaarId: '123456789015', skills: ['Cleaning'] },
+  { id: '5', name: 'Sita Rai', jobsCompleted: 0, benefitedAmount: 0, mobileNo: '9876543214', aadhaarId: '123456789016', skills: ['Child Care', 'Cooking'] },
+  { id: '6', name: 'Rina Das', jobsCompleted: 5, benefitedAmount: 12500, mobileNo: '9876543215', aadhaarId: '123456789017', skills: ['Handicrafts', 'Painting'] },
+  { id: '7', name: 'Sunita Devi', jobsCompleted: 0, benefitedAmount: 0, mobileNo: '9876543216', aadhaarId: '123456789018', skills: ['Tailoring', 'Embroidery'] },
+  { id: '8', name: 'Pooja Singh', jobsCompleted: 0, benefitedAmount: 0, mobileNo: '9876543217', aadhaarId: '123456789019', skills: ['Driving'] },
 ];
 
 const statusColors = {
@@ -59,7 +68,9 @@ export default function ProfilesListPage() {
   const [profiles, setProfiles] = useState<Profile[]>([]);
   const [filter, setFilter] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
+  const [selectedProfile, setSelectedProfile] = useState<Profile | null>(null);
   const { toast } = useToast();
+  const router = useRouter();
 
   useEffect(() => {
     try {
@@ -83,6 +94,11 @@ export default function ProfilesListPage() {
       title: 'Profile Deleted',
       description: 'The profile has been successfully removed.',
     });
+  };
+
+  const handleEditProfile = (profile: Profile) => {
+    localStorage.setItem('selectedPanchayatProfile', JSON.stringify(profile));
+    router.push('/dashboard/panchayat/profiles/edit');
   };
 
   const sortedAndFilteredProfiles = profiles
@@ -178,8 +194,8 @@ export default function ProfilesListPage() {
                     </div>
                 </CardContent>
                 <CardFooter className="gap-2">
-                    <Button variant="outline" size="sm"><Eye className="mr-2 h-4 w-4"/>View</Button>
-                    <Button variant="outline" size="sm"><Edit className="mr-2 h-4 w-4"/>Edit</Button>
+                    <Button variant="outline" size="sm" onClick={() => setSelectedProfile(profile)}><Eye className="mr-2 h-4 w-4"/>View</Button>
+                    <Button variant="outline" size="sm" onClick={() => handleEditProfile(profile)}><Edit className="mr-2 h-4 w-4"/>Edit</Button>
                     <Button variant="destructive" size="sm" onClick={() => handleDeleteProfile(profile.id)}>
                       <Trash2 className="mr-2 h-4 w-4"/>Delete
                     </Button>
@@ -188,6 +204,56 @@ export default function ProfilesListPage() {
            );
         })}
       </div>
+
+       {selectedProfile && (
+        <Dialog open={!!selectedProfile} onOpenChange={(isOpen) => !isOpen && setSelectedProfile(null)}>
+          <DialogContent className="sm:max-w-lg">
+            <DialogHeader>
+              <DialogTitle className="text-2xl">{selectedProfile.name}</DialogTitle>
+              <DialogDescription>
+                Panchayat Member Profile
+              </DialogDescription>
+            </DialogHeader>
+            <div className="space-y-6 py-4">
+                <div className="space-y-2">
+                    <h4 className="font-semibold">Contact Information</h4>
+                    <p className="text-sm text-muted-foreground">Mobile: {selectedProfile.mobileNo}</p>
+                    <p className="text-sm text-muted-foreground">Aadhaar ID: {selectedProfile.aadhaarId}</p>
+                </div>
+                <div className="space-y-2">
+                    <h4 className="font-semibold">Skills</h4>
+                    <div className="flex flex-wrap gap-2">
+                        {selectedProfile.skills.map((skill) => (
+                            <Badge key={skill} variant="secondary">{skill}</Badge>
+                        ))}
+                    </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4 pt-4 border-t">
+                    <div className="flex items-center gap-2">
+                        <Briefcase className="h-5 w-5 text-primary" />
+                        <div>
+                            <p className="text-sm text-muted-foreground">Jobs Completed</p>
+                            <p className="font-bold text-lg">{selectedProfile.jobsCompleted}</p>
+                        </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                         <DollarSign className="h-5 w-5 text-green-600" />
+                        <div>
+                            <p className="text-sm text-muted-foreground">Total Benefited</p>
+                            <p className="font-bold text-lg">₹{selectedProfile.benefitedAmount.toLocaleString()}</p>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setSelectedProfile(null)}>Close</Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      )}
+
     </div>
   );
 }
