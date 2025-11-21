@@ -174,7 +174,7 @@ export default function PostJobAndMatchPage() {
                 size="lg"
                 className="bg-gradient-to-r from-[#E0BBE4] to-[#957DAD] hover:opacity-90 text-primary-foreground"
               >
-                Post Job & Match
+                Post Job
               </Button>
             </div>
           </form>
