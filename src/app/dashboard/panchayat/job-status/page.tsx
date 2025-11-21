@@ -10,31 +10,39 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { BarChart, CheckCircle, UserPlus, Trash2, Eye } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from '@/components/ui/dialog';
+import { BarChart, CheckCircle, UserPlus, Trash2, Eye, Calendar, Clock, DollarSign, MapPin } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 
 
 const initialJobs = [
-    { id: '1', name: 'Farm Harvesting', workerNames: ['Gita Devi', 'Priya'], status: 'Worker Assigned' },
-    { id: '2', name: 'Washing', workerNames: [], status: 'Yet To Assign' },
-    { id: '3', name: 'Herder', workerNames: ['Meena Kumari'], status: 'Completed' },
-    { id: '4', name: 'Community Hall Painting', workerNames: [], status: 'Yet To Assign' },
-    { id: '5', name: 'School Lunch Preparation', workerNames: ['Sunita', 'Anjali'], status: 'Worker Assigned' },
-    { id: '6', name: 'Roadside Cleanup', workerNames: ['Ramesh', 'Suresh'], status: 'Completed' },
-    { id: '7', name: 'Village Fair Setup', workerNames: [], status: 'Yet To Assign' },
-    { id: '8', name: 'Handicraft Stall Management', workerNames: ['Rina Das'], status: 'Worker Assigned' },
-    { id: '9', name: 'Temple Cleaning', workerNames: ['Lalita', 'Sarita', 'Anita'], status: 'Completed' },
-    { id: '10', name: 'Water Tank Maintenance', workerNames: [], status: 'Yet To Assign' },
-    { id: '11', name: 'Local Market Stall Setup', workerNames: ['Kavita Devi'], status: 'Worker Assigned' },
-    { id: '12', name: 'Papad Making', workerNames: ['Shanti', 'Kamla'], status: 'Completed' },
-    { id: '13', name: 'Spice Grinding', workerNames: [], status: 'Yet To Assign' },
-    { id: '14', name: 'Cattle Rearing', workerNames: ['Laxmi'], status: 'Worker Assigned' },
-    { id: '15', name: 'Embroidery Work', workerNames: ['Sunita Devi'], status: 'Completed' },
-    { id: '16', name: 'Driving for local transport', workerNames: ['Pooja Singh'], status: 'Worker Assigned' },
-    { id: '17', name: 'Retail Store Assistant', workerNames: ['Aarti', 'Bharti'], status: 'Worker Assigned' },
-    { id: '18', name: 'Pottery Decoration', workerNames: [], status: 'Yet To Assign' },
-    { id: '19', name: 'Event Catering Support', workerNames: ['Suman', 'Rita'], status: 'Completed' },
+    { id: '1', name: 'Farm Harvesting', workerNames: ['Gita Devi', 'Priya'], status: 'Worker Assigned', location: 'Village Fields', date: '2024-07-25', time: '9:00 AM - 5:00 PM', pay: '₹450 per day' },
+    { id: '2', name: 'Washing', workerNames: [], status: 'Yet To Assign', location: 'Community Center', date: '2024-07-26', time: '10:00 AM - 1:00 PM', pay: '₹300 per session' },
+    { id: '3', name: 'Herder', workerNames: ['Meena Kumari'], status: 'Completed', location: 'Pasture Lands', date: '2024-07-22', time: '6:00 AM - 6:00 PM', pay: '₹500 per day' },
+    { id: '4', name: 'Community Hall Painting', workerNames: [], status: 'Yet To Assign', location: 'Community Hall', date: '2024-08-01', time: 'Full Day', pay: '₹600 per day' },
+    { id: '5', name: 'School Lunch Preparation', workerNames: ['Sunita', 'Anjali'], status: 'Worker Assigned', location: 'Village School', date: 'Daily', time: '8:00 AM - 12:00 PM', pay: '₹350 per day' },
+    { id: '6', name: 'Roadside Cleanup', workerNames: ['Ramesh', 'Suresh'], status: 'Completed', location: 'Main Village Road', date: '2024-07-20', time: 'Morning', pay: '₹200 per person' },
+    { id: '7', name: 'Village Fair Setup', workerNames: [], status: 'Yet To Assign', location: 'Market Ground', date: '2024-08-10', time: '9:00 AM onwards', pay: '₹400 per day' },
+    { id: '8', name: 'Handicraft Stall Management', workerNames: ['Rina Das'], status: 'Worker Assigned', location: 'Village Fair', date: '2024-08-12', time: '10:00 AM - 8:00 PM', pay: '₹550 per day' },
+    { id: '9', name: 'Temple Cleaning', workerNames: ['Lalita', 'Sarita', 'Anita'], status: 'Completed', location: 'Village Temple', date: '2024-07-18', time: '7:00 AM - 9:00 AM', pay: '₹150 per person' },
+    { id: '10', name: 'Water Tank Maintenance', workerNames: [], status: 'Yet To Assign', location: 'Overhead Water Tank', date: '2024-07-30', time: '2:00 PM - 5:00 PM', pay: '₹300 flat' },
+    { id: '11', name: 'Local Market Stall Setup', workerNames: ['Kavita Devi'], status: 'Worker Assigned', location: 'Weekly Market', date: '2024-07-28', time: '8:00 AM - 10:00 AM', pay: '₹250' },
+    { id: '12', name: 'Papad Making', workerNames: ['Shanti', 'Kamla'], status: 'Completed', location: 'Women\'s SHG Center', date: '2024-07-15', time: 'Flexible', pay: 'Piece-rate' },
+    { id: '13', name: 'Spice Grinding', workerNames: [], status: 'Yet To Assign', location: 'Women\'s SHG Center', date: 'As per order', time: 'Flexible', pay: 'Per Kg' },
+    { id: '14', name: 'Cattle Rearing', workerNames: ['Laxmi'], status: 'Worker Assigned', location: 'Individual Farm', date: 'Ongoing', time: 'Daily', pay: 'Monthly stipend' },
+    { id: '15', name: 'Embroidery Work', workerNames: ['Sunita Devi'], status: 'Completed', location: 'Home-based', date: '2024-07-10', time: 'Flexible', pay: 'Per piece' },
+    { id: '16', name: 'Driving for local transport', workerNames: ['Pooja Singh'], status: 'Worker Assigned', location: 'Village Routes', date: 'Daily', time: '6:00 AM - 8:00 PM', pay: '₹700 per day' },
+    { id: '17', name: 'Retail Store Assistant', workerNames: ['Aarti', 'Bharti'], status: 'Worker Assigned', location: 'Local Kirana Store', date: 'Mon-Sat', time: '10:00 AM - 6:00 PM', pay: '₹8000 per month' },
+    { id: '18', name: 'Pottery Decoration', workerNames: [], status: 'Yet To Assign', location: 'Artisan Village', date: 'Ongoing', time: 'Flexible', pay: 'Per piece' },
+    { id: '19', name: 'Event Catering Support', workerNames: ['Suman', 'Rita'], status: 'Completed', location: 'Various', date: '2024-07-12', time: 'Event-based', pay: '₹600 per event' },
 ];
 
 type JobStatus = 'Completed' | 'Worker Assigned' | 'Yet To Assign';
@@ -44,6 +52,10 @@ type Job = {
     name: string;
     workerNames: string[];
     status: JobStatus;
+    location: string;
+    date: string;
+    time: string;
+    pay: string;
 }
 
 const statusColors: { [key in JobStatus]: string } = {
@@ -54,6 +66,7 @@ const statusColors: { [key in JobStatus]: string } = {
 
 export default function JobStatusPage() {
   const [jobs, setJobs] = useState<Job[]>([]);
+  const [selectedJob, setSelectedJob] = useState<Job | null>(null);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -91,6 +104,10 @@ export default function JobStatusPage() {
         description: `The job "${jobName}" has been permanently deleted.`,
         variant: 'destructive',
     });
+  };
+
+  const handleViewDetails = (job: Job) => {
+    setSelectedJob(job);
   };
 
   const statusOrder: { [key in JobStatus]: number } = {
@@ -132,7 +149,7 @@ export default function JobStatusPage() {
                 </div>
             </CardContent>
             <CardFooter className="gap-2 flex-wrap">
-                <Button variant="outline" size="sm">
+                <Button variant="outline" size="sm" onClick={() => handleViewDetails(job)}>
                   <Eye className="mr-2 h-4 w-4" />
                   View Details
                 </Button>
@@ -156,6 +173,55 @@ export default function JobStatusPage() {
           </Card>
         ))}
       </div>
+
+       {selectedJob && (
+        <Dialog open={!!selectedJob} onOpenChange={(isOpen) => !isOpen && setSelectedJob(null)}>
+          <DialogContent className="sm:max-w-lg">
+            <DialogHeader>
+              <DialogTitle className="text-2xl">{selectedJob.name}</DialogTitle>
+              <DialogDescription>
+                Job Details
+              </DialogDescription>
+            </DialogHeader>
+            <div className="space-y-4 py-4">
+                <div className="flex items-center gap-2">
+                    <MapPin className="h-5 w-5 text-muted-foreground" />
+                    <span className="text-sm text-muted-foreground">{selectedJob.location}</span>
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                    <div className="flex items-center gap-2">
+                        <Calendar className="h-5 w-5 text-muted-foreground" />
+                         <span className="text-sm text-muted-foreground">{selectedJob.date}</span>
+                    </div>
+                     <div className="flex items-center gap-2">
+                        <Clock className="h-5 w-5 text-muted-foreground" />
+                         <span className="text-sm text-muted-foreground">{selectedJob.time}</span>
+                    </div>
+                </div>
+                <div className="flex items-center gap-2">
+                    <DollarSign className="h-5 w-5 text-muted-foreground" />
+                    <span className="text-sm text-muted-foreground">{selectedJob.pay}</span>
+                </div>
+
+                <div className="pt-4 border-t">
+                    <h4 className="font-semibold mb-2">Assigned Workers</h4>
+                    {selectedJob.workerNames.length > 0 ? (
+                        <div className="flex flex-wrap gap-2">
+                            {selectedJob.workerNames.map(name => <Badge key={name} variant="secondary">{name}</Badge>)}
+                        </div>
+                    ) : (
+                        <p className="text-sm text-muted-foreground">No workers assigned to this job yet.</p>
+                    )}
+                </div>
+            </div>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setSelectedJob(null)}>Close</Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      )}
+
     </div>
   );
-}
+
+    
