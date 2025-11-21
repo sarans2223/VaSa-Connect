@@ -68,7 +68,7 @@ export function DashboardNav() {
     if (!isPanchayatPath) {
       if (user) {
         setUserName(user.displayName || 'User');
-      } else {
+      } else if (typeof window !== 'undefined') {
         const storedName = localStorage.getItem('userName');
         if (storedName) {
           setUserName(storedName);
@@ -77,14 +77,16 @@ export function DashboardNav() {
         }
       }
     }
-  }, [isPanchayatPath, user]);
+  }, [isPanchayatPath, user, pathname]);
 
   const handleSignOut = async () => {
     try {
       await signOut();
-      localStorage.removeItem('userName');
-      localStorage.removeItem('userEmail');
-      localStorage.removeItem('user');
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('userName');
+        localStorage.removeItem('userEmail');
+        localStorage.removeItem('user');
+      }
       toast({
         title: "Signed Out",
         description: "You have been successfully signed out.",
@@ -107,6 +109,7 @@ export function DashboardNav() {
     }
 
     const isProfilePage = pathname === '/dashboard/profile';
+    const displayName = userName.split(' ')[0] || 'User';
 
     if (inSheet) {
       return (
@@ -119,7 +122,7 @@ export function DashboardNav() {
               )}
             >
               <UserCircle className="h-4 w-4" />
-              {userName}
+              {displayName}
             </Link>
           </SheetClose>
       )
@@ -132,7 +135,7 @@ export function DashboardNav() {
           isProfilePage ? "text-primary-foreground font-semibold" : ""
         )}>
             <UserCircle className="h-5 w-5" />
-            {userName}
+            {displayName}
         </Link>
       </Button>
     );
