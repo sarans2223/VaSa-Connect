@@ -56,6 +56,8 @@ export default function PostJobPage() {
   
   const [fromDate, setFromDate] = React.useState<Date>();
   const [toDate, setToDate] = React.useState<Date>();
+  const [fromTime, setFromTime] = React.useState<string>('');
+  const [toTime, setToTime] = React.useState<string>('');
   const { toast } = useToast();
 
   const [selectedJob, setSelectedJob] = React.useState<Job | null>(null);
@@ -104,6 +106,9 @@ export default function PostJobPage() {
     setSkills('');
     setFromDate(undefined);
     setToDate(undefined);
+    setFromTime('');
+    setToTime('');
+
 
     toast({
         title: 'Job Posted!',
@@ -122,6 +127,14 @@ export default function PostJobPage() {
       description: `The job "${jobTitle}" has been marked as completed and removed.`,
     });
   };
+
+  const getToTimeOptions = () => {
+    if (!fromTime) return timeOptions;
+    const fromIndex = timeOptions.indexOf(fromTime);
+    return timeOptions.slice(fromIndex + 1);
+  };
+
+  const toTimeOptions = getToTimeOptions();
 
 
   return (
@@ -193,7 +206,7 @@ export default function PostJobPage() {
                   </div>
                    <div className="space-y-2">
                     <Label htmlFor="from-time">From Time</Label>
-                    <Select>
+                    <Select value={fromTime} onValueChange={setFromTime}>
                       <SelectTrigger>
                         <SelectValue placeholder="Select time" />
                       </SelectTrigger>
@@ -232,12 +245,12 @@ export default function PostJobPage() {
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="to-time">To Time</Label>
-                     <Select>
+                     <Select value={toTime} onValueChange={setToTime} disabled={!fromTime}>
                       <SelectTrigger>
                         <SelectValue placeholder="Select time" />
                       </SelectTrigger>
                       <SelectContent>
-                        {timeOptions.map(time => <SelectItem key={time} value={time}>{time}</SelectItem>)}
+                        {toTimeOptions.map(time => <SelectItem key={time} value={time}>{time}</SelectItem>)}
                       </SelectContent>
                     </Select>
                   </div>
@@ -399,3 +412,5 @@ export default function PostJobPage() {
     </div>
   );
 }
+
+    
