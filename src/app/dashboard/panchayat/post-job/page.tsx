@@ -168,14 +168,7 @@ export default function PostJobAndMatchPage() {
               </div>
             </div>
 
-            <div className="flex justify-between items-center">
-              <Button
-                size="lg"
-                className="bg-gradient-to-r from-[#D291BC] to-[#957DAD] hover:opacity-90 text-white"
-              >
-                <Sparkles className="mr-2 h-5 w-5" />
-                AI Profile Matching
-              </Button>
+            <div className="flex justify-end items-center">
               <Button
                 type="submit"
                 size="lg"
@@ -190,5 +183,3 @@ export default function PostJobAndMatchPage() {
     </div>
   );
 }
-
-    
