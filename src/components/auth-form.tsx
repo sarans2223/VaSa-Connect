@@ -1,9 +1,12 @@
-
 "use client";
 
-import { useState }from "react";
+import * as React from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { signInWithPopup } from "firebase/auth";
+
+import { auth, googleProvider } from "@/firebase"; // <- adjust path if needed
 import { Github, KeyRound, Mail, User, Users, Eye, EyeOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -34,35 +37,79 @@ const MicrosoftIcon = (props: React.SVGProps<SVGSVGElement>) => (
 );
 
 const GoogleIcon = (props: React.SVGProps<SVGSVGElement>) => (
-    <svg viewBox="0 0 48 48" {...props} >
-        <path fill="#FFC107" d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12
-	c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24
-	s8.955,20,20,20s20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"/>
-        <path fill="#FF3D00" d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657
-	C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"/>
-        <path fill="#4CAF50" d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36
-	c-5.222,0-9.617-3.27-11.283-7.94l-6.522,5.025C9.505,39.556,16.227,44,24,44z"/>
-        <path fill="#1976D2" d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.574l6.19,5.238
-	C42.418,34.569,44,29.692,44,24C44,22.659,43.862,21.35,43.611,20.083z"/>
-    </svg>
+  <svg viewBox="0 0 48 48" {...props}>
+    <path
+      fill="#FFC107"
+      d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12
+        c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24
+        s8.955,20,20,20s20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"
+    />
+    <path
+      fill="#FF3D00"
+      d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657
+        C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"
+    />
+    <path
+      fill="#4CAF50"
+      d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36
+        c-5.222,0-9.617-3.27-11.283-7.94l-6.522,5.025C9.505,39.556,16.227,44,24,44z"
+    />
+    <path
+      fill="#1976D2"
+      d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.574l6.19,5.238
+        C42.418,34.569,44,29.692,44,24C44,22.659,43.862,21.35,43.611,20.083z"
+    />
+  </svg>
 );
-
 
 export function AuthForm({ type }: AuthFormProps) {
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
   const { toast } = useToast();
 
+  const [isLoading, setIsLoading] = useState(false);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+
+  // 🔥 GOOGLE SIGN-IN + SAVE NAME + REDIRECT
+  const handleGoogleLogin = async () => {
+    try {
+      const result = await signInWithPopup(auth, googleProvider);
+      const user = result.user;
+
+      const displayName =
+        user.displayName ||
+        name || // if they typed name already
+        (user.email ? user.email.split("@")[0] : "VaSa Member");
+
+      // save for dashboard/profile
+      localStorage.setItem("userName", displayName);
+      if (user.email) {
+        localStorage.setItem("userEmail", user.email);
+      }
+
+      router.push("/dashboard");
+    } catch (error: any) {
+      if (error?.code === "auth/popup-closed-by-user") {
+        // user closed popup, ignore
+        return;
+      }
+      console.error("Google login error:", error);
+      toast({
+        title: "Google sign-in failed",
+        description: "Please try again.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  // ✉️ Password / email flow
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
 
-    if (type === 'signup') {
-      // Simulate checking if email exists. In a real app, this would be a backend check.
+    if (type === "signup") {
       if (email.toLowerCase() === mockUser.email.toLowerCase()) {
         toast({
           title: "Registration Error",
@@ -72,12 +119,16 @@ export function AuthForm({ type }: AuthFormProps) {
         setIsLoading(false);
         return;
       }
-      localStorage.setItem('userName', name);
+      // store the name from the signup form
+      localStorage.setItem("userName", name);
     }
 
     if (type === "login") {
-      if (email.toLowerCase() === mockUser.email.toLowerCase() && password !== "password123") {
-         toast({
+      if (
+        email.toLowerCase() === mockUser.email.toLowerCase() &&
+        password !== "password123"
+      ) {
+        toast({
           title: "Login Error",
           description: "Invalid password. Please try again.",
           variant: "destructive",
@@ -85,11 +136,16 @@ export function AuthForm({ type }: AuthFormProps) {
         setIsLoading(false);
         return;
       }
+
+      // optional: if you want a default name when logging in with mock user
+      if (!localStorage.getItem("userName") && mockUser.name) {
+        localStorage.setItem("userName", mockUser.name);
+      }
     }
 
+    // store email for dashboard/profile
+    localStorage.setItem("userEmail", email);
 
-    localStorage.setItem('userEmail', email);
-    
     // Simulate API call
     setTimeout(() => {
       router.push("/dashboard");
@@ -111,6 +167,7 @@ export function AuthForm({ type }: AuthFormProps) {
               : "Create an account to get started."}
           </CardDescription>
         </CardHeader>
+
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
             {type === "signup" && (
@@ -118,20 +175,21 @@ export function AuthForm({ type }: AuthFormProps) {
                 <Label htmlFor="name">Full Name</Label>
                 <div className="relative">
                   <User className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                  <Input 
-                    id="name" 
-                    placeholder="Savitri Bai" 
-                    required 
-                    className="pl-10" 
+                  <Input
+                    id="name"
+                    placeholder="Savitri Bai"
+                    required
+                    className="pl-10"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                   />
                 </div>
               </div>
             )}
+
             <div className="space-y-2">
               <Label htmlFor="email">Email Address</Label>
-               <div className="relative">
+              <div className="relative">
                 <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
                 <Input
                   id="email"
@@ -144,13 +202,14 @@ export function AuthForm({ type }: AuthFormProps) {
                 />
               </div>
             </div>
+
             <div className="space-y-2">
               <Label htmlFor="password">Password</Label>
               <div className="relative">
                 <KeyRound className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
                 <Input
                   id="password"
-                  type={showPassword ? 'text' : 'password'}
+                  type={showPassword ? "text" : "password"}
                   required
                   className="pl-10 pr-10"
                   value={password}
@@ -163,15 +222,29 @@ export function AuthForm({ type }: AuthFormProps) {
                   className="absolute right-1 top-1/2 h-7 w-7 -translate-y-1/2 text-muted-foreground"
                   onClick={() => setShowPassword(!showPassword)}
                 >
-                  {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                  {showPassword ? (
+                    <EyeOff className="h-5 w-5" />
+                  ) : (
+                    <Eye className="h-5 w-5" />
+                  )}
                 </Button>
               </div>
             </div>
-            <Button disabled={isLoading} type="submit" className="w-full font-semibold bg-gradient-to-r from-[#E0BBE4] to-[#957DAD] hover:opacity-90 transition-opacity text-primary-foreground">
-              {isLoading ? 'Processing...' : (type === "login" ? "Log In" : "Create Account")}
+
+            <Button
+              disabled={isLoading}
+              type="submit"
+              className="w-full font-semibold bg-gradient-to-r from-[#E0BBE4] to-[#957DAD] hover:opacity-90 transition-opacity text-primary-foreground"
+            >
+              {isLoading
+                ? "Processing..."
+                : type === "login"
+                ? "Log In"
+                : "Create Account"}
             </Button>
           </form>
 
+          {/* Divider */}
           <div className="my-6 flex items-center">
             <Separator className="flex-1" />
             <span className="mx-4 text-sm text-muted-foreground">
@@ -180,46 +253,60 @@ export function AuthForm({ type }: AuthFormProps) {
             <Separator className="flex-1" />
           </div>
 
+          {/* Social buttons */}
           <div className="grid grid-cols-2 gap-4">
-            <Button variant="outline" className="w-full">
+            <Button
+              variant="outline"
+              className="w-full"
+              onClick={handleGoogleLogin}
+            >
               <GoogleIcon className="mr-2 h-5 w-5" />
               Google
             </Button>
+
             <Button variant="outline" className="w-full">
               <MicrosoftIcon className="mr-2 h-5 w-5" />
               Microsoft
             </Button>
           </div>
-          
-           {type === 'login' && (
+
+          {type === "login" && (
             <>
               <div className="my-6 flex items-center">
                 <Separator className="flex-1" />
-                <span className="mx-4 text-sm text-muted-foreground">
-                  OR
-                </span>
+                <span className="mx-4 text-sm text-muted-foreground">OR</span>
                 <Separator className="flex-1" />
               </div>
-              <Button variant="secondary" className="w-full" onClick={() => router.push('/onsite-login')}>
+              <Button
+                variant="secondary"
+                className="w-full"
+                onClick={() => router.push("/onsite-login")}
+              >
                 <Users className="mr-2 h-5 w-5" />
                 Onsite Member Login
               </Button>
             </>
-           )}
-
+          )}
         </CardContent>
+
         <CardFooter className="justify-center text-sm">
           {type === "login" ? (
             <p>
               Don&apos;t have an account?{" "}
-              <Link href="/signup" className="font-semibold text-accent hover:underline">
+              <Link
+                href="/signup"
+                className="font-semibold text-accent hover:underline"
+              >
                 Sign up
               </Link>
             </p>
           ) : (
             <p>
               Already have an account?{" "}
-              <Link href="/login" className="font-semibold text-accent hover:underline">
+              <Link
+                href="/login"
+                className="font-semibold text-accent hover:underline"
+              >
                 Log in
               </Link>
             </p>
@@ -229,5 +316,3 @@ export function AuthForm({ type }: AuthFormProps) {
     </div>
   );
 }
-
-    
