@@ -74,7 +74,14 @@ export default function JobStatusPage() {
     try {
       const storedJobs = localStorage.getItem('panchayatJobs');
       if (storedJobs) {
-          setJobs(JSON.parse(storedJobs));
+          const parsedJobs = JSON.parse(storedJobs);
+          // Simple validation
+          if(Array.isArray(parsedJobs) && parsedJobs.length > 0) {
+            setJobs(parsedJobs);
+          } else {
+            localStorage.setItem('panchayatJobs', JSON.stringify(initialJobs));
+            setJobs(initialJobs);
+          }
       } else {
           // If nothing is in localStorage, set it with initialJobs
           localStorage.setItem('panchayatJobs', JSON.stringify(initialJobs));
@@ -232,3 +239,4 @@ export default function JobStatusPage() {
 
 
     
+
