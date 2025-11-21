@@ -35,7 +35,6 @@ const mockProfiles = [
 
 export default function AssignWorkerPage() {
   const [selectedWorkers, setSelectedWorkers] = useState<string[]>([]);
-  const jobTitle = 'Washing';
 
   const handleSelectWorker = (workerId: string) => {
     setSelectedWorkers(prev => 
@@ -63,7 +62,7 @@ export default function AssignWorkerPage() {
                 <UserPlus className="h-8 w-8 text-primary" />
                 <h1 className="text-3xl font-bold tracking-tight">Assign Workers</h1>
             </div>
-            <p className="text-muted-foreground mt-2">Select profiles to assign to the job: <span className="font-semibold text-primary">{jobTitle}</span></p>
+            <p className="text-muted-foreground mt-2">Select profiles to assign to the job.</p>
         </div>
       </div>
 
