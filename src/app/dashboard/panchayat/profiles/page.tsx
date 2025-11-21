@@ -223,9 +223,9 @@ export default function ProfilesListPage() {
                 <div className="space-y-2">
                     <h4 className="font-semibold">Skills</h4>
                     <div className="flex flex-wrap gap-2">
-                        {selectedProfile.skills.map((skill) => (
+                        {Array.isArray(selectedProfile.skills) ? selectedProfile.skills.map((skill) => (
                             <Badge key={skill} variant="secondary">{skill}</Badge>
-                        ))}
+                        )) : <p className="text-sm text-muted-foreground">No skills listed.</p>}
                     </div>
                 </div>
 
