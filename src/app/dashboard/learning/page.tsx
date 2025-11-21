@@ -1,4 +1,6 @@
 
+'use client';
+
 import Image from "next/image";
 import {
   Card,
@@ -20,9 +22,26 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
+import { useToast } from "@/hooks/use-toast";
 
 
 export default function LearningPage() {
+  const { toast } = useToast();
+
+  const handleResume = (title: string) => {
+    toast({
+      title: "Resuming Video",
+      description: `Playing "${title}" from where you left off.`,
+    });
+  };
+
+  const handleRewind = (title: string) => {
+    toast({
+      title: "Rewinding Video",
+      description: `Playing "${title}" from the beginning.`,
+    });
+  };
+
   return (
     <div className="p-4 sm:p-6 lg:p-8 space-y-8">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -89,11 +108,11 @@ export default function LearningPage() {
                 </span>
               </div>
               <div className="flex w-full items-center gap-2 pt-2">
-                <Button size="sm" className="w-full">
+                <Button size="sm" className="w-full" onClick={() => handleResume(module.title)}>
                   <Play className="mr-2 h-4 w-4" />
                   Resume
                 </Button>
-                <Button size="sm" variant="outline" className="w-full">
+                <Button size="sm" variant="outline" className="w-full" onClick={() => handleRewind(module.title)}>
                   <Rewind className="mr-2 h-4 w-4" />
                   Rewind
                 </Button>
