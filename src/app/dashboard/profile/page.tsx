@@ -44,22 +44,29 @@ const membershipBadges = {
 
 
 export default function ProfilePage() {
-  const [user, setUser] = useState<User>(defaultUser);
+  const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
-    const storedUser = localStorage.getItem('user');
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    } else {
+    try {
+      const storedUser = localStorage.getItem('user');
+      if (storedUser) {
+        setUser(JSON.parse(storedUser));
+      } else {
         const storedName = localStorage.getItem('userName');
         const storedEmail = localStorage.getItem('userEmail');
         if (storedName || storedEmail) {
             setUser(prevUser => ({ 
-                ...prevUser, 
-                name: storedName || prevUser.name,
-                email: storedEmail || prevUser.email,
+                ...(prevUser || defaultUser),
+                name: storedName || defaultUser.name,
+                email: storedEmail || defaultUser.email,
             }));
+        } else {
+          setUser(defaultUser);
         }
+      }
+    } catch (error) {
+      console.error("Failed to parse user data from localStorage", error);
+      setUser(defaultUser);
     }
   }, []);
 
@@ -78,6 +85,7 @@ export default function ProfilePage() {
   };
 
   const MembershipBadge = () => {
+    if (!user) return null;
     const badge = membershipBadges[user.membership];
     if (!badge) return null;
     const Icon = badge.icon;
@@ -88,6 +96,11 @@ export default function ProfilePage() {
       </Badge>
     );
   };
+
+  if (!user) {
+    return <div>Loading...</div>; // Or a skeleton loader
+  }
+
 
   return (
     <div className="p-4 sm:p-6 lg:p-8 space-y-8">

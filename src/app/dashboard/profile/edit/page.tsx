@@ -20,36 +20,45 @@ import type { User } from "@/lib/types";
 import { useToast } from "@/hooks/use-toast";
 
 export default function EditProfilePage() {
-  const [user, setUser] = useState<User>(defaultUser);
+  const [user, setUser] = useState<User | null>(null);
   const router = useRouter();
   const { toast } = useToast();
 
   useEffect(() => {
-    const storedUser = localStorage.getItem('user');
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    } else {
-        const storedName = localStorage.getItem('userName');
-        const storedEmail = localStorage.getItem('userEmail');
-        if (storedName || storedEmail) {
-            setUser(prevUser => ({ 
-                ...prevUser, 
-                name: storedName || prevUser.name,
-                email: storedEmail || prevUser.email,
-            }));
-        }
+    try {
+      const storedUser = localStorage.getItem('user');
+      if (storedUser) {
+        setUser(JSON.parse(storedUser));
+      } else {
+          const storedName = localStorage.getItem('userName');
+          const storedEmail = localStorage.getItem('userEmail');
+          if (storedName || storedEmail) {
+              setUser(prevUser => ({ 
+                  ...defaultUser,
+                  ...prevUser,
+                  name: storedName || defaultUser.name,
+                  email: storedEmail || defaultUser.email,
+              }));
+          } else {
+            setUser(defaultUser);
+          }
+      }
+    } catch (error) {
+      console.error("Failed to parse user data from localStorage", error);
+      setUser(defaultUser);
     }
   }, []);
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { id, value } = e.target;
     setUser(prevUser => ({
-      ...prevUser,
+      ...(prevUser || defaultUser),
       [id]: id === 'skills' || id === 'industryPreferences' ? value.split(',').map(s => s.trim()) : value,
     }));
   };
 
   const handleSaveChanges = () => {
+    if (!user) return;
     localStorage.setItem('user', JSON.stringify(user));
     localStorage.setItem('userName', user.name);
 
@@ -59,6 +68,10 @@ export default function EditProfilePage() {
     });
     router.push('/dashboard/profile');
   };
+
+  if (!user) {
+    return <div>Loading...</div>; // Or a skeleton loader
+  }
 
 
   return (

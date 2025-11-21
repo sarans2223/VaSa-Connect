@@ -59,7 +59,7 @@ export function DashboardNav() {
   const router = useRouter();
   const { toast } = useToast();
   const { user } = useUser();
-  const [userName, setUserName] = useState('User');
+  const [userName, setUserName] = useState('');
   const [panchayatName, setPanchayatName] = useState('SARAN');
 
 
@@ -69,7 +69,7 @@ export function DashboardNav() {
   useEffect(() => {
     if (user) {
       setUserName(user.displayName || 'User');
-    } else if (typeof window !== 'undefined') {
+    } else {
       const storedName = localStorage.getItem('userName');
       if (storedName) {
         setUserName(storedName);
@@ -114,7 +114,7 @@ export function DashboardNav() {
     }
 
     const isProfilePage = pathname === '/dashboard/profile';
-    const displayName = userName.split(' ')[0] || 'User';
+    const displayName = (userName || 'User').split(' ')[0];
 
     if (inSheet) {
       return (
@@ -145,6 +145,8 @@ export function DashboardNav() {
       </Button>
     );
   });
+  UserNameDisplay.displayName = 'UserNameDisplay';
+
 
   const NavLink = React.memo(function NavLink({ item, inSheet }: { item: typeof menuItems[0], inSheet?: boolean}) {
     const isActive = pathname === item.href;
@@ -165,6 +167,8 @@ export function DashboardNav() {
       </Component>
     );
   });
+  NavLink.displayName = 'NavLink';
+
 
   return (
     <header className="sticky top-0 flex h-14 items-center gap-4 border-b bg-background px-4 sm:px-6 z-30">
