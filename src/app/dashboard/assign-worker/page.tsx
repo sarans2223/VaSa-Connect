@@ -164,7 +164,7 @@ export default function AssignWorkerPage() {
 
       <Card>
         <CardContent className="p-4">
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 items-end">
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 items-end">
                 <div className="relative lg:col-span-1 space-y-2">
                     <Label htmlFor="search-input">Search</Label>
                     <div className="relative">
@@ -172,20 +172,26 @@ export default function AssignWorkerPage() {
                         <Input id="search-input" placeholder="Name or skill..." className="pl-10" />
                     </div>
                 </div>
-                <div className="space-y-2">
-                    <Label>Skill</Label>
-                    <Select>
-                    <SelectTrigger>
-                        <SelectValue placeholder="Filter by skill" />
-                    </SelectTrigger>
-                    <SelectContent>
-                        <SelectItem value="all">All Skills</SelectItem>
-                        <SelectItem value="cooking">Cooking</SelectItem>
-                        <SelectItem value="farming">Farming</SelectItem>
-                        <SelectItem value="tailoring">Tailoring</SelectItem>
-                        <SelectItem value="cleaning">Cleaning</SelectItem>
-                    </SelectContent>
-                    </Select>
+                <div className="space-y-4">
+                    <div className="space-y-2">
+                        <Label>Skill</Label>
+                        <Select>
+                        <SelectTrigger>
+                            <SelectValue placeholder="Filter by skill" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="all">All Skills</SelectItem>
+                            <SelectItem value="cooking">Cooking</SelectItem>
+                            <SelectItem value="farming">Farming</SelectItem>
+                            <SelectItem value="tailoring">Tailoring</SelectItem>
+                            <SelectItem value="cleaning">Cleaning</SelectItem>
+                        </SelectContent>
+                        </Select>
+                    </div>
+                     <Button className="w-full">
+                        <Search className="mr-2 h-4 w-4" />
+                        Search
+                    </Button>
                 </div>
                 <div className="space-y-2">
                     <Label>Job</Label>
@@ -202,10 +208,6 @@ export default function AssignWorkerPage() {
                         </SelectContent>
                     </Select>
                 </div>
-                <Button className="w-full">
-                    <Search className="mr-2 h-4 w-4" />
-                    Search
-                </Button>
             </div>
         </CardContent>
       </Card>
