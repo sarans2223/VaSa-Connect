@@ -8,6 +8,7 @@ import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -21,7 +22,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { UserSearch, Upload, Users, CalendarIcon } from "lucide-react";
+import { UserSearch, Upload, Users, CalendarIcon, Briefcase } from "lucide-react";
 import {
   Popover,
   PopoverContent,
@@ -30,6 +31,7 @@ import {
 import { Calendar } from '@/components/ui/calendar';
 import { cn } from '@/lib/utils';
 import { mockJobs } from '@/lib/data';
+import { Badge } from '@/components/ui/badge';
 
 
 export default function PostJobPage() {
@@ -42,6 +44,8 @@ export default function PostJobPage() {
     const formattedHours = hours.toString().padStart(2, '0');
     return `${formattedHours}:${minutes}`;
   });
+
+  const recentlyPostedJobs = mockJobs.slice(0, 3);
 
   return (
     <div className="p-4 sm:p-6 lg:p-8 space-y-8">
@@ -219,6 +223,34 @@ export default function PostJobPage() {
               </Button>
             </div>
           </form>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Jobs Posted</CardTitle>
+          <CardDescription>
+            A list of your recently posted jobs.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          {recentlyPostedJobs.map((job) => (
+            <div key={job.id} className="border p-4 rounded-lg flex flex-col sm:flex-row justify-between sm:items-center gap-4">
+              <div className="flex items-center gap-4">
+                <div className="bg-muted p-3 rounded-full">
+                  <Briefcase className="h-6 w-6 text-primary" />
+                </div>
+                <div>
+                  <h3 className="font-semibold">{job.title}</h3>
+                  <p className="text-sm text-muted-foreground">{job.companyName} &middot; {job.location}</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-4">
+                <Badge variant="outline">{job.jobType}</Badge>
+                <Button variant="secondary" size="sm">View Details</Button>
+              </div>
+            </div>
+          ))}
         </CardContent>
       </Card>
     </div>
