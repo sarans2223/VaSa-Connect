@@ -182,17 +182,6 @@ export const mockLearningModules: LearningModule[] = [
     videoId: 'k-y_s4qises'
   },
   {
-    id: 'learn-4-en',
-    title: 'Introduction to Coding with Python',
-    description: 'A beginner-friendly introduction to the world of programming with Python.',
-    type: 'video',
-    duration: '4h',
-    imageUrl: 'https://picsum.photos/seed/coding/600/400',
-    progress: 25,
-    language: 'en',
-    videoId: 'rfscVS0vtbw'
-  },
-  {
     id: 'learn-4-hi',
     title: 'Introduction to Coding with Python (Hindi)',
     description: 'A beginner-friendly introduction to the world of programming with Python, in Hindi.',
@@ -213,6 +202,17 @@ export const mockLearningModules: LearningModule[] = [
     progress: 0,
     language: 'ta',
     videoId: '4X-d22P9d5s'
+  },
+  {
+    id: 'learn-6-en',
+    title: 'Start a Home Salon & Spa',
+    description: 'Learn how to start your own salon and spa business from home, covering services like facials, waxing, and threading.',
+    type: 'video',
+    duration: '8 min',
+    imageUrl: 'https://picsum.photos/seed/salon/600/400',
+    progress: 0,
+    language: 'en',
+    videoId: 'YV2p_23s1xE'
   }
 ];
 
