@@ -23,6 +23,10 @@ const initialJobs = [
     { id: '5', name: 'School Lunch Preparation', workerNames: ['Sunita', 'Anjali'], status: 'Worker Assigned' },
     { id: '6', name: 'Roadside Cleanup', workerNames: ['Ramesh', 'Suresh'], status: 'Completed' },
     { id: '7', name: 'Village Fair Setup', workerNames: [], status: 'Yet To Assign' },
+    { id: '8', name: 'Handicraft Stall Management', workerNames: ['Rina Das'], status: 'Worker Assigned' },
+    { id: '9', name: 'Temple Cleaning', workerNames: ['Lalita', 'Sarita', 'Anita'], status: 'Completed' },
+    { id: '10', name: 'Water Tank Maintenance', workerNames: [], status: 'Yet To Assign' },
+    { id: '11', name: 'Local Market Stall Setup', workerNames: ['Kavita Devi'], status: 'Worker Assigned' },
 ];
 
 type JobStatus = 'Completed' | 'Worker Assigned' | 'Yet To Assign';
