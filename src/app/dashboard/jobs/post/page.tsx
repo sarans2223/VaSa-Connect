@@ -224,6 +224,7 @@ export default function PostJobPage() {
                           mode="single"
                           selected={toDate}
                           onSelect={setToDate}
+                          disabled={fromDate ? { before: fromDate } : undefined}
                           initialFocus
                         />
                       </PopoverContent>
