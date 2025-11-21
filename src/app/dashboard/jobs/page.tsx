@@ -1,4 +1,5 @@
 
+
 import {
   Card,
   CardContent,
@@ -16,6 +17,7 @@ import { Briefcase, Search, MapPin } from "lucide-react";
 import { JobCard } from "../components/job-card";
 import { JobSearchClient } from "./components/job-search-client";
 import { Separator } from "@/components/ui/separator";
+import { Button } from "@/components/ui/button";
 
 export default function JobsPage() {
   return (
@@ -32,7 +34,7 @@ export default function JobsPage() {
       <div>
         <h2 className="text-2xl font-bold tracking-tight mb-4">All Jobs</h2>
         <Card className="mb-6">
-          <CardContent className="p-4">
+          <CardContent className="p-4 space-y-4">
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 items-center">
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
@@ -145,6 +147,12 @@ export default function JobsPage() {
                   <SelectItem value="hospitality">Hospitality</SelectItem>
                 </SelectContent>
               </Select>
+            </div>
+             <div className="flex justify-end">
+                <Button>
+                    <Search className="mr-2 h-4 w-4" />
+                    Search
+                </Button>
             </div>
           </CardContent>
         </Card>
