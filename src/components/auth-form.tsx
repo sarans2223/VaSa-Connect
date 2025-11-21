@@ -6,8 +6,8 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { signInWithPopup } from "firebase/auth";
 
-import { auth, googleProvider } from "@/firebase"; // <- adjust path if needed
-import { Github, KeyRound, Mail, User, Users, Eye, EyeOff } from "lucide-react";
+import { auth, googleProvider } from "@/firebase"; // <-- change path if needed
+import { KeyRound, Mail, User, Users, Eye, EyeOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -62,6 +62,10 @@ const GoogleIcon = (props: React.SVGProps<SVGSVGElement>) => (
   </svg>
 );
 
+// validators
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d).{8,}$/; // 8+ chars, 1 letter, 1 number
+
 export function AuthForm({ type }: AuthFormProps) {
   const router = useRouter();
   const { toast } = useToast();
@@ -71,6 +75,9 @@ export function AuthForm({ type }: AuthFormProps) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [agreeTerms, setAgreeTerms] = useState(false);
+  const [isAdult, setIsAdult] = useState(false);
+  const [showForgot, setShowForgot] = useState(false);
 
   // 🔥 GOOGLE SIGN-IN + SAVE NAME + REDIRECT
   const handleGoogleLogin = async () => {
@@ -80,21 +87,17 @@ export function AuthForm({ type }: AuthFormProps) {
 
       const displayName =
         user.displayName ||
-        name || // if they typed name already
+        name ||
         (user.email ? user.email.split("@")[0] : "VaSa Member");
 
-      // save for dashboard/profile
       localStorage.setItem("userName", displayName);
       if (user.email) {
-        localStorage.setItem("userEmail", user.email);
+        localStorage.setItem("userEmail", user.email.toLowerCase());
       }
 
       router.push("/dashboard");
     } catch (error: any) {
-      if (error?.code === "auth/popup-closed-by-user") {
-        // user closed popup, ignore
-        return;
-      }
+      if (error?.code === "auth/popup-closed-by-user") return;
       console.error("Google login error:", error);
       toast({
         title: "Google sign-in failed",
@@ -104,52 +107,158 @@ export function AuthForm({ type }: AuthFormProps) {
     }
   };
 
-  // ✉️ Password / email flow
+  const handleForgotPassword = () => {
+    // Demo behaviour – in real app you'd use Firebase sendPasswordResetEmail
+    toast({
+      title: "Forgot password",
+      description:
+        "In a real VaSa app, we would send a password reset link to your email.",
+    });
+  };
+
+  // ✉️ Email / Password submit with full rules
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
+    setShowForgot(false);
 
-    if (type === "signup") {
-      if (email.toLowerCase() === mockUser.email.toLowerCase()) {
-        toast({
-          title: "Registration Error",
-          description: "An account with this email address already exists.",
-          variant: "destructive",
-        });
-        setIsLoading(false);
-        return;
-      }
-      // store the name from the signup form
-      localStorage.setItem("userName", name);
+    const normalizedInput = email.toLowerCase();
+    const storedEmail = localStorage.getItem("userEmail");
+    const storedPassword = localStorage.getItem("userPassword");
+    const localEmail = storedEmail?.toLowerCase();
+    const mockEmail = mockUser.email.toLowerCase();
+
+    // ===== common validation (login + signup) =====
+    if (!emailRegex.test(email)) {
+      toast({
+        title: "Invalid email",
+        description: "Please enter a valid email address like name@example.com.",
+        variant: "destructive",
+      });
+      setIsLoading(false);
+      return;
     }
 
-    if (type === "login") {
-      if (
-        email.toLowerCase() === mockUser.email.toLowerCase() &&
-        password !== "password123"
-      ) {
+    if (!passwordRegex.test(password)) {
+      toast({
+        title: "Weak password",
+        description:
+          "Password must be at least 8 characters and include both letters and numbers.",
+        variant: "destructive",
+      });
+      setIsLoading(false);
+      return;
+    }
+
+    // ===== signup-only rules =====
+    if (type === "signup") {
+      if (!name.trim()) {
         toast({
-          title: "Login Error",
-          description: "Invalid password. Please try again.",
+          title: "Name required",
+          description: "Please enter your full name.",
           variant: "destructive",
         });
         setIsLoading(false);
         return;
       }
 
-      // optional: if you want a default name when logging in with mock user
+      if (!agreeTerms) {
+        toast({
+          title: "Agreement required",
+          description: "You must accept the Terms & Privacy Policy to continue.",
+          variant: "destructive",
+        });
+        setIsLoading(false);
+        return;
+      }
+
+      if (!isAdult) {
+        toast({
+          title: "Eligibility check",
+          description:
+            "Please confirm that you are 18+ or have guardian permission.",
+          variant: "destructive",
+        });
+        setIsLoading(false);
+        return;
+      }
+
+      // 🚨 email already used (mock OR locally created account)
+      if (
+        normalizedInput === mockEmail ||
+        (localEmail && normalizedInput === localEmail)
+      ) {
+        toast({
+          title: "Email already registered",
+          description: "An account with this email already exists. Please log in.",
+          variant: "destructive",
+        });
+        setIsLoading(false);
+        return;
+      }
+
+      // store name + email + password (demo only)
+      localStorage.setItem("userName", name);
+      localStorage.setItem("userEmail", normalizedInput);
+      localStorage.setItem("userPassword", password);
+    }
+
+    // ===== login-only rules =====
+    if (type === "login") {
+      // 1) No account found at all
+      if (normalizedInput !== mockEmail && normalizedInput !== localEmail) {
+        toast({
+          title: "No account found",
+          description:
+            "No VaSa account exists with this email. Please sign up first.",
+          variant: "destructive",
+        });
+        setIsLoading(false);
+        return;
+      }
+
+      // 2) Password mismatch for mock user
+      if (normalizedInput === mockEmail && password !== "password123") {
+        toast({
+          title: "Password mismatch",
+          description: "The password you entered does not match this account.",
+          variant: "destructive",
+        });
+        setIsLoading(false);
+        setShowForgot(true);
+        return;
+      }
+
+      // 3) Password mismatch for locally created user
+      if (
+        normalizedInput === localEmail &&
+        storedPassword &&
+        password !== storedPassword
+      ) {
+        toast({
+          title: "Password mismatch",
+          description: "The password you entered does not match this account.",
+          variant: "destructive",
+        });
+        setIsLoading(false);
+        setShowForgot(true);
+        return;
+      }
+
+      // success: ensure we have a name saved
       if (!localStorage.getItem("userName") && mockUser.name) {
         localStorage.setItem("userName", mockUser.name);
       }
+      // make sure login email is stored as last used
+      localStorage.setItem("userEmail", normalizedInput);
     }
 
-    // store email for dashboard/profile
-    localStorage.setItem("userEmail", email);
-
-    // Simulate API call
+    // ===== success path =====
+    // Simulate API call / backend delay
     setTimeout(() => {
+      setIsLoading(false);
       router.push("/dashboard");
-    }, 1000);
+    }, 800);
   };
 
   return (
@@ -179,6 +288,8 @@ export function AuthForm({ type }: AuthFormProps) {
                     id="name"
                     placeholder="Savitri Bai"
                     required
+                    minLength={2}
+                    maxLength={50}
                     className="pl-10"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
@@ -211,6 +322,7 @@ export function AuthForm({ type }: AuthFormProps) {
                   id="password"
                   type={showPassword ? "text" : "password"}
                   required
+                  minLength={8}
                   className="pl-10 pr-10"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
@@ -229,7 +341,50 @@ export function AuthForm({ type }: AuthFormProps) {
                   )}
                 </Button>
               </div>
+              {type === "signup" && (
+                <p className="text-xs text-muted-foreground">
+                  Use at least 8 characters with letters and numbers.
+                </p>
+              )}
+              {type === "login" && showForgot && (
+                <button
+                  type="button"
+                  onClick={handleForgotPassword}
+                  className="mt-1 text-xs text-accent underline"
+                >
+                  Forgot password?
+                </button>
+              )}
             </div>
+
+            {type === "signup" && (
+              <div className="space-y-2 text-xs text-muted-foreground">
+                <label className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    className="h-4 w-4"
+                    checked={agreeTerms}
+                    onChange={(e) => setAgreeTerms(e.target.checked)}
+                  />
+                  <span>
+                    I agree to VaSa&apos;s{" "}
+                    <span className="underline">Terms</span> and{" "}
+                    <span className="underline">Privacy Policy</span>.
+                  </span>
+                </label>
+                <label className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    className="h-4 w-4"
+                    checked={isAdult}
+                    onChange={(e) => setIsAdult(e.target.checked)}
+                  />
+                  <span>
+                    I am 18+ or have guardian permission to use this platform.
+                  </span>
+                </label>
+              </div>
+            )}
 
             <Button
               disabled={isLoading}
@@ -316,3 +471,4 @@ export function AuthForm({ type }: AuthFormProps) {
     </div>
   );
 }
+
