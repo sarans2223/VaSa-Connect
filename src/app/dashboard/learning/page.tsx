@@ -1,6 +1,7 @@
 
 'use client';
 
+import { useState } from 'react';
 import Image from "next/image";
 import {
   Card,
@@ -27,6 +28,7 @@ import { useToast } from "@/hooks/use-toast";
 
 export default function LearningPage() {
   const { toast } = useToast();
+  const [language, setLanguage] = useState('all');
 
   const handleResume = (title: string) => {
     toast({
@@ -42,6 +44,10 @@ export default function LearningPage() {
     });
   };
 
+  const filteredModules = mockLearningModules.filter(module => 
+    language === 'all' || module.language === language
+  );
+
   return (
     <div className="p-4 sm:p-6 lg:p-8 space-y-8">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -51,7 +57,7 @@ export default function LearningPage() {
         </div>
         <div className="flex items-center gap-2">
             <Languages className="h-5 w-5 text-muted-foreground" />
-            <Select>
+            <Select value={language} onValueChange={setLanguage}>
                 <SelectTrigger className="w-full sm:w-[180px]">
                     <SelectValue placeholder="Filter by language" />
                 </SelectTrigger>
@@ -72,23 +78,34 @@ export default function LearningPage() {
       </p>
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {mockLearningModules.map((module) => (
+        {filteredModules.map((module) => (
           <Card key={module.id} className="flex flex-col overflow-hidden transition-all hover:shadow-lg">
             <CardHeader className="p-0">
               <div className="relative aspect-video">
-                <Image
-                  src={module.imageUrl}
-                  alt={module.title}
-                  fill
-                  className="object-cover"
-                  data-ai-hint={
-                    module.title.toLowerCase().includes('cook') ? 'food preparation' :
-                    module.title.toLowerCase().includes('plate') ? 'gourmet food' :
-                    module.title.toLowerCase().includes('marketing') ? 'digital marketing' :
-                    module.title.toLowerCase().includes('coding') ? 'laptop code' :
-                    'woman working'
-                  }
-                />
+                 {module.type === 'video' && module.videoId ? (
+                  <iframe
+                    src={`https://www.youtube.com/embed/${module.videoId}`}
+                    title={module.title}
+                    frameBorder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                    className="w-full h-full"
+                  ></iframe>
+                ) : (
+                  <Image
+                    src={module.imageUrl}
+                    alt={module.title}
+                    fill
+                    className="object-cover"
+                    data-ai-hint={
+                      module.title.toLowerCase().includes('cook') ? 'food preparation' :
+                      module.title.toLowerCase().includes('plate') ? 'gourmet food' :
+                      module.title.toLowerCase().includes('marketing') ? 'digital marketing' :
+                      module.title.toLowerCase().includes('coding') ? 'laptop code' :
+                      'woman working'
+                    }
+                  />
+                )}
               </div>
             </CardHeader>
             <CardContent className="p-4 flex-grow space-y-3">
@@ -107,16 +124,18 @@ export default function LearningPage() {
                   {module.progress}% Complete
                 </span>
               </div>
-              <div className="flex w-full items-center gap-2 pt-2">
-                <Button size="sm" className="w-full" onClick={() => handleResume(module.title)}>
-                  <Play className="mr-2 h-4 w-4" />
-                  Resume
-                </Button>
-                <Button size="sm" variant="outline" className="w-full" onClick={() => handleRewind(module.title)}>
-                  <Rewind className="mr-2 h-4 w-4" />
-                  Rewind
-                </Button>
-              </div>
+              {module.type === 'video' && (
+                <div className="flex w-full items-center gap-2 pt-2">
+                  <Button size="sm" className="w-full" onClick={() => handleResume(module.title)}>
+                    <Play className="mr-2 h-4 w-4" />
+                    Resume
+                  </Button>
+                  <Button size="sm" variant="outline" className="w-full" onClick={() => handleRewind(module.title)}>
+                    <Rewind className="mr-2 h-4 w-4" />
+                    Rewind
+                  </Button>
+                </div>
+              )}
             </CardFooter>
           </Card>
         ))}

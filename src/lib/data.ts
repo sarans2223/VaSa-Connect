@@ -116,41 +116,104 @@ export const mockJobs: Job[] = [
 
 export const mockLearningModules: LearningModule[] = [
   {
-    id: 'learn-1',
+    id: 'learn-1-en',
     title: 'Professional Cooking Techniques',
     description: 'Master the fundamental techniques of professional cooking, from knife skills to sauce making.',
     type: 'video',
-    duration: '4h 15m',
+    duration: '10 min',
     imageUrl: 'https://picsum.photos/seed/cook/600/400',
     progress: 40,
+    language: 'en',
+    videoId: 'U1A64G7yT6A'
   },
   {
-    id: 'learn-2',
+    id: 'learn-1-hi',
+    title: 'Professional Cooking Techniques (Hindi)',
+    description: 'Master the fundamental techniques of professional cooking, from knife skills to sauce making, in Hindi.',
+    type: 'video',
+    duration: '13 min',
+    imageUrl: 'https://picsum.photos/seed/cook2/600/400',
+    progress: 20,
+    language: 'hi',
+    videoId: 'L4oI3G3iW6A'
+  },
+  {
+    id: 'learn-2-en',
     title: 'Advanced Digital Marketing',
     description: 'Learn SEO, SEM, and social media strategies to boost your online presence.',
-    type: 'article',
-    duration: '45 min read',
+    type: 'video',
+    duration: '5 hours',
     imageUrl: 'https://picsum.photos/seed/marketing/600/400',
     progress: 0,
+    language: 'en',
+    videoId: 'Jb4p3S3An2s'
+  },
+    {
+    id: 'learn-2-hi',
+    title: 'Advanced Digital Marketing (Hindi)',
+    description: 'Learn SEO, SEM, and social media strategies to boost your online presence, in Hindi.',
+    type: 'video',
+    duration: '12 hours',
+    imageUrl: 'https://picsum.photos/seed/marketing2/600/400',
+    progress: 0,
+    language: 'hi',
+    videoId: 'rqg1Y5Mxi6c'
   },
   {
-    id: 'learn-3',
+    id: 'learn-3-en',
     title: 'The Art of Plate Decoration',
     description: 'Learn how to present your culinary creations with artistic flair and elegance.',
     type: 'video',
-    duration: '1h 45m',
+    duration: '8 min',
     imageUrl: 'https://picsum.photos/seed/plate/600/400',
     progress: 75,
+    language: 'en',
+    videoId: 'i8aY2a7V2z0'
+  },
+   {
+    id: 'learn-3-hi',
+    title: 'The Art of Plate Decoration (Hindi)',
+    description: 'Learn how to present your culinary creations with artistic flair and elegance, in Hindi.',
+    type: 'video',
+    duration: '4 min',
+    imageUrl: 'https://picsum.photos/seed/plate2/600/400',
+    progress: 10,
+    language: 'hi',
+    videoId: 'k-y_s4qises'
   },
   {
-    id: 'learn-4',
+    id: 'learn-4-en',
     title: 'Introduction to Coding with Python',
     description: 'A beginner-friendly introduction to the world of programming with Python.',
     type: 'video',
-    duration: '5h',
+    duration: '4h',
     imageUrl: 'https://picsum.photos/seed/coding/600/400',
     progress: 25,
+    language: 'en',
+    videoId: 'rfscVS0vtbw'
   },
+  {
+    id: 'learn-4-hi',
+    title: 'Introduction to Coding with Python (Hindi)',
+    description: 'A beginner-friendly introduction to the world of programming with Python, in Hindi.',
+    type: 'video',
+    duration: '2h',
+    imageUrl: 'https://picsum.photos/seed/coding2/600/400',
+    progress: 5,
+    language: 'hi',
+    videoId: 'gfDE2a7MKjA'
+  },
+  {
+    id: 'learn-5-ta',
+    title: 'Introduction to Python (Tamil)',
+    description: 'A beginner-friendly introduction to Python programming in Tamil.',
+    type: 'video',
+    duration: '11 hours',
+    imageUrl: 'https://picsum.photos/seed/coding3/600/400',
+    progress: 0,
+    language: 'ta',
+    videoId: '4X-d22P9d5s'
+  }
 ];
 
 export const mockTeams: Team[] = [

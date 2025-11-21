@@ -33,6 +33,8 @@ export type LearningModule = {
   duration: string;
   imageUrl: string;
   progress: number;
+  language: 'en' | 'hi' | 'ta' | 'te' | 'bn' | 'mr';
+  videoId?: string;
 };
 
 export type Team = {
