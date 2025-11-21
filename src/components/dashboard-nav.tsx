@@ -65,19 +65,17 @@ export function DashboardNav() {
   const menuItems = isPanchayatPath ? panchayatMenuItems : regularMenuItems;
 
   useEffect(() => {
-    if (!isPanchayatPath) {
-      if (user) {
-        setUserName(user.displayName || 'User');
-      } else if (typeof window !== 'undefined') {
-        const storedName = localStorage.getItem('userName');
-        if (storedName) {
-          setUserName(storedName);
-        } else {
-          setUserName('User'); // Fallback name
-        }
+    if (user) {
+      setUserName(user.displayName || 'User');
+    } else if (typeof window !== 'undefined') {
+      const storedName = localStorage.getItem('userName');
+      if (storedName) {
+        setUserName(storedName);
+      } else {
+        setUserName('User'); // Fallback name
       }
     }
-  }, [isPanchayatPath, user, pathname]);
+  }, [user, pathname]);
 
   const handleSignOut = async () => {
     try {
@@ -105,7 +103,7 @@ export function DashboardNav() {
 
   const UserNameDisplay = ({ inSheet }: { inSheet?: boolean }) => {
     if (isPanchayatPath) {
-      return <span className="font-semibold text-sm">Panchayat Member</span>;
+      return <span className="font-semibold text-sm">Sathyamangalam Panchayat</span>;
     }
 
     const isProfilePage = pathname === '/dashboard/profile';

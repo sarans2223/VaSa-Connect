@@ -11,7 +11,7 @@ import { Button } from '@/components/ui/button';
 import { ArrowRight, UserPlus, Users, Briefcase, BarChart, TrendingUp, BriefcaseBusiness, UsersRound } from 'lucide-react';
 import { Progress } from '@/components/ui/progress';
 
-const panchayatName = 'Sathyamangalam';
+const panchayatName = 'Sathyamangalam Panchayat';
 const panchayatId = 'GP-STYM-001';
 
 const dashboardItems = [
