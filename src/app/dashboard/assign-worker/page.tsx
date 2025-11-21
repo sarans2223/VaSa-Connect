@@ -2,6 +2,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -23,6 +24,7 @@ import { Search, UserPlus, Star, CheckSquare, Square, UserCheck } from "lucide-r
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from '@/hooks/use-toast';
 import { mockJobs } from '@/lib/data';
+import type { Job } from '@/lib/types';
 
 const allProfiles = [
   { id: '1', name: 'Lakshmi Priya', skills: ['Cooking', 'Tailoring'], rating: 4.5, jobsCompleted: 2, job: 'Catering Project' },
@@ -42,7 +44,9 @@ export default function AssignWorkerPage() {
   const [availableWorkers, setAvailableWorkers] = useState<WorkerProfile[]>(allProfiles);
   const [assignedWorkers, setAssignedWorkers] = useState<WorkerProfile[]>([]);
   const [selectedWorkers, setSelectedWorkers] = useState<string[]>([]);
+  const [selectedJob, setSelectedJob] = useState<string>('');
   const { toast } = useToast();
+  const router = useRouter();
 
   const handleSelectWorker = (workerId: string) => {
     setSelectedWorkers(prev => 
@@ -53,6 +57,15 @@ export default function AssignWorkerPage() {
   };
 
   const handleConfirmAssignment = () => {
+    if (!selectedJob) {
+      toast({
+        title: 'No Job Selected',
+        description: 'Please select a job to assign workers to.',
+        variant: 'destructive',
+      });
+      return;
+    }
+
     const workersToAssign = availableWorkers.filter(w => selectedWorkers.includes(w.id));
     if (workersToAssign.length === 0) {
       toast({
@@ -67,10 +80,30 @@ export default function AssignWorkerPage() {
     setAvailableWorkers(prev => prev.filter(w => !selectedWorkers.includes(w.id)));
     setSelectedWorkers([]);
 
+    try {
+        const storedJobs = localStorage.getItem('panchayatJobs');
+        if (storedJobs) {
+            let panchayatJobs: Job[] = JSON.parse(storedJobs);
+            const jobToUpdate = panchayatJobs.find(job => job.id === selectedJob);
+
+            if (jobToUpdate) {
+                const updatedJobs = panchayatJobs.map(job => 
+                    job.id === selectedJob 
+                    ? { ...job, workerNames: [...(job.workerNames || []), ...workersToAssign.map(w => w.name)], status: 'Worker Assigned' as Job['status'] }
+                    : job
+                );
+                localStorage.setItem('panchayatJobs', JSON.stringify(updatedJobs));
+            }
+        }
+    } catch (error) {
+        console.error("Failed to update job status in local storage", error);
+    }
+
     toast({
       title: 'Assignment Confirmed!',
       description: `${workersToAssign.length} worker(s) have been assigned to the job.`,
     });
+    router.push('/dashboard/panchayat/job-status');
   };
   
   const renderStars = (rating: number) => {
@@ -156,12 +189,12 @@ export default function AssignWorkerPage() {
                 </div>
                 <div className="space-y-2">
                     <Label>Job</Label>
-                    <Select>
+                    <Select value={selectedJob} onValueChange={setSelectedJob}>
                         <SelectTrigger>
                             <SelectValue placeholder="Select a job to assign" />
                         </SelectTrigger>
                         <SelectContent>
-                            {mockJobs.slice(0, 3).map(job => (
+                            {mockJobs.slice(0, 5).map(job => (
                                 <SelectItem key={job.id} value={job.id}>
                                     {job.title}
                                 </SelectItem>
@@ -180,7 +213,7 @@ export default function AssignWorkerPage() {
       <Tabs defaultValue="available" className="w-full">
         <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="available">Available Workers ({availableWorkers.length})</TabsTrigger>
-            <TabsTrigger value="assigned">Assigned Workers ({assignedWorkers.length})</TabsTrigger>
+            <TabsTrigger value="assigned">Assigned to Current Job ({assignedWorkers.length})</TabsTrigger>
         </TabsList>
         <TabsContent value="available" className="mt-6">
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -233,7 +266,7 @@ export default function AssignWorkerPage() {
       </Tabs>
 
        <div className="flex justify-end">
-         <Button size="lg" className="bg-gradient-to-r from-[#E0BBE4] to-[#957DAD] hover:opacity-90 text-primary-foreground" onClick={handleConfirmAssignment}>
+         <Button size="lg" className="bg-gradient-to-r from-[#E0BBE4] to-[#957DAD] hover:opacity-90 text-primary-foreground" onClick={handleConfirmAssignment} disabled={selectedWorkers.length === 0 || !selectedJob}>
             Confirm Assignment ({selectedWorkers.length})
         </Button>
       </div>

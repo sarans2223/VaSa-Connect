@@ -23,6 +23,12 @@ export type Job = {
   description: string;
   skillsRequired: string[];
   industry: string;
+  name?: string;
+  workerNames?: string[];
+  status?: 'Completed' | 'Worker Assigned' | 'Yet To Assign';
+  date?: string;
+  time?: string;
+  pay?: string;
 };
 
 export type LearningModule = {
