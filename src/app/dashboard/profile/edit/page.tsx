@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, ChangeEvent } from "react";
 import { useRouter } from "next/navigation";
 import {
   Card,
@@ -25,19 +25,34 @@ export default function EditProfilePage() {
   const { toast } = useToast();
 
   useEffect(() => {
-    const storedName = localStorage.getItem('userName');
-    const storedEmail = localStorage.getItem('userEmail');
-    if (storedName) {
-      setUser(prevUser => ({ ...prevUser, name: storedName }));
-    }
-    if (storedEmail) {
-      setUser(prevUser => ({ ...prevUser, email: storedEmail }));
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    } else {
+        const storedName = localStorage.getItem('userName');
+        const storedEmail = localStorage.getItem('userEmail');
+        if (storedName || storedEmail) {
+            setUser(prevUser => ({ 
+                ...prevUser, 
+                name: storedName || prevUser.name,
+                email: storedEmail || prevUser.email,
+            }));
+        }
     }
   }, []);
 
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { id, value } = e.target;
+    setUser(prevUser => ({
+      ...prevUser,
+      [id]: id === 'skills' || id === 'industryPreferences' ? value.split(',').map(s => s.trim()) : value,
+    }));
+  };
+
   const handleSaveChanges = () => {
-    // In a real app, you'd save this to a backend.
-    // We'll just simulate it with a toast.
+    localStorage.setItem('user', JSON.stringify(user));
+    localStorage.setItem('userName', user.name);
+
     toast({
       title: "Profile Updated",
       description: "Your changes have been saved successfully.",
@@ -67,7 +82,7 @@ export default function EditProfilePage() {
           <div className="grid sm:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="name">Full Name</Label>
-              <Input id="name" defaultValue={user.name} />
+              <Input id="name" value={user.name} onChange={handleInputChange} />
             </div>
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
@@ -78,28 +93,29 @@ export default function EditProfilePage() {
             <Label htmlFor="experience">Experience Summary</Label>
             <Textarea
               id="experience"
-              defaultValue={user.experience}
+              value={user.experience}
+              onChange={handleInputChange}
               className="min-h-[120px]"
               placeholder="Tell us about your professional experience..."
             />
           </div>
           <div className="grid sm:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="job-type">Desired Job Type</Label>
-              <Input id="job-type" defaultValue={user.desiredJobType} />
+              <Label htmlFor="desiredJobType">Desired Job Type</Label>
+              <Input id="desiredJobType" value={user.desiredJobType} onChange={handleInputChange} />
             </div>
              <div className="space-y-2">
-              <Label htmlFor="location">Location Preferences</Label>
-              <Input id="location" defaultValue={user.locationPreferences} />
+              <Label htmlFor="locationPreferences">Location Preferences</Label>
+              <Input id="locationPreferences" value={user.locationPreferences} onChange={handleInputChange} />
             </div>
           </div>
            <div className="space-y-2">
-              <Label htmlFor="industries">Industry Preferences (comma-separated)</Label>
-              <Input id="industries" defaultValue={user.industryPreferences.join(', ')} placeholder="e.g., Technology, Healthcare, Education" />
+              <Label htmlFor="industryPreferences">Industry Preferences (comma-separated)</Label>
+              <Input id="industryPreferences" value={user.industryPreferences.join(', ')} onChange={handleInputChange} placeholder="e.g., Technology, Healthcare, Education" />
             </div>
              <div className="space-y-2">
               <Label htmlFor="skills">My Skills (comma-separated)</Label>
-              <Input id="skills" defaultValue={user.skills.join(', ')} placeholder="e.g., Cooking, Event Planning" />
+              <Input id="skills" value={user.skills.join(', ')} onChange={handleInputChange} placeholder="e.g., Cooking, Event Planning" />
             </div>
             <div className="flex justify-end">
                 <Button onClick={handleSaveChanges} className="bg-gradient-to-r from-[#E0BBE4] to-[#957DAD] hover:opacity-90 text-primary-foreground">

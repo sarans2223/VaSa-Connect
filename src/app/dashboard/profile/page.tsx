@@ -47,13 +47,19 @@ export default function ProfilePage() {
   const [user, setUser] = useState<User>(defaultUser);
 
   useEffect(() => {
-    const storedName = localStorage.getItem('userName');
-    const storedEmail = localStorage.getItem('userEmail');
-    if (storedName) {
-      setUser(prevUser => ({ ...prevUser, name: storedName }));
-    }
-    if (storedEmail) {
-      setUser(prevUser => ({ ...prevUser, email: storedEmail }));
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    } else {
+        const storedName = localStorage.getItem('userName');
+        const storedEmail = localStorage.getItem('userEmail');
+        if (storedName || storedEmail) {
+            setUser(prevUser => ({ 
+                ...prevUser, 
+                name: storedName || prevUser.name,
+                email: storedEmail || prevUser.email,
+            }));
+        }
     }
   }, []);
 
