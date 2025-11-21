@@ -12,17 +12,17 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import type { Job } from "@/lib/types";
-import { MapPin, Briefcase, DollarSign, ArrowRight, Send } from "lucide-react";
-import { useToast } from '@/hooks/use-toast';
+import { MapPin, Briefcase, DollarSign, ArrowRight, Send, Check } from "lucide-react";
 
 type JobCardProps = {
   job: Job;
   relevanceScore?: number;
   onViewDetails?: (job: Job) => void;
+  onApplyClick?: (job: Job) => void;
+  isApplied?: boolean;
 };
 
-export function JobCard({ job, relevanceScore, onViewDetails }: JobCardProps) {
-  const { toast } = useToast();
+export function JobCard({ job, relevanceScore, onViewDetails, onApplyClick, isApplied }: JobCardProps) {
   
   const handleViewDetailsClick = () => {
     if (onViewDetails) {
@@ -31,10 +31,9 @@ export function JobCard({ job, relevanceScore, onViewDetails }: JobCardProps) {
   };
 
   const handleApplyClick = () => {
-    toast({
-        title: 'Application Sent!',
-        description: `Your application for "${job.title}" has been submitted.`,
-    });
+    if (onApplyClick) {
+      onApplyClick(job);
+    }
   };
   
   return (
@@ -94,9 +93,9 @@ export function JobCard({ job, relevanceScore, onViewDetails }: JobCardProps) {
           variant="secondary"
           className="w-full"
           onClick={handleApplyClick}
+          disabled={isApplied}
         >
-          <Send className="mr-2 h-4 w-4" />
-          Apply Now
+          {isApplied ? <><Check className="mr-2 h-4 w-4" />Applied</> : <><Send className="mr-2 h-4 w-4" />Apply Now</>}
         </Button>
       </CardFooter>
     </Card>
