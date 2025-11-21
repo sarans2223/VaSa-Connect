@@ -60,6 +60,8 @@ export function DashboardNav() {
   const { toast } = useToast();
   const { user } = useUser();
   const [userName, setUserName] = useState('');
+  const [panchayatName, setPanchayatName] = useState('Sathyamangalam');
+
 
   const isPanchayatPath = pathname.startsWith('/dashboard/panchayat');
   const menuItems = isPanchayatPath ? panchayatMenuItems : regularMenuItems;
@@ -103,7 +105,14 @@ export function DashboardNav() {
 
   const UserNameDisplay = ({ inSheet }: { inSheet?: boolean }) => {
     if (isPanchayatPath) {
-      return <span className="font-semibold text-sm">Sathyamangalam Panchayat</span>;
+      return (
+        <Button asChild variant={'ghost'} size="sm">
+            <Link href="/dashboard/panchayat" className="font-semibold text-sm flex items-center gap-2">
+                <UserCircle className="h-5 w-5" />
+                {panchayatName}
+            </Link>
+        </Button>
+      );
     }
 
     const isProfilePage = pathname === '/dashboard/profile';
