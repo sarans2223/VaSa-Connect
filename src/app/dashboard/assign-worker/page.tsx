@@ -11,6 +11,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
@@ -71,10 +72,12 @@ export default function AssignWorkerPage() {
       <Card>
         <CardContent className="p-4">
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 items-end">
-                <div className="relative lg:col-span-1">
+                <div className="relative lg:col-span-1 space-y-2">
                     <Label htmlFor="search-input">Search</Label>
-                    <Search className="absolute left-3 top-9 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                    <Input id="search-input" placeholder="Name or skill..." className="pl-10" />
+                    <div className="relative">
+                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                        <Input id="search-input" placeholder="Name or skill..." className="pl-10" />
+                    </div>
                 </div>
                 <div className="space-y-2">
                     <Label>Skill</Label>
