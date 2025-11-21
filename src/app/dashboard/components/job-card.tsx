@@ -1,3 +1,5 @@
+
+'use client';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -10,7 +12,8 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import type { Job } from "@/lib/types";
-import { MapPin, Briefcase, DollarSign, ArrowRight } from "lucide-react";
+import { MapPin, Briefcase, DollarSign, ArrowRight, Send } from "lucide-react";
+import { useToast } from '@/hooks/use-toast';
 
 type JobCardProps = {
   job: Job;
@@ -19,10 +22,19 @@ type JobCardProps = {
 };
 
 export function JobCard({ job, relevanceScore, onViewDetails }: JobCardProps) {
+  const { toast } = useToast();
+  
   const handleViewDetailsClick = () => {
     if (onViewDetails) {
       onViewDetails(job);
     }
+  };
+
+  const handleApplyClick = () => {
+    toast({
+        title: 'Application Sent!',
+        description: `Your application for "${job.title}" has been submitted.`,
+    });
   };
   
   return (
@@ -70,13 +82,21 @@ export function JobCard({ job, relevanceScore, onViewDetails }: JobCardProps) {
             ))}
         </div>
       </CardContent>
-      <CardFooter>
+      <CardFooter className="flex-col items-stretch gap-2">
         <Button 
           className="w-full bg-gradient-to-r from-[#E0BBE4] to-[#957DAD] hover:opacity-90 text-primary-foreground"
           onClick={handleViewDetailsClick}
         >
           View Details
           <ArrowRight className="ml-2 h-4 w-4" />
+        </Button>
+         <Button 
+          variant="secondary"
+          className="w-full"
+          onClick={handleApplyClick}
+        >
+          <Send className="mr-2 h-4 w-4" />
+          Apply Now
         </Button>
       </CardFooter>
     </Card>
