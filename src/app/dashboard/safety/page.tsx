@@ -79,23 +79,19 @@ export default function SafetyPage() {
   };
 
   const handleDeleteContact = (contactId: number) => {
+    const contactToDelete = contacts.find((contact) => contact.id === contactId);
     setContacts(contacts.filter((contact) => contact.id !== contactId));
     toast({
       title: 'Contact Removed',
-      description: 'The contact has been removed from your emergency list.',
+      description: `${contactToDelete?.name} has been removed from your emergency list.`,
     });
   };
 
   const handleShortcutToggle = (type: 'power' | 'volume', enabled: boolean) => {
     const featureName = type === 'power' ? 'Power button shortcut' : 'Volume button shortcut';
     
-    if (enabled) {
-      if (type === 'power') setPowerButtonShortcut(true);
-      if (type === 'volume') setVolumeButtonShortcut(true);
-    } else {
-        if (type === 'power') setPowerButtonShortcut(false);
-        if (type === 'volume') setVolumeButtonShortcut(false);
-    }
+    if (type === 'power') setPowerButtonShortcut(enabled);
+    if (type === 'volume') setVolumeButtonShortcut(enabled);
     
     toast({
       title: `${featureName} ${enabled ? 'Enabled' : 'Disabled'}`,
