@@ -64,9 +64,6 @@ export default function AssignWorkerPage() {
             </div>
             <p className="text-muted-foreground mt-2">Select profiles to assign to a job.</p>
         </div>
-        <Button size="lg" className="bg-gradient-to-r from-[#E0BBE4] to-[#957DAD] hover:opacity-90 text-primary-foreground">
-            Confirm Assignment ({selectedWorkers.length})
-        </Button>
       </div>
 
       <Card>
