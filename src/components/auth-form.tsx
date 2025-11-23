@@ -1,12 +1,11 @@
+
 "use client";
 
 import * as React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { signInWithPopup } from "firebase/auth";
 
-import { auth, googleProvider } from "@/firebase"; // <-- change path if needed
 import { KeyRound, Mail, User, Users, Eye, EyeOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -22,10 +21,8 @@ import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/hooks/use-toast";
 import { mockUser } from "@/lib/data";
-
-interface AuthFormProps {
-  type: "login" | "signup";
-}
+import { signInWithGoogle } from "@/firebase/auth";
+import { useUser } from "@/firebase/index";
 
 const MicrosoftIcon = (props: React.SVGProps<SVGSVGElement>) => (
   <svg viewBox="0 0 21 21" {...props}>
@@ -62,6 +59,10 @@ const GoogleIcon = (props: React.SVGProps<SVGSVGElement>) => (
   </svg>
 );
 
+type AuthFormProps = {
+  type: "login" | "signup";
+};
+
 // validators
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d).{8,}$/; // 8+ chars, 1 letter, 1 number
@@ -69,8 +70,10 @@ const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d).{8,}$/; // 8+ chars, 1 letter, 1 
 export function AuthForm({ type }: AuthFormProps) {
   const router = useRouter();
   const { toast } = useToast();
+  const { user: firebaseUser, loading: userLoading } = useUser();
 
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isGoogleLoading, setIsGoogleLoading] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -79,31 +82,35 @@ export function AuthForm({ type }: AuthFormProps) {
   const [isAdult, setIsAdult] = useState(false);
   const [showForgot, setShowForgot] = useState(false);
 
-  // 🔥 GOOGLE SIGN-IN + SAVE NAME + REDIRECT
-  const handleGoogleLogin = async () => {
+  useEffect(() => {
+    if (!userLoading && firebaseUser) {
+      router.push("/dashboard");
+    } else if (!userLoading) {
+      setIsLoading(false);
+    }
+  }, [firebaseUser, userLoading, router]);
+
+  const handleGoogleSignIn = async () => {
+    setIsGoogleLoading(true);
     try {
-      const result = await signInWithPopup(auth, googleProvider);
-      const user = result.user;
-
-      const displayName =
-        user.displayName ||
-        name ||
-        (user.email ? user.email.split("@")[0] : "VaSa Member");
-
-      localStorage.setItem("userName", displayName);
+      const userCredential = await signInWithGoogle();
+      const user = userCredential.user;
+      localStorage.setItem("userName", user.displayName || name || "VaSa Member");
       if (user.email) {
         localStorage.setItem("userEmail", user.email.toLowerCase());
       }
-
       router.push("/dashboard");
     } catch (error: any) {
-      if (error?.code === "auth/popup-closed-by-user") return;
-      console.error("Google login error:", error);
-      toast({
-        title: "Google sign-in failed",
-        description: "Please try again.",
-        variant: "destructive",
-      });
+      if (error?.code !== "auth/popup-closed-by-user") {
+        console.error("Google Sign-In Error:", error);
+        toast({
+          title: "Google Sign-In Failed",
+          description: "Could not sign in with Google. Please try again.",
+          variant: "destructive",
+        });
+      }
+    } finally {
+      setIsGoogleLoading(false);
     }
   };
 
@@ -115,8 +122,6 @@ export function AuthForm({ type }: AuthFormProps) {
         "In a real VaSa app, we would send a password reset link to your email.",
     });
   };
-
-  // ✉️ Email / Password submit with full rules
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
@@ -261,6 +266,14 @@ export function AuthForm({ type }: AuthFormProps) {
     }, 800);
   };
 
+  if (isLoading) {
+    return (
+      <div className="flex min-h-screen w-full items-center justify-center bg-background">
+        <div>Loading...</div>
+      </div>
+    );
+  }
+
   return (
     <div className="flex min-h-screen w-full items-center justify-center bg-background px-4">
       <Card className="w-full max-w-md">
@@ -387,11 +400,11 @@ export function AuthForm({ type }: AuthFormProps) {
             )}
 
             <Button
-              disabled={isLoading}
+              disabled={isLoading || userLoading}
               type="submit"
               className="w-full font-semibold bg-gradient-to-r from-[#E0BBE4] to-[#957DAD] hover:opacity-90 transition-opacity text-primary-foreground"
             >
-              {isLoading
+              {isLoading || userLoading
                 ? "Processing..."
                 : type === "login"
                 ? "Log In"
@@ -410,13 +423,9 @@ export function AuthForm({ type }: AuthFormProps) {
 
           {/* Social buttons */}
           <div className="grid grid-cols-2 gap-4">
-            <Button
-              variant="outline"
-              className="w-full"
-              onClick={handleGoogleLogin}
-            >
+            <Button variant="outline" className="w-full" onClick={handleGoogleSignIn} disabled={isGoogleLoading || userLoading}>
               <GoogleIcon className="mr-2 h-5 w-5" />
-              Google
+              {isGoogleLoading ? "Signing in..." : "Google"}
             </Button>
 
             <Button variant="outline" className="w-full">
@@ -472,3 +481,4 @@ export function AuthForm({ type }: AuthFormProps) {
   );
 }
 
+    

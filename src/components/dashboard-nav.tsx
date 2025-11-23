@@ -2,7 +2,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import {
   BarChart,
@@ -25,10 +25,12 @@ import {
   SheetContent,
   SheetTrigger,
   SheetClose,
-  SheetHeader,
-  SheetTitle,
 } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
+import { useAuth, signOut } from "@/firebase/auth";
+import { useToast } from "@/hooks/use-toast";
+import { useUser } from "@/firebase";
+
 
 const panchayatMenuItems = [
   { href: "/dashboard/panchayat", label: "Dashboard", icon: LayoutDashboard },
@@ -54,6 +56,9 @@ const regularMenuItems = [
 
 export function DashboardNav() {
   const pathname = usePathname();
+  const router = useRouter();
+  const { toast } = useToast();
+  const user = useUser();
   const [userName, setUserName] = useState('');
 
   const isPanchayatPath = pathname.startsWith('/dashboard/panchayat');
@@ -61,14 +66,39 @@ export function DashboardNav() {
 
   useEffect(() => {
     if (!isPanchayatPath) {
-      const storedName = localStorage.getItem('userName');
-      if (storedName) {
-        setUserName(storedName);
+      if (user) {
+        setUserName(user.displayName || 'User');
       } else {
-        setUserName('User'); // Fallback name
+        const storedName = localStorage.getItem('userName');
+        if (storedName) {
+          setUserName(storedName);
+        } else {
+          setUserName('User'); // Fallback name
+        }
       }
     }
-  }, [isPanchayatPath]);
+  }, [isPanchayatPath, user]);
+
+  const handleSignOut = async () => {
+    try {
+      await signOut();
+      localStorage.removeItem('userName');
+      localStorage.removeItem('userEmail');
+      toast({
+        title: "Signed Out",
+        description: "You have been successfully signed out.",
+      });
+      router.push('/login');
+    } catch (error) {
+      console.error("Sign Out Error:", error);
+      toast({
+        title: "Sign Out Failed",
+        description: "Could not sign out. Please try again.",
+        variant: "destructive",
+      });
+    }
+  };
+
 
   const UserNameDisplay = ({ inSheet }: { inSheet?: boolean }) => {
     if (isPanchayatPath) {
@@ -84,7 +114,7 @@ export function DashboardNav() {
               href="/dashboard/profile"
               className={cn(
                 "flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary",
-                isProfilePage && "bg-secondary text-primary"
+                isProfilePage && "bg-primary/10 text-primary font-semibold"
               )}
             >
               <UserCircle className="h-4 w-4" />
@@ -96,7 +126,10 @@ export function DashboardNav() {
 
     return (
       <Button asChild variant={isProfilePage ? 'secondary' : 'ghost'} size="sm">
-        <Link href="/dashboard/profile" className="flex items-center gap-2">
+        <Link href="/dashboard/profile" className={cn(
+          "flex items-center gap-2",
+          isProfilePage ? "text-primary-foreground font-semibold" : ""
+        )}>
             <UserCircle className="h-5 w-5" />
             {userName}
         </Link>
@@ -111,11 +144,11 @@ export function DashboardNav() {
     return (
        <Component {...props}>
           <Link
-          href={item.href}
-          className={cn(
-              "flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary",
-              isActive ? "bg-primary/10 text-primary font-semibold" : ""
-          )}
+            href={item.href}
+            className={cn(
+                "flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary",
+                isActive ? "bg-primary/10 text-primary font-semibold" : ""
+            )}
           >
           <item.icon className="h-4 w-4" />
           {item.label}
@@ -138,12 +171,11 @@ export function DashboardNav() {
             </Button>
           </SheetTrigger>
           <SheetContent side="left" className="flex flex-col p-0">
-             <SheetHeader className="p-4 border-b">
-                <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
+             <div className="p-4 border-b">
                 <Link href={isPanchayatPath ? "/dashboard/panchayat" : "/dashboard"} className="flex items-center gap-2 font-bold">
-                  <span className="">VaSa</span>
+                  <span className="font-bold">VaSa</span>
                 </Link>
-             </SheetHeader>
+             </div>
             <nav className="flex-1 grid gap-2 p-2 text-sm font-medium lg:p-4">
               {menuItems.map((item) => <NavLink key={item.href} item={item} inSheet />)}
             </nav>
@@ -154,10 +186,8 @@ export function DashboardNav() {
                         <UserNameDisplay inSheet />
                     </div>
                     </div>
-                    <Button asChild variant="ghost" size="icon">
-                    <Link href="/login">
+                    <Button onClick={handleSignOut} variant="ghost" size="icon">
                         <LogOut className="h-5 w-5" />
-                    </Link>
                     </Button>
                 </div>
            </div>
@@ -166,17 +196,15 @@ export function DashboardNav() {
         <div className="flex w-full items-center gap-4 md:ml-auto md:gap-2 lg:gap-4">
             <div className="w-full flex-1">
                 <Link href={isPanchayatPath ? "/dashboard/panchayat" : "/dashboard"} className="flex items-center gap-2 font-bold">
-                  <span className="">VaSa</span>
+                  <span className="font-bold">VaSa</span>
                 </Link>
             </div>
             <div className="ml-auto flex items-center gap-2 overflow-hidden">
                 <div className="flex items-center gap-2">
                     <UserNameDisplay />
                 </div>
-                 <Button asChild variant="ghost" size="icon">
-                  <Link href="/login">
-                    <LogOut className="h-5 w-5" />
-                  </Link>
+                 <Button onClick={handleSignOut} variant="ghost" size="icon">
+                  <LogOut className="h-5 w-5" />
                 </Button>
             </div>
         </div>
