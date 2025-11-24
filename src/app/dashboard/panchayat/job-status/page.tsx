@@ -99,7 +99,11 @@ export default function JobStatusPage() {
           job.id === jobId ? { ...job, status: 'Completed' as JobStatus } : job
       );
       setJobs(updatedJobs);
-      localStorage.setItem('panchayatJobs', JSON.stringify(updatedJobs));
+      try {
+        localStorage.setItem('panchayatJobs', JSON.stringify(updatedJobs));
+      } catch (error) {
+        console.error("Failed to update jobs in local storage", error);
+      }
       toast({
           title: 'Job Status Updated',
           description: `"${jobName}" has been marked as completed.`
@@ -109,7 +113,11 @@ export default function JobStatusPage() {
   const handleDeleteJob = (jobId: string, jobName: string) => {
     const updatedJobs = jobs.filter(job => job.id !== jobId);
     setJobs(updatedJobs);
-    localStorage.setItem('panchayatJobs', JSON.stringify(updatedJobs));
+    try {
+      localStorage.setItem('panchayatJobs', JSON.stringify(updatedJobs));
+    } catch (error) {
+      console.error("Failed to update jobs in local storage", error);
+    }
     toast({
         title: 'Job Deleted',
         description: `The job "${jobName}" has been permanently deleted.`,
@@ -240,5 +248,6 @@ export default function JobStatusPage() {
 
 
     
+
 
 
