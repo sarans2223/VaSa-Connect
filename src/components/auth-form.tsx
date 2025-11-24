@@ -67,11 +67,6 @@ type AuthFormProps = {
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d).{8,}$/; // 8+ chars, 1 letter, 1 number
 
-type AuthFormProps = {
-  type: 'login' | 'signup';
-};
-
-
 export function AuthForm({ type }: AuthFormProps) {
   const router = useRouter();
   const { toast } = useToast();
@@ -427,15 +422,10 @@ export function AuthForm({ type }: AuthFormProps) {
           </div>
 
           {/* Social buttons */}
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 gap-4">
             <Button variant="outline" className="w-full" onClick={handleGoogleSignIn} disabled={isGoogleLoading || userLoading}>
               <GoogleIcon className="mr-2 h-5 w-5" />
               {isGoogleLoading ? "Signing in..." : "Google"}
-            </Button>
-
-            <Button variant="outline" className="w-full">
-              <MicrosoftIcon className="mr-2 h-5 w-5" />
-              Microsoft
             </Button>
           </div>
 
@@ -485,3 +475,5 @@ export function AuthForm({ type }: AuthFormProps) {
     </div>
   );
 }
+
+    
