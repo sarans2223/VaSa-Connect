@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -41,12 +41,43 @@ type WorkerProfile = typeof allProfiles[0];
 
 
 export default function AssignWorkerPage() {
-  const [availableWorkers, setAvailableWorkers] = useState<WorkerProfile[]>(allProfiles);
+  const [allWorkers] = useState<WorkerProfile[]>(allProfiles);
+  const [availableWorkers, setAvailableWorkers] = useState<WorkerProfile[]>([]);
   const [assignedWorkers, setAssignedWorkers] = useState<WorkerProfile[]>([]);
   const [selectedWorkers, setSelectedWorkers] = useState<string[]>([]);
   const [selectedJob, setSelectedJob] = useState<string>('');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedSkill, setSelectedSkill] = useState('all');
   const { toast } = useToast();
   const router = useRouter();
+
+  useEffect(() => {
+    // Initialize available workers, you might want to fetch this
+    setAvailableWorkers(allWorkers);
+  }, [allWorkers]);
+  
+  const handleSearch = () => {
+    let filtered = allWorkers;
+
+    if (searchQuery) {
+        filtered = filtered.filter(worker => 
+            worker.name.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+    }
+
+    if (selectedSkill !== 'all') {
+        filtered = filtered.filter(worker => 
+            worker.skills.some(skill => skill.toLowerCase() === selectedSkill.toLowerCase())
+        );
+    }
+
+    // Exclude workers who are already assigned in the current session
+    const assignedIds = assignedWorkers.map(w => w.id);
+    filtered = filtered.filter(w => !assignedIds.includes(w.id));
+
+    setAvailableWorkers(filtered);
+};
+
 
   const handleSelectWorker = (workerId: string) => {
     setSelectedWorkers(prev => 
@@ -66,7 +97,7 @@ export default function AssignWorkerPage() {
       return;
     }
 
-    const workersToAssign = availableWorkers.filter(w => selectedWorkers.includes(w.id));
+    const workersToAssign = allWorkers.filter(w => selectedWorkers.includes(w.id));
     if (workersToAssign.length === 0) {
       toast({
         title: 'No Workers Selected',
@@ -165,16 +196,22 @@ export default function AssignWorkerPage() {
       <Card>
         <CardContent className="p-4">
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 items-end">
-                <div className="relative lg:col-span-1 space-y-2">
+                <div className="lg:col-span-1 space-y-2">
                     <Label htmlFor="search-input">Search by Name</Label>
                     <div className="relative">
                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                        <Input id="search-input" placeholder="Name or skill..." className="pl-10" />
+                        <Input 
+                          id="search-input" 
+                          placeholder="Name..." 
+                          className="pl-10" 
+                          value={searchQuery}
+                          onChange={(e) => setSearchQuery(e.target.value)}
+                        />
                     </div>
                 </div>
                 <div className="space-y-2">
                     <Label>Skill</Label>
-                    <Select>
+                    <Select value={selectedSkill} onValueChange={setSelectedSkill}>
                     <SelectTrigger>
                         <SelectValue placeholder="Filter by skill" />
                     </SelectTrigger>
@@ -184,6 +221,12 @@ export default function AssignWorkerPage() {
                         <SelectItem value="farming">Farming</SelectItem>
                         <SelectItem value="tailoring">Tailoring</SelectItem>
                         <SelectItem value="cleaning">Cleaning</SelectItem>
+                        <SelectItem value="herding">Herding</SelectItem>
+                        <SelectItem value="child-care">Child Care</SelectItem>
+                        <SelectItem value="handicrafts">Handicrafts</SelectItem>
+                        <SelectItem value="painting">Painting</SelectItem>
+                        <SelectItem value="embroidery">Embroidery</SelectItem>
+                        <SelectItem value="driving">Driving</SelectItem>
                     </SelectContent>
                     </Select>
                 </div>
@@ -202,7 +245,7 @@ export default function AssignWorkerPage() {
                         </SelectContent>
                     </Select>
                 </div>
-                 <Button>
+                 <Button onClick={handleSearch}>
                     <Search className="mr-2 h-4 w-4" />
                     Search
                 </Button>
@@ -216,6 +259,7 @@ export default function AssignWorkerPage() {
             <TabsTrigger value="assigned">Assigned to Current Job ({assignedWorkers.length})</TabsTrigger>
         </TabsList>
         <TabsContent value="available" className="mt-6">
+          {availableWorkers.length > 0 ? (
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
               {availableWorkers.map((profile) => (
                  <WorkerCard 
@@ -226,6 +270,12 @@ export default function AssignWorkerPage() {
                  />
               ))}
             </div>
+          ) : (
+            <div className="text-center py-16 text-muted-foreground bg-muted/50 rounded-lg">
+                <h3 className="text-xl font-semibold">No Available Workers</h3>
+                <p className="mt-2">Try adjusting your search filters or check back later.</p>
+            </div>
+          )}
         </TabsContent>
         <TabsContent value="assigned" className="mt-6">
            {assignedWorkers.length > 0 ? (
@@ -273,3 +323,5 @@ export default function AssignWorkerPage() {
     </div>
   );
 }
+
+    
