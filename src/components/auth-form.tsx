@@ -24,15 +24,6 @@ import { mockUser } from "@/lib/data";
 import { signInWithGoogle } from "@/firebase/auth";
 import { useUser } from "@/firebase/index";
 
-const MicrosoftIcon = (props: React.SVGProps<SVGSVGElement>) => (
-  <svg viewBox="0 0 21 21" {...props}>
-    <path fill="#f25022" d="M1 1h9v9H1z" />
-    <path fill="#00a4ef" d="M1 11h9v9H1z" />
-    <path fill="#7fba00" d="M11 1h9v9h-9z" />
-    <path fill="#ffb900" d="M11 11h9v9h-9z" />
-  </svg>
-);
-
 const GoogleIcon = (props: React.SVGProps<SVGSVGElement>) => (
   <svg viewBox="0 0 48 48" {...props}>
     <path
@@ -70,9 +61,9 @@ const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d).{8,}$/; // 8+ chars, 1 letter, 1 
 export function AuthForm({ type }: AuthFormProps) {
   const router = useRouter();
   const { toast } = useToast();
-  const { user: firebaseUser, loading: userLoading } = useUser();
+  const { user: firebaseUser, isUserLoading } = useUser();
 
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -82,13 +73,12 @@ export function AuthForm({ type }: AuthFormProps) {
   const [isAdult, setIsAdult] = useState(false);
   const [showForgot, setShowForgot] = useState(false);
 
-  useEffect(() => {
-    if (!userLoading && firebaseUser) {
-      router.push("/dashboard");
-    } else if (!userLoading) {
-      setIsLoading(false);
+ useEffect(() => {
+    // Redirect if user is already logged in and not loading
+    if (!isUserLoading && firebaseUser) {
+      router.push('/dashboard');
     }
-  }, [firebaseUser, userLoading, router]);
+  }, [firebaseUser, isUserLoading, router]);
 
   const handleGoogleSignIn = async () => {
     setIsGoogleLoading(true);
@@ -266,7 +256,7 @@ export function AuthForm({ type }: AuthFormProps) {
     }, 800);
   };
 
-  if (isLoading) {
+  if (isUserLoading || firebaseUser) {
     return (
       <div className="flex min-h-screen w-full items-center justify-center bg-background">
         <div>Loading...</div>
@@ -400,11 +390,11 @@ export function AuthForm({ type }: AuthFormProps) {
             )}
 
             <Button
-              disabled={isLoading || userLoading}
+              disabled={isLoading || isUserLoading}
               type="submit"
               className="w-full font-semibold bg-gradient-to-r from-[#E0BBE4] to-[#957DAD] hover:opacity-90 transition-opacity text-primary-foreground"
             >
-              {isLoading || userLoading
+              {isLoading || isUserLoading
                 ? "Processing..."
                 : type === "login"
                 ? "Log In"
@@ -423,7 +413,7 @@ export function AuthForm({ type }: AuthFormProps) {
 
           {/* Social buttons */}
           <div className="grid grid-cols-1 gap-4">
-            <Button variant="outline" className="w-full" onClick={handleGoogleSignIn} disabled={isGoogleLoading || userLoading}>
+            <Button variant="outline" className="w-full" onClick={handleGoogleSignIn} disabled={isGoogleLoading || isUserLoading}>
               <GoogleIcon className="mr-2 h-5 w-5" />
               {isGoogleLoading ? "Signing in..." : "Google"}
             </Button>
@@ -475,5 +465,3 @@ export function AuthForm({ type }: AuthFormProps) {
     </div>
   );
 }
-
-    
