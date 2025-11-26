@@ -1,8 +1,343 @@
 {
-  "entities": {},
+  "entities": {
+    "UserProfile": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "UserProfile",
+      "type": "object",
+      "description": "Represents a user's profile in the VaSa application.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the UserProfile entity."
+        },
+        "email": {
+          "type": "string",
+          "description": "User's email address.",
+          "format": "email"
+        },
+        "phoneNumber": {
+          "type": "string",
+          "description": "User's phone number."
+        },
+        "name": {
+          "type": "string",
+          "description": "User's full name."
+        },
+        "skills": {
+          "type": "array",
+          "description": "List of user's skills.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "location": {
+          "type": "string",
+          "description": "User's location (e.g., city, state)."
+        },
+        "progress": {
+          "type": "number",
+          "description": "Overall progress of the user in the app (e.g., completion percentage)."
+        }
+      },
+      "required": [
+        "id",
+        "email",
+        "name"
+      ]
+    },
+    "JobPost": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "JobPost",
+      "type": "object",
+      "description": "Represents a job posting created by an employer.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the JobPost entity."
+        },
+        "employerId": {
+          "type": "string",
+          "description": "Reference to UserProfile of the employer who created the job post. (Relationship: UserProfile 1:N JobPost)"
+        },
+        "title": {
+          "type": "string",
+          "description": "Job title."
+        },
+        "description": {
+          "type": "string",
+          "description": "Detailed description of the job."
+        },
+        "location": {
+          "type": "string",
+          "description": "Location of the job."
+        },
+        "skillsRequired": {
+          "type": "array",
+          "description": "List of skills required for the job.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "salary": {
+          "type": "number",
+          "description": "Salary offered for the job."
+        }
+      },
+      "required": [
+        "id",
+        "employerId",
+        "title",
+        "description",
+        "location"
+      ]
+    },
+    "LearningModule": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "LearningModule",
+      "type": "object",
+      "description": "Represents a learning module available in the Learning Hub.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the LearningModule entity."
+        },
+        "title": {
+          "type": "string",
+          "description": "Title of the learning module."
+        },
+        "contentType": {
+          "type": "string",
+          "description": "Type of content (e.g., video, article)."
+        },
+        "contentUrl": {
+          "type": "string",
+          "description": "URL of the learning module content.",
+          "format": "uri"
+        }
+      },
+      "required": [
+        "id",
+        "title",
+        "contentType",
+        "contentUrl"
+      ]
+    },
+    "UserLearningProgress": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "UserLearningProgress",
+      "type": "object",
+      "description": "Represents a user's progress in a specific learning module.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the UserLearningProgress entity."
+        },
+        "userId": {
+          "type": "string",
+          "description": "Reference to UserProfile. (Relationship: UserProfile 1:N UserLearningProgress)"
+        },
+        "learningModuleId": {
+          "type": "string",
+          "description": "Reference to LearningModule. (Relationship: LearningModule 1:N UserLearningProgress)"
+        },
+        "progress": {
+          "type": "number",
+          "description": "Progress of the user in the learning module (e.g., completion percentage)."
+        },
+        "completed": {
+          "type": "boolean",
+          "description": "Indicates whether the user has completed the learning module."
+        }
+      },
+      "required": [
+        "id",
+        "userId",
+        "learningModuleId",
+        "progress",
+        "completed"
+      ]
+    },
+    "Team": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Team",
+      "type": "object",
+      "description": "Represents a team created by users.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Team entity."
+        },
+        "name": {
+          "type": "string",
+          "description": "Name of the team."
+        },
+        "description": {
+          "type": "string",
+          "description": "Description of the team."
+        },
+        "memberIds": {
+          "type": "array",
+          "description": "References to UserProfiles who are members of the team. (Relationship: UserProfile N:N Team)",
+          "items": {
+            "type": "string"
+          }
+        },
+        "ownerId": {
+          "type": "string",
+          "description": "Reference to UserProfile who created the team. (Relationship: UserProfile 1:N Team)"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "description",
+        "ownerId"
+      ]
+    },
+    "EmergencyContact": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "EmergencyContact",
+      "type": "object",
+      "description": "Represents an emergency contact for a user.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the EmergencyContact entity."
+        },
+        "userId": {
+          "type": "string",
+          "description": "Reference to UserProfile. (Relationship: UserProfile 1:N EmergencyContact)"
+        },
+        "name": {
+          "type": "string",
+          "description": "Name of the emergency contact."
+        },
+        "phoneNumber": {
+          "type": "string",
+          "description": "Phone number of the emergency contact."
+        }
+      },
+      "required": [
+        "id",
+        "userId",
+        "name",
+        "phoneNumber"
+      ]
+    }
+  },
   "auth": {
     "providers": [
-      "google.com"
+      "password",
+      "anonymous"
     ]
+  },
+  "firestore": {
+    "structure": [
+      {
+        "path": "/users/{userId}",
+        "definition": {
+          "entityName": "UserProfile",
+          "schema": {
+            "$ref": "#/backend/entities/UserProfile"
+          },
+          "description": "Stores user profiles. Path-based ownership ensures only the authenticated user can access their own profile data.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique identifier of the user."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/job_posts/{jobPostId}",
+        "definition": {
+          "entityName": "JobPost",
+          "schema": {
+            "$ref": "#/backend/entities/JobPost"
+          },
+          "description": "Stores job postings. Includes the employerId for filtering and display.",
+          "params": [
+            {
+              "name": "jobPostId",
+              "description": "The unique identifier of the job post."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/learning_modules/{learningModuleId}",
+        "definition": {
+          "entityName": "LearningModule",
+          "schema": {
+            "$ref": "#/backend/entities/LearningModule"
+          },
+          "description": "Stores learning modules available in the learning hub.",
+          "params": [
+            {
+              "name": "learningModuleId",
+              "description": "The unique identifier of the learning module."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/users/{userId}/learning_progress/{learningProgressId}",
+        "definition": {
+          "entityName": "UserLearningProgress",
+          "schema": {
+            "$ref": "#/backend/entities/UserLearningProgress"
+          },
+          "description": "Stores user's progress in learning modules. Path-based ownership ensures only the authenticated user can access their own learning progress.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique identifier of the user."
+            },
+            {
+              "name": "learningProgressId",
+              "description": "The unique identifier of the user learning progress."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/teams/{teamId}",
+        "definition": {
+          "entityName": "Team",
+          "schema": {
+            "$ref": "#/backend/entities/Team"
+          },
+          "description": "Stores team information. Includes a 'memberIds' array and 'ownerId' to manage access. Includes denormalized 'memberIds' for authorization independence.",
+          "params": [
+            {
+              "name": "teamId",
+              "description": "The unique identifier of the team."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/users/{userId}/emergency_contacts/{contactId}",
+        "definition": {
+          "entityName": "EmergencyContact",
+          "schema": {
+            "$ref": "#/backend/entities/EmergencyContact"
+          },
+          "description": "Stores emergency contacts for a user. Path-based ownership ensures only the authenticated user can access their own emergency contacts.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique identifier of the user."
+            },
+            {
+              "name": "contactId",
+              "description": "The unique identifier of the emergency contact."
+            }
+          ]
+        }
+      }
+    ],
+    "reasoning": "The Firestore data structure is designed to ensure security, scalability, and ease of debugging, adhering to the core design principles of Authorization Independence, Clarity of Intent, DBAC (Database-Based Access Control), and QAPs (Rules are not Filters). Authorization Independence is achieved through denormalization. For instance, team membership is managed via a membership map within the team document itself, eliminating the need for `get()` calls in security rules. Segregation of data based on access requirements is implemented by storing user profiles in `/users/{userId}`, ensuring that only the authenticated user can access their own profile data. QAPs are supported by using the path-based ownership model and membership maps for collaborative entities.\n\nThe structure uses consistent patterns for authorization. Private data is stored under user-specific paths (e.g., `/users/{userId}/emergency_contacts/{contactId}`). Collaborative data, such as teams, uses a membership map (`members: {uid1: \"role\", uid2: \"role\"}`). Global roles are managed via the existence of documents in dedicated collections.\n\nExplicit state modeling is encouraged with a dedicated `status` field where applicable. Predictable schemas with static keys and radical consistency in naming conventions enhance debuggability and maintainability."
   }
 }
