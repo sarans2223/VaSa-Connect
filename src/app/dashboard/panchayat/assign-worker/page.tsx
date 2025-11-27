@@ -314,13 +314,5 @@ export default function AssignWorkerPanchayatPage() {
            )}
         </TabsContent>
       </Tabs>
-
-       <div className="flex justify-end">
-         <Button size="lg" className="bg-gradient-to-r from-[#E0BBE4] to-[#957DAD] hover:opacity-90 text-primary-foreground" onClick={handleConfirmAssignment} disabled={selectedWorkers.length === 0 || !selectedJob}>
-            Confirm Assignment ({selectedWorkers.length})
-        </Button>
-      </div>
     </div>
   );
-
-    
