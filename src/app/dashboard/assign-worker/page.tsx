@@ -187,9 +187,9 @@ export default function AssignWorkerPage() {
         <div>
             <div className="flex items-center gap-4">
                 <UserPlus className="h-8 w-8 text-primary" />
-                <h1 className="text-3xl font-bold tracking-tight">Assign Workers</h1>
+                <h1 className="text-3xl font-bold tracking-tight">Hire Talent</h1>
             </div>
-            <p className="text-muted-foreground mt-2">Select profiles to assign to a job.</p>
+            <p className="text-muted-foreground mt-2">Select profiles to hire for a job.</p>
         </div>
       </div>
 
