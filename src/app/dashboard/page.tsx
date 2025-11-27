@@ -12,7 +12,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { mockUser } from "@/lib/data";
 import { SosButton } from "@/components/sos-button";
 
 const featureCards = [
@@ -47,14 +46,12 @@ const featureCards = [
 ];
 
 export default function DashboardPage() {
-  const [userName, setUserName] = useState('');
+  const [userName, setUserName] = useState('User');
 
   useEffect(() => {
     const storedName = localStorage.getItem('userName');
     if (storedName) {
       setUserName(storedName.split(" ")[0]);
-    } else {
-      setUserName(mockUser.name.split(" ")[0]);
     }
   }, []);
 
@@ -62,7 +59,7 @@ export default function DashboardPage() {
     <div className="p-4 sm:p-6 lg:p-8 space-y-8">
       <div className="space-y-2">
         <h1 className="text-3xl font-bold tracking-tight">
-          Welcome back, {userName || 'User'}!
+          Welcome back, {userName}!
         </h1>
         <p className="text-muted-foreground">
           Here&apos;s your central hub for safety, growth, and opportunity.
@@ -108,3 +105,5 @@ export default function DashboardPage() {
     </div>
   );
 }
+
+    

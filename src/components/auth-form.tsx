@@ -126,34 +126,30 @@ export function AuthForm({ type }: AuthFormProps) {
     setIsLoading(true);
     setShowForgot(false);
 
-    const normalizedInput = email.toLowerCase();
-    const storedEmail = localStorage.getItem("userEmail");
-    const storedPassword = localStorage.getItem("userPassword");
-    const localEmail = storedEmail?.toLowerCase();
-    const mockEmail = mockUser.email.toLowerCase();
-
-    // ===== common validation (login + signup) =====
-    if (!emailRegex.test(email)) {
+    // Basic email format check
+    if (!email.includes('@')) {
       toast({
         title: "Invalid email",
-        description: "Please enter a valid email address like name@example.com.",
+        description: "Please enter a valid email address.",
         variant: "destructive",
       });
       setIsLoading(false);
       return;
     }
-
-    if (!passwordRegex.test(password)) {
-      toast({
+    
+    // Basic password length check
+    if (password.length < 8) {
+       toast({
         title: "Weak password",
-        description:
-          "Password must be at least 8 characters and include both letters and numbers.",
+        description: "Password must be at least 8 characters.",
         variant: "destructive",
       });
       setIsLoading(false);
       return;
     }
 
+    const normalizedInput = email.toLowerCase();
+    
     // ===== signup-only rules =====
     if (type === "signup") {
       if (!name.trim()) {
@@ -187,75 +183,38 @@ export function AuthForm({ type }: AuthFormProps) {
         return;
       }
 
-      // 🚨 email already used (mock OR locally created account)
-      if (
-        normalizedInput === mockEmail ||
-        (localEmail && normalizedInput === localEmail)
-      ) {
-        toast({
-          title: "Email already registered",
-          description: "An account with this email already exists. Please log in.",
-          variant: "destructive",
-        });
-        setIsLoading(false);
-        return;
-      }
-
-      // store name + email + password (demo only)
+      // Store name for the new account
       localStorage.setItem("userName", name);
       localStorage.setItem("userEmail", normalizedInput);
-      localStorage.setItem("userPassword", password);
+      localStorage.setItem("userPassword", password); // For demo purposes
     }
 
     // ===== login-only rules =====
-    if (type === "login") {
-      // 1) No account found at all
-      if (normalizedInput !== mockEmail && normalizedInput !== localEmail) {
-        toast({
-          title: "No account found",
-          description:
-            "No VaSa account exists with this email. Please sign up first.",
-          variant: "destructive",
-        });
-        setIsLoading(false);
-        return;
-      }
-
-      // 2) Password mismatch for mock user
-      if (normalizedInput === mockEmail && password !== "password123") {
-        toast({
-          title: "Password mismatch",
-          description: "The password you entered does not match this account.",
-          variant: "destructive",
-        });
-        setIsLoading(false);
-        setShowForgot(true);
-        return;
-      }
-
-      // 3) Password mismatch for locally created user
-      if (
-        normalizedInput === localEmail &&
-        storedPassword &&
-        password !== storedPassword
-      ) {
-        toast({
-          title: "Password mismatch",
-          description: "The password you entered does not match this account.",
-          variant: "destructive",
-        });
-        setIsLoading(false);
-        setShowForgot(true);
-        return;
-      }
-
-      // success: ensure we have a name saved
-      if (!localStorage.getItem("userName") && mockUser.name) {
-        localStorage.setItem("userName", mockUser.name);
-      }
-      // make sure login email is stored as last used
-      localStorage.setItem("userEmail", normalizedInput);
+    if (type === 'login') {
+        const storedEmail = localStorage.getItem('userEmail');
+        const storedPassword = localStorage.getItem('userPassword');
+        
+        // If no account is found locally, we'll create a temporary one for the demo
+        if (normalizedInput !== storedEmail?.toLowerCase()) {
+            const loginName = email.split('@')[0];
+            localStorage.setItem("userName", loginName);
+        } else {
+            // Check password for existing local user
+            if (password !== storedPassword) {
+                toast({
+                  title: "Password mismatch",
+                  description: "The password you entered does not match this account.",
+                  variant: "destructive",
+                });
+                setIsLoading(false);
+                setShowForgot(true);
+                return;
+            }
+            // Name should already be in local storage from signup
+        }
+        localStorage.setItem("userEmail", normalizedInput);
     }
+    
 
     // ===== success path =====
     // Simulate API call / backend delay
@@ -356,7 +315,7 @@ export function AuthForm({ type }: AuthFormProps) {
                 </div>
                 {type === "signup" && (
                   <p className="text-xs text-muted-foreground">
-                    Use at least 8 characters with letters and numbers.
+                    Use at least 8 characters.
                   </p>
                 )}
                 {type === "login" && showForgot && (
@@ -505,17 +464,11 @@ export function AuthForm({ type }: AuthFormProps) {
             <h3 className="font-semibold text-foreground">6. Termination</h3>
             <p>We may terminate or suspend your account at any time, without prior notice, for any reason, including a breach of these Terms.</p>
 
-            <h3 className="font-semibold text-foreground">7. Disclaimers</h3>
-            <p>The service is provided "as is" without any warranties. We do not guarantee that the service will be uninterrupted or error-free.</p>
-
-            <h3 className="font-semibold text-foreground">8. Governing Law</h3>
-            <p>These Terms shall be governed by the laws of India.</p>
-
-            <h3 className="font-semibold text-foreground">9. Contact Us</h3>
-            <p>If you have any questions about these Terms, please contact us at support@vasa.example.com.</p>
           </div>
         </ScrollArea>
       </DialogContent>
     </Dialog>
   );
 }
+
+    
