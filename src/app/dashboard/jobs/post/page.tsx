@@ -38,13 +38,12 @@ import {
 } from '@/components/ui/popover';
 import { Calendar } from '@/components/ui/calendar';
 import { cn } from '@/lib/utils';
-import { mockJobs } from '@/lib/data';
 import { Badge } from '@/components/ui/badge';
 import type { Job } from '@/lib/types';
 import { useToast } from '@/hooks/use-toast';
 
 export default function PostJobPage() {
-  const [postedJobs, setPostedJobs] = React.useState<Job[]>(mockJobs.slice(0, 3));
+  const [postedJobs, setPostedJobs] = React.useState<Job[]>([]);
   const [jobTitle, setJobTitle] = React.useState('');
   const [companyName, setCompanyName] = React.useState('');
   const [location, setLocation] = React.useState('');
@@ -62,12 +61,36 @@ export default function PostJobPage() {
 
   const [selectedJob, setSelectedJob] = React.useState<Job | null>(null);
 
+  React.useEffect(() => {
+    try {
+      const storedJobs = localStorage.getItem('postedJobs');
+      if (storedJobs) {
+        setPostedJobs(JSON.parse(storedJobs));
+      }
+    } catch (error) {
+      console.error("Failed to load jobs from local storage", error);
+    }
+  }, []);
+
   const timeOptions = Array.from({ length: 24 * 2 }, (_, i) => {
     const hours = Math.floor(i / 2);
     const minutes = i % 2 === 0 ? '00' : '30';
     const formattedHours = hours.toString().padStart(2, '0');
     return `${formattedHours}:${minutes}`;
   });
+
+  const updateLocalStorage = (updatedJobs: Job[]) => {
+    try {
+      localStorage.setItem('postedJobs', JSON.stringify(updatedJobs));
+    } catch (error) {
+      console.error("Failed to save jobs to local storage", error);
+      toast({
+        title: 'Storage Error',
+        description: 'Could not save job to your browser storage.',
+        variant: 'destructive'
+      })
+    }
+  };
 
   const handlePostJob = (e: React.FormEvent) => {
     e.preventDefault();
@@ -91,9 +114,12 @@ export default function PostJobPage() {
       description: description,
       skillsRequired: skills.split(',').map(s => s.trim()),
       industry: industry || 'General',
+      status: 'Yet To Assign'
     };
 
-    setPostedJobs(prevJobs => [newJob, ...prevJobs]);
+    const updatedJobs = [newJob, ...postedJobs];
+    setPostedJobs(updatedJobs);
+    updateLocalStorage(updatedJobs);
 
     // Reset form fields
     setJobTitle('');
@@ -121,7 +147,9 @@ export default function PostJobPage() {
   };
 
   const handleMarkAsCompleted = (jobId: string, jobTitle: string) => {
-    setPostedJobs(prevJobs => prevJobs.filter(job => job.id !== jobId));
+    const updatedJobs = postedJobs.filter(job => job.id !== jobId);
+    setPostedJobs(updatedJobs);
+    updateLocalStorage(updatedJobs);
     toast({
       title: 'Job Completed',
       description: `The job "${jobTitle}" has been marked as completed and removed.`,

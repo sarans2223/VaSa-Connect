@@ -20,21 +20,22 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Search, UserPlus, Star, CheckSquare, Square } from "lucide-react";
+import { Search, UserPlus, Star, CheckSquare, Square, MapPin } from "lucide-react";
 import { useToast } from '@/hooks/use-toast';
-import { mockJobs } from '@/lib/data';
 import type { Job } from '@/lib/types';
+import { mockJobs } from '@/lib/data'; // Keep for fallback if needed
 
 const allProfiles = [
-  { id: '1', name: 'Lakshmi Priya', skills: ['Cooking', 'Tailoring'], rating: 4.5, jobsCompleted: 2, job: 'Catering Project' },
-  { id: '2', name: 'Kavita Devi', skills: ['Farming'], rating: 4.2, jobsCompleted: 2, job: 'Harvesting' },
-  { id: '3', name: 'Meena Kumari', skills: ['Herding', 'Farming'], rating: 4.8, jobsCompleted: 3, job: 'Livestock Management' },
-  { id: '4', name: 'Anjali Sharma', skills: ['Cleaning'], rating: 3.9, jobsCompleted: 1, job: 'Office Cleaning' },
-  { id: '5', name: 'Sita Rai', skills: ['Child Care', 'Cooking'], rating: 4.0, jobsCompleted: 0, job: 'Nanny Position' },
-  { id: '6', name: 'Rina Das', skills: ['Handicrafts', 'Painting'], rating: 4.9, jobsCompleted: 5, job: 'Artisan Fair' },
-  { id: '7', name: 'Sunita Devi', skills: ['Tailoring', 'Embroidery'], rating: 4.1, jobsCompleted: 0, job: 'Boutique Assistant' },
-  { id: '8', name: 'Pooja Singh', skills: ['Driving'], rating: 4.3, jobsCompleted: 0, job: 'Delivery Driver' },
+  { id: '1', name: 'Lakshmi Priya', skills: ['Cooking', 'Tailoring'], rating: 4.5, jobsCompleted: 2, job: 'Catering Project', location: 'Chennai' },
+  { id: '2', name: 'Kavita Devi', skills: ['Farming'], rating: 4.2, jobsCompleted: 2, job: 'Harvesting', location: 'Coimbatore' },
+  { id: '3', name: 'Meena Kumari', skills: ['Herding', 'Farming'], rating: 4.8, jobsCompleted: 3, job: 'Livestock Management', location: 'Madurai' },
+  { id: '4', name: 'Anjali Sharma', skills: ['Cleaning'], rating: 3.9, jobsCompleted: 1, job: 'Office Cleaning', location: 'Tiruchirappalli' },
+  { id: '5', name: 'Sita Rai', skills: ['Child Care', 'Cooking'], rating: 4.0, jobsCompleted: 0, job: 'Nanny Position', location: 'Salem' },
+  { id: '6', name: 'Rina Das', skills: ['Handicrafts', 'Painting'], rating: 4.9, jobsCompleted: 5, job: 'Artisan Fair', location: 'Erode' },
+  { id: '7', name: 'Sunita Devi', skills: ['Tailoring', 'Embroidery'], rating: 4.1, jobsCompleted: 0, job: 'Boutique Assistant', location: 'Tirunelveli' },
+  { id: '8', name: 'Pooja Singh', skills: ['Driving'], rating: 4.3, jobsCompleted: 0, job: 'Delivery Driver', location: 'Vellore' },
 ];
+
 
 type WorkerProfile = typeof allProfiles[0];
 
@@ -46,6 +47,7 @@ export default function AssignWorkerPage() {
   const [selectedJob, setSelectedJob] = useState<string>('');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedSkill, setSelectedSkill] = useState('all');
+  const [selectedLocation, setSelectedLocation] = useState('all');
   const [jobs, setJobs] = useState<Job[]>([]);
   const { toast } = useToast();
   const router = useRouter();
@@ -53,12 +55,11 @@ export default function AssignWorkerPage() {
   useEffect(() => {
     setAvailableWorkers(allWorkers);
     try {
-        const storedJobs = localStorage.getItem('panchayatJobs');
+        const storedJobs = localStorage.getItem('postedJobs');
         if (storedJobs) {
             setJobs(JSON.parse(storedJobs));
         } else {
-            // Fallback to mockJobs if nothing in local storage
-            setJobs(mockJobs);
+            setJobs(mockJobs); // Fallback if nothing in localStorage
         }
     } catch (error) {
         console.error("Failed to load jobs from local storage, using mock jobs.", error);
@@ -78,6 +79,11 @@ export default function AssignWorkerPage() {
     if (selectedSkill !== 'all') {
         filtered = filtered.filter(worker => 
             worker.skills.some(skill => skill.toLowerCase() === selectedSkill.toLowerCase())
+        );
+    }
+     if (selectedLocation !== 'all') {
+        filtered = filtered.filter(worker => 
+            worker.location.toLowerCase() === selectedLocation.toLowerCase()
         );
     }
 
@@ -116,37 +122,13 @@ export default function AssignWorkerPage() {
     // In a real app, this would be an API call. Here we simulate it.
     console.log('Assigning workers:', workersToAssign.map(w => w.name), 'to job ID:', selectedJob);
 
-    try {
-        const storedJobs = localStorage.getItem('panchayatJobs');
-        let panchayatJobs: Job[] = storedJobs ? JSON.parse(storedJobs) : [];
-        const jobToUpdate = panchayatJobs.find(job => job.id === selectedJob);
-
-        if (jobToUpdate) {
-            const updatedJobs = panchayatJobs.map(job => 
-                job.id === selectedJob 
-                ? { ...job, workerNames: [...(job.workerNames || []), ...workersToAssign.map(w => w.name)], status: 'Worker Assigned' as Job['status'] }
-                : job
-            );
-            localStorage.setItem('panchayatJobs', JSON.stringify(updatedJobs));
-        } else {
-             // Handle case where job is from mockJobs but not in localStorage
-            const mockJobToUpdate = mockJobs.find(job => job.id === selectedJob);
-            if (mockJobToUpdate) {
-                const newJobWithWorkers = { ...mockJobToUpdate, workerNames: workersToAssign.map(w => w.name), status: 'Worker Assigned' as Job['status'] };
-                 // This part is tricky as we don't want to overwrite all jobs, just update or add one.
-                 // For this demo, we'll just log it. A real app would need a more robust data store.
-                 console.log("Would update/add job in a central store:", newJobWithWorkers);
-            }
-        }
-    } catch (error) {
-        console.error("Failed to update job status in local storage", error);
-    }
-
     toast({
       title: 'Assignment Confirmed!',
-      description: `${workersToAssign.length} worker(s) have been assigned to the job.`,
+      description: `${workersToAssign.length} worker(s) have been assigned to the job. This is a demo; no data was persisted.`,
     });
-    router.push('/dashboard/panchayat/job-status');
+    // For demo purposes, we don't redirect or change job status here as it's complex with mock data.
+    setSelectedJob('');
+    setSelectedWorkers([]);
   };
   
   const renderStars = (rating: number) => {
@@ -178,10 +160,10 @@ export default function AssignWorkerPage() {
                       {profile.skills.map(skill => <Badge key={skill} variant="secondary">{skill}</Badge>)}
                   </div>
               </div>
-              <div className="flex justify-between items-center text-sm">
-                  <span className="font-medium text-muted-foreground">Current Job:</span>
-                  <Badge variant="outline">{profile.job}</Badge>
-              </div>
+              <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
+                    <MapPin className="h-4 w-4" />
+                    <span>{profile.location}</span>
+                </div>
               <div className="flex justify-between items-center text-sm">
                   <span className="font-medium text-muted-foreground">Rating:</span>
                   <div className="flex items-center gap-1">
@@ -193,7 +175,7 @@ export default function AssignWorkerPage() {
       </Card>
   );
 
-  const unassignedJobs = jobs.filter(job => job.status === 'Yet To Assign');
+  const assignableJobs = jobs.filter(job => !job.status || job.status === 'Yet To Assign');
 
   return (
     <div className="p-4 sm:p-6 lg:p-8 space-y-8">
@@ -209,8 +191,8 @@ export default function AssignWorkerPage() {
 
       <Card>
         <CardContent className="p-4">
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 items-end">
-                <div className="lg:col-span-1 space-y-2">
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5 items-end">
+                <div className="space-y-2">
                     <Label htmlFor="search-input">Search by Name</Label>
                     <div className="relative">
                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
@@ -245,16 +227,65 @@ export default function AssignWorkerPage() {
                     </Select>
                 </div>
                 <div className="space-y-2">
+                    <Label>Location (TN)</Label>
+                    <Select value={selectedLocation} onValueChange={setSelectedLocation}>
+                    <SelectTrigger>
+                        <SelectValue placeholder="Filter by location" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="all">All Locations</SelectItem>
+                        <SelectItem value="Ariyalur">Ariyalur</SelectItem>
+                        <SelectItem value="Chengalpattu">Chengalpattu</SelectItem>
+                        <SelectItem value="Chennai">Chennai</SelectItem>
+                        <SelectItem value="Coimbatore">Coimbatore</SelectItem>
+                        <SelectItem value="Cuddalore">Cuddalore</SelectItem>
+                        <SelectItem value="Dharmapuri">Dharmapuri</SelectItem>
+                        <SelectItem value="Dindigul">Dindigul</SelectItem>
+                        <SelectItem value="Erode">Erode</SelectItem>
+                        <SelectItem value="Kallakurichi">Kallakurichi</SelectItem>
+                        <SelectItem value="Kanchipuram">Kanchipuram</SelectItem>
+                        <SelectItem value="Kanyakumari">Kanyakumari</SelectItem>
+                        <SelectItem value="Karur">Karur</SelectItem>
+                        <SelectItem value="Krishnagiri">Krishnagiri</SelectItem>
+                        <SelectItem value="Madurai">Madurai</SelectItem>
+                        <SelectItem value="Mayiladuthurai">Mayiladuthurai</SelectItem>
+                        <SelectItem value="Nagapattinam">Nagapattinam</SelectItem>
+                        <SelectItem value="Namakkal">Namakkal</SelectItem>
+                        <SelectItem value="Nilgiris">Nilgiris</SelectItem>
+                        <SelectItem value="Perambalur">Perambalur</SelectItem>
+                        <SelectItem value="Pudukkottai">Pudukkottai</SelectItem>
+                        <SelectItem value="Ramanathapuram">Ramanathapuram</SelectItem>
+                        <SelectItem value="Ranipet">Ranipet</SelectItem>
+                        <SelectItem value="Salem">Salem</SelectItem>
+                        <SelectItem value="Sivaganga">Sivaganga</SelectItem>
+                        <SelectItem value="Tenkasi">Tenkasi</SelectItem>
+                        <SelectItem value="Thanjavur">Thanjavur</SelectItem>
+                        <SelectItem value="Theni">Theni</SelectItem>
+                        <SelectItem value="Thoothukudi">Thoothukudi</SelectItem>
+                        <SelectItem value="Tiruchirappalli">Tiruchirappalli</SelectItem>
+                        <SelectItem value="Tirunelveli">Tirunelveli</SelectItem>
+                        <SelectItem value="Tirupathur">Tirupathur</SelectItem>
+                        <SelectItem value="Tiruppur">Tiruppur</SelectItem>
+                        <SelectItem value="Tiruvallur">Tiruvallur</SelectItem>
+                        <SelectItem value="Tiruvannamalai">Tiruvannamalai</SelectItem>
+                        <SelectItem value="Tiruvarur">Tiruvarur</SelectItem>
+                        <SelectItem value="Vellore">Vellore</SelectItem>
+                        <SelectItem value="Viluppuram">Viluppuram</SelectItem>
+                        <SelectItem value="Virudhunagar">Virudhunagar</SelectItem>
+                    </SelectContent>
+                    </Select>
+                </div>
+                <div className="space-y-2">
                     <Label>Job</Label>
                     <Select value={selectedJob} onValueChange={setSelectedJob}>
                         <SelectTrigger>
                             <SelectValue placeholder="Select a job to assign" />
                         </SelectTrigger>
                         <SelectContent>
-                            {unassignedJobs.length > 0 ? (
-                                unassignedJobs.map(job => (
+                            {assignableJobs.length > 0 ? (
+                                assignableJobs.map(job => (
                                     <SelectItem key={job.id} value={job.id}>
-                                        {job.title || job.name}
+                                        {job.title}
                                     </SelectItem>
                                 ))
                             ) : (
@@ -303,3 +334,5 @@ export default function AssignWorkerPage() {
     </div>
   );
 }
+
+    
