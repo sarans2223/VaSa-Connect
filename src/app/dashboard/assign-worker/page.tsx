@@ -19,6 +19,8 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
+  SelectGroup,
+  SelectLabel,
 } from "@/components/ui/select";
 import { Search, UserPlus, Star, CheckSquare, Square, MapPin } from "lucide-react";
 import { useToast } from '@/hooks/use-toast';
@@ -34,6 +36,10 @@ const allProfiles = [
   { id: '6', name: 'Rina Das', skills: ['Handicrafts', 'Painting'], rating: 4.9, jobsCompleted: 5, job: 'Artisan Fair', location: 'Erode' },
   { id: '7', name: 'Sunita Devi', skills: ['Tailoring', 'Embroidery'], rating: 4.1, jobsCompleted: 0, job: 'Boutique Assistant', location: 'Tirunelveli' },
   { id: '8', name: 'Pooja Singh', skills: ['Driving'], rating: 4.3, jobsCompleted: 0, job: 'Delivery Driver', location: 'Vellore' },
+  { id: '9', name: 'Asha Patil', skills: ['Data Entry', 'MS Office'], rating: 4.6, jobsCompleted: 4, job: 'Office Assistant', location: 'Bangalore' },
+  { id: '10', name: 'Divya Gowda', skills: ['Farming', 'Gardening'], rating: 4.4, jobsCompleted: 3, job: 'Urban Gardener', location: 'Mysuru' },
+  { id: '11', name: 'Priya Chavan', skills: ['Cooking', 'Baking'], rating: 4.7, jobsCompleted: 6, job: 'Home Baker', location: 'Mumbai' },
+  { id: '12', name: 'Neha Reddy', skills: ['Graphic Design'], rating: 4.5, jobsCompleted: 2, job: 'Freelance Designer', location: 'Bangalore' },
 ];
 
 
@@ -190,9 +196,9 @@ export default function AssignWorkerPage() {
       </div>
 
       <Card>
-        <CardContent className="p-4">
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5 items-end">
-                <div className="space-y-2">
+        <CardContent className="p-4 flex justify-center">
+            <div className="w-full max-w-7xl grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 items-end">
+                <div className="lg:col-span-1 space-y-2">
                     <Label htmlFor="search-input">Search by Name</Label>
                     <div className="relative">
                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
@@ -223,55 +229,43 @@ export default function AssignWorkerPage() {
                         <SelectItem value="painting">Painting</SelectItem>
                         <SelectItem value="embroidery">Embroidery</SelectItem>
                         <SelectItem value="driving">Driving</SelectItem>
+                        <SelectItem value="data-entry">Data Entry</SelectItem>
+                        <SelectItem value="gardening">Gardening</SelectItem>
+                        <SelectItem value="baking">Baking</SelectItem>
+                        <SelectItem value="graphic-design">Graphic Design</SelectItem>
                     </SelectContent>
                     </Select>
                 </div>
                 <div className="space-y-2">
-                    <Label>Location (TN)</Label>
+                    <Label>Location</Label>
                     <Select value={selectedLocation} onValueChange={setSelectedLocation}>
                     <SelectTrigger>
                         <SelectValue placeholder="Filter by location" />
                     </SelectTrigger>
                     <SelectContent>
                         <SelectItem value="all">All Locations</SelectItem>
-                        <SelectItem value="Ariyalur">Ariyalur</SelectItem>
-                        <SelectItem value="Chengalpattu">Chengalpattu</SelectItem>
-                        <SelectItem value="Chennai">Chennai</SelectItem>
-                        <SelectItem value="Coimbatore">Coimbatore</SelectItem>
-                        <SelectItem value="Cuddalore">Cuddalore</SelectItem>
-                        <SelectItem value="Dharmapuri">Dharmapuri</SelectItem>
-                        <SelectItem value="Dindigul">Dindigul</SelectItem>
-                        <SelectItem value="Erode">Erode</SelectItem>
-                        <SelectItem value="Kallakurichi">Kallakurichi</SelectItem>
-                        <SelectItem value="Kanchipuram">Kanchipuram</SelectItem>
-                        <SelectItem value="Kanyakumari">Kanyakumari</SelectItem>
-                        <SelectItem value="Karur">Karur</SelectItem>
-                        <SelectItem value="Krishnagiri">Krishnagiri</SelectItem>
-                        <SelectItem value="Madurai">Madurai</SelectItem>
-                        <SelectItem value="Mayiladuthurai">Mayiladuthurai</SelectItem>
-                        <SelectItem value="Nagapattinam">Nagapattinam</SelectItem>
-                        <SelectItem value="Namakkal">Namakkal</SelectItem>
-                        <SelectItem value="Nilgiris">Nilgiris</SelectItem>
-                        <SelectItem value="Perambalur">Perambalur</SelectItem>
-                        <SelectItem value="Pudukkottai">Pudukkottai</SelectItem>
-                        <SelectItem value="Ramanathapuram">Ramanathapuram</SelectItem>
-                        <SelectItem value="Ranipet">Ranipet</SelectItem>
-                        <SelectItem value="Salem">Salem</SelectItem>
-                        <SelectItem value="Sivaganga">Sivaganga</SelectItem>
-                        <SelectItem value="Tenkasi">Tenkasi</SelectItem>
-                        <SelectItem value="Thanjavur">Thanjavur</SelectItem>
-                        <SelectItem value="Theni">Theni</SelectItem>
-                        <SelectItem value="Thoothukudi">Thoothukudi</SelectItem>
-                        <SelectItem value="Tiruchirappalli">Tiruchirappalli</SelectItem>
-                        <SelectItem value="Tirunelveli">Tirunelveli</SelectItem>
-                        <SelectItem value="Tirupathur">Tirupathur</SelectItem>
-                        <SelectItem value="Tiruppur">Tiruppur</SelectItem>
-                        <SelectItem value="Tiruvallur">Tiruvallur</SelectItem>
-                        <SelectItem value="Tiruvannamalai">Tiruvannamalai</SelectItem>
-                        <SelectItem value="Tiruvarur">Tiruvarur</SelectItem>
-                        <SelectItem value="Vellore">Vellore</SelectItem>
-                        <SelectItem value="Viluppuram">Viluppuram</SelectItem>
-                        <SelectItem value="Virudhunagar">Virudhunagar</SelectItem>
+                        <SelectGroup>
+                            <SelectLabel>Tamil Nadu</SelectLabel>
+                            <SelectItem value="Chennai">Chennai</SelectItem>
+                            <SelectItem value="Coimbatore">Coimbatore</SelectItem>
+                            <SelectItem value="Madurai">Madurai</SelectItem>
+                            <SelectItem value="Tiruchirappalli">Tiruchirappalli</SelectItem>
+                            <SelectItem value="Salem">Salem</SelectItem>
+                            <SelectItem value="Erode">Erode</SelectItem>
+                            <SelectItem value="Tirunelveli">Tirunelveli</SelectItem>
+                            <SelectItem value="Vellore">Vellore</SelectItem>
+                        </SelectGroup>
+                        <SelectGroup>
+                            <SelectLabel>Karnataka</SelectLabel>
+                            <SelectItem value="Bangalore">Bangalore</SelectItem>
+                            <SelectItem value="Mysuru">Mysuru</SelectItem>
+                            <SelectItem value="Mangalore">Mangalore</SelectItem>
+                            <SelectItem value="Hubli">Hubli</SelectItem>
+                        </SelectGroup>
+                         <SelectGroup>
+                            <SelectLabel>Maharashtra</SelectLabel>
+                            <SelectItem value="Mumbai">Mumbai</SelectItem>
+                        </SelectGroup>
                     </SelectContent>
                     </Select>
                 </div>
