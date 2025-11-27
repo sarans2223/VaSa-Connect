@@ -173,7 +173,7 @@ export default function JobStatusPage() {
                   View Details
                 </Button>
                 <Button asChild size="sm">
-                    <Link href="/dashboard/assign-worker">
+                    <Link href="/dashboard/panchayat/assign-worker">
                         <UserPlus className="mr-2 h-4 w-4" />
                         Assign Workers
                     </Link>
@@ -243,11 +243,3 @@ export default function JobStatusPage() {
     </div>
   );
 }
-
-    
-
-
-    
-
-
-
