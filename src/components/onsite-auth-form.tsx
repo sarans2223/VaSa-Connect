@@ -4,7 +4,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from 'next/link';
-import { KeyRound, Building, Eye, EyeOff } from "lucide-react";
+import { KeyRound, Building, Eye, EyeOff, Landmark } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -45,6 +45,13 @@ export function OnsiteAuthForm() {
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="panchayat-name">Panchayat Name</Label>
+              <div className="relative">
+                <Landmark className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                <Input id="panchayat-name" placeholder="Enter your Panchayat Name" required className="pl-10" />
+              </div>
+            </div>
             <div className="space-y-2">
               <Label htmlFor="panchayat-id">Panchayat ID</Label>
               <div className="relative">
