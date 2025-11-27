@@ -372,11 +372,7 @@ export function AuthForm({ type }: AuthFormProps) {
                   <span>
                     I agree to VaSa&apos;s{" "}
                     <Link href="/terms" className="underline hover:text-accent">
-                      Terms
-                    </Link>{" "}
-                    and{" "}
-                    <Link href="/terms" className="underline hover:text-accent">
-                      Privacy Policy
+                      Terms and Privacy Policy
                     </Link>
                     .
                   </span>
