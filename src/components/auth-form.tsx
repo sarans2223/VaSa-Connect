@@ -371,8 +371,14 @@ export function AuthForm({ type }: AuthFormProps) {
                   />
                   <span>
                     I agree to VaSa&apos;s{" "}
-                    <span className="underline">Terms</span> and{" "}
-                    <span className="underline">Privacy Policy</span>.
+                    <Link href="/terms" className="underline hover:text-accent">
+                      Terms
+                    </Link>{" "}
+                    and{" "}
+                    <Link href="/terms" className="underline hover:text-accent">
+                      Privacy Policy
+                    </Link>
+                    .
                   </span>
                 </label>
                 <label className="flex items-center gap-2">
