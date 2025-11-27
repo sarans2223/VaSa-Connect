@@ -21,10 +21,14 @@ export function OnsiteAuthForm() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [panchayatName, setPanchayatName] = useState('');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
+    // Store Panchayat Name in local storage
+    localStorage.setItem('panchayatName', panchayatName);
+    
     // Simulate API call
     setTimeout(() => {
       // Redirect to the panchayat dashboard for onsite members
@@ -49,7 +53,14 @@ export function OnsiteAuthForm() {
               <Label htmlFor="panchayat-name">Panchayat Name</Label>
               <div className="relative">
                 <Landmark className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                <Input id="panchayat-name" placeholder="Enter your Panchayat Name" required className="pl-10" />
+                <Input 
+                  id="panchayat-name" 
+                  placeholder="Enter your Panchayat Name" 
+                  required 
+                  className="pl-10" 
+                  value={panchayatName}
+                  onChange={(e) => setPanchayatName(e.target.value)}
+                />
               </div>
             </div>
             <div className="space-y-2">

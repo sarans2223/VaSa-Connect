@@ -1,4 +1,7 @@
 
+'use client';
+
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import {
   Card,
@@ -11,7 +14,6 @@ import { Button } from '@/components/ui/button';
 import { ArrowRight, UserPlus, Users, Briefcase, BarChart, TrendingUp, BriefcaseBusiness, UsersRound } from 'lucide-react';
 import { Progress } from '@/components/ui/progress';
 
-const panchayatName = 'Sathyamangalam Panchayat';
 const panchayatId = 'GP-STYM-001';
 
 const dashboardItems = [
@@ -50,6 +52,15 @@ const dashboardItems = [
 ];
 
 export default function PanchayatDashboard() {
+  const [panchayatName, setPanchayatName] = useState('Sathyamangalam Panchayat');
+
+  useEffect(() => {
+    const storedPanchayatName = localStorage.getItem('panchayatName');
+    if (storedPanchayatName) {
+      setPanchayatName(storedPanchayatName);
+    }
+  }, []);
+
   return (
     <div className="p-4 sm:p-6 lg:p-8 space-y-8">
       <div className="flex justify-between items-start">

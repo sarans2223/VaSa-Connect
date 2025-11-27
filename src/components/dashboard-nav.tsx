@@ -75,15 +75,17 @@ export function DashboardNav() {
         setUserName(storedName);
       }
     }
+    const storedPanchayatName = localStorage.getItem('panchayatName');
+    if (storedPanchayatName) {
+        setPanchayatName(storedPanchayatName);
+    }
   }, [user]);
 
   const handleSignOut = async () => {
     try {
       await signOut();
       if (typeof window !== 'undefined') {
-        localStorage.removeItem('userName');
-        localStorage.removeItem('userEmail');
-        localStorage.removeItem('user');
+        localStorage.clear();
       }
       toast({
         title: "Signed Out",
