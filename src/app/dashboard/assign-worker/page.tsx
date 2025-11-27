@@ -279,33 +279,40 @@ export default function AssignWorkerPage() {
         </TabsContent>
         <TabsContent value="assigned" className="mt-6">
            {assignedWorkers.length > 0 ? (
-             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                {assignedWorkers.map((profile) => (
-                    <Card key={profile.id}>
-                        <CardHeader>
-                           <div className="flex justify-between items-start">
-                              <CardTitle>{profile.name}</CardTitle>
-                              <UserCheck className="h-6 w-6 text-green-600" />
-                          </div>
-                        </CardHeader>
-                        <CardContent className="space-y-4">
-                           <div>
-                                <h4 className="text-sm font-semibold text-muted-foreground mb-2">Skills</h4>
-                                <div className="flex flex-wrap gap-2">
-                                    {profile.skills.map(skill => <Badge key={skill} variant="secondary">{skill}</Badge>)}
+             <div className="space-y-4">
+                <Card>
+                    <CardHeader>
+                        <CardTitle>Assigned to: {mockJobs.find(j => j.id === selectedJob)?.title || 'Selected Job'}</CardTitle>
+                    </CardHeader>
+                    <CardContent className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                        {assignedWorkers.map((profile) => (
+                            <Card key={profile.id}>
+                                <CardHeader>
+                                <div className="flex justify-between items-start">
+                                    <CardTitle>{profile.name}</CardTitle>
+                                    <UserCheck className="h-6 w-6 text-green-600" />
                                 </div>
-                            </div>
-                             <div className="flex justify-between items-center text-sm">
-                                <span className="font-medium text-muted-foreground">Rating:</span>
-                                <div className="flex items-center gap-1">
-                                  {renderStars(profile.rating)}
-                                   <span className="font-semibold">{profile.rating.toFixed(1)}</span>
-                                </div>
-                            </div>
-                        </CardContent>
-                    </Card>
-                ))}
-            </div>
+                                </CardHeader>
+                                <CardContent className="space-y-4">
+                                <div>
+                                        <h4 className="text-sm font-semibold text-muted-foreground mb-2">Skills</h4>
+                                        <div className="flex flex-wrap gap-2">
+                                            {profile.skills.map(skill => <Badge key={skill} variant="secondary">{skill}</Badge>)}
+                                        </div>
+                                    </div>
+                                    <div className="flex justify-between items-center text-sm">
+                                        <span className="font-medium text-muted-foreground">Rating:</span>
+                                        <div className="flex items-center gap-1">
+                                        {renderStars(profile.rating)}
+                                        <span className="font-semibold">{profile.rating.toFixed(1)}</span>
+                                        </div>
+                                    </div>
+                                </CardContent>
+                            </Card>
+                        ))}
+                    </CardContent>
+                </Card>
+             </div>
            ) : (
              <div className="text-center py-16 text-muted-foreground bg-muted/50 rounded-lg">
                 <h3 className="text-xl font-semibold">No Workers Assigned Yet</h3>
@@ -314,6 +321,15 @@ export default function AssignWorkerPage() {
            )}
         </TabsContent>
       </Tabs>
+
+      {selectedWorkers.length > 0 && (
+        <div className="fixed bottom-0 left-0 right-0 p-4 bg-background/80 backdrop-blur-sm border-t">
+          <div className="container mx-auto flex justify-between items-center">
+            <p className="font-semibold">{selectedWorkers.length} worker(s) selected.</p>
+            <Button size="lg" onClick={handleConfirmAssignment}>Confirm Assignment</Button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
