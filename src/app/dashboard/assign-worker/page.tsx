@@ -288,10 +288,12 @@ export default function AssignWorkerPage() {
                         </SelectContent>
                     </Select>
                 </div>
-                 <Button onClick={handleSearch}>
-                    <Search className="mr-2 h-4 w-4" />
-                    Search
-                </Button>
+                 <div className="flex justify-center">
+                    <Button onClick={handleSearch}>
+                        <Search className="mr-2 h-4 w-4" />
+                        Search
+                    </Button>
+                </div>
             </div>
         </CardContent>
       </Card>
