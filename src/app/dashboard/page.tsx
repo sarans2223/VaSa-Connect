@@ -37,13 +37,6 @@ const featureCards = [
     icon: Users,
     cta: "Manage Teams",
   },
-  {
-    title: "Complete Your Profile",
-    description: "A strong profile helps you stand out to employers and collaborators.",
-    href: "/dashboard/profile",
-    icon: UserCircle,
-    cta: "View Profile",
-  },
 ];
 
 export default function DashboardPage() {
