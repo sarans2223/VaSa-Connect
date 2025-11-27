@@ -443,8 +443,8 @@ export function AuthForm({ type }: AuthFormProps) {
             src="https://picsum.photos/seed/vasa-art/1200/1800"
             alt="An abstract art piece with purple and pink tones, representing feminine energy and creativity."
             data-ai-hint="feminine abstract art"
-            layout="fill"
-            objectFit="cover"
+            fill
+            style={{objectFit: 'cover'}}
            />
            <div className="absolute inset-0 bg-gradient-to-t from-background to-transparent" />
         </div>
@@ -483,3 +483,5 @@ export function AuthForm({ type }: AuthFormProps) {
     </Dialog>
   );
 }
+
+    
