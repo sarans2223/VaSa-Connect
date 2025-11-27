@@ -20,20 +20,19 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Search, UserPlus, Star, CheckSquare, Square, UserCheck } from "lucide-react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Search, UserPlus, Star, CheckSquare, Square } from "lucide-react";
 import { useToast } from '@/hooks/use-toast';
 import type { Job } from '@/lib/types';
 
 const allProfiles = [
-  { id: '1', name: 'Lakshmi Priya', skills: ['Cooking', 'Tailoring'], rating: 4.5, jobsCompleted: 2, job: 'Catering Project' },
-  { id: '2', name: 'Kavita Devi', skills: ['Farming'], rating: 4.2, jobsCompleted: 2, job: 'Harvesting' },
-  { id: '3', name: 'Meena Kumari', skills: ['Herding', 'Farming'], rating: 4.8, jobsCompleted: 3, job: 'Livestock Management' },
-  { id: '4', name: 'Anjali Sharma', skills: ['Cleaning'], rating: 3.9, jobsCompleted: 1, job: 'Office Cleaning' },
-  { id: '5', name: 'Sita Rai', skills: ['Child Care', 'Cooking'], rating: 4.0, jobsCompleted: 0, job: 'Nanny Position' },
-  { id: '6', name: 'Rina Das', skills: ['Handicrafts', 'Painting'], rating: 4.9, jobsCompleted: 5, job: 'Artisan Fair' },
-  { id: '7', name: 'Sunita Devi', skills: ['Tailoring', 'Embroidery'], rating: 4.1, jobsCompleted: 0, job: 'Boutique Assistant' },
-  { id: '8', name: 'Pooja Singh', skills: ['Driving'], rating: 4.3, jobsCompleted: 0, job: 'Delivery Driver' },
+  { id: '1', name: 'Lakshmi Priya', skills: ['Cooking', 'Tailoring'], rating: 4.5 },
+  { id: '2', name: 'Kavita Devi', skills: ['Farming'], rating: 4.2 },
+  { id: '3', name: 'Meena Kumari', skills: ['Herding', 'Farming'], rating: 4.8 },
+  { id: '4', name: 'Anjali Sharma', skills: ['Cleaning'], rating: 3.9 },
+  { id: '5', name: 'Sita Rai', skills: ['Child Care', 'Cooking'], rating: 4.0 },
+  { id: '6', name: 'Rina Das', skills: ['Handicrafts', 'Painting'], rating: 4.9 },
+  { id: '7', name: 'Sunita Devi', skills: ['Tailoring', 'Embroidery'], rating: 4.1 },
+  { id: '8', name: 'Pooja Singh', skills: ['Driving'], rating: 4.3 },
 ];
 
 type WorkerProfile = typeof allProfiles[0];
@@ -41,7 +40,6 @@ type WorkerProfile = typeof allProfiles[0];
 export default function AssignWorkerPanchayatPage() {
   const [allWorkers] = useState<WorkerProfile[]>(allProfiles);
   const [availableWorkers, setAvailableWorkers] = useState<WorkerProfile[]>([]);
-  const [assignedWorkers, setAssignedWorkers] = useState<WorkerProfile[]>([]);
   const [selectedWorkers, setSelectedWorkers] = useState<string[]>([]);
   const [selectedJob, setSelectedJob] = useState<string>('');
   const [searchQuery, setSearchQuery] = useState('');
@@ -77,9 +75,6 @@ export default function AssignWorkerPanchayatPage() {
         );
     }
 
-    const assignedIds = assignedWorkers.map(w => w.id);
-    filtered = filtered.filter(w => !assignedIds.includes(w.id));
-
     setAvailableWorkers(filtered);
   };
 
@@ -111,10 +106,6 @@ export default function AssignWorkerPanchayatPage() {
       return;
     }
     
-    setAssignedWorkers(prev => [...prev, ...workersToAssign]);
-    setAvailableWorkers(prev => prev.filter(w => !selectedWorkers.includes(w.id)));
-    setSelectedWorkers([]);
-
     try {
         const storedJobs = localStorage.getItem('panchayatJobs');
         if (storedJobs) {
@@ -252,76 +243,28 @@ export default function AssignWorkerPanchayatPage() {
             </div>
         </CardContent>
       </Card>
-
-      <Tabs defaultValue="available" className="w-full">
-        <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="available">Available Workers ({availableWorkers.length})</TabsTrigger>
-            <TabsTrigger value="assigned">Assigned to Current Job ({assignedWorkers.length})</TabsTrigger>
-        </TabsList>
-        <TabsContent value="available" className="mt-6">
-          {availableWorkers.length > 0 ? (
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {availableWorkers.map((profile) => (
-                 <WorkerCard 
-                   key={profile.id}
-                   profile={profile}
-                   isSelected={selectedWorkers.includes(profile.id)}
-                   onSelect={handleSelectWorker}
-                 />
-              ))}
-            </div>
-          ) : (
-            <div className="text-center py-16 text-muted-foreground bg-muted/50 rounded-lg">
-                <h3 className="text-xl font-semibold">No Available Workers</h3>
-                <p className="mt-2">Try adjusting your search filters or check back later.</p>
-            </div>
-          )}
-        </TabsContent>
-        <TabsContent value="assigned" className="mt-6">
-           {assignedWorkers.length > 0 ? (
-             <div className="space-y-4">
-                <Card>
-                    <CardHeader>
-                        <CardTitle>Assigned to: {jobs.find(j => j.id === selectedJob)?.name || 'Selected Job'}</CardTitle>
-                    </CardHeader>
-                    <CardContent className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                        {assignedWorkers.map((profile) => (
-                            <Card key={profile.id}>
-                                <CardHeader>
-                                <div className="flex justify-between items-start">
-                                    <CardTitle>{profile.name}</CardTitle>
-                                    <UserCheck className="h-6 w-6 text-green-600" />
-                                </div>
-                                </CardHeader>
-                                <CardContent className="space-y-4">
-                                <div>
-                                        <h4 className="text-sm font-semibold text-muted-foreground mb-2">Skills</h4>
-                                        <div className="flex flex-wrap gap-2">
-                                            {profile.skills.map(skill => <Badge key={skill} variant="secondary">{skill}</Badge>)}
-                                        </div>
-                                    </div>
-                                    <div className="flex justify-between items-center text-sm">
-                                        <span className="font-medium text-muted-foreground">Rating:</span>
-                                        <div className="flex items-center gap-1">
-                                        {renderStars(profile.rating)}
-                                        <span className="font-semibold">{profile.rating.toFixed(1)}</span>
-                                        </div>
-                                    </div>
-                                </CardContent>
-                            </Card>
-                        ))}
-                    </CardContent>
-                </Card>
-             </div>
-           ) : (
-             <div className="text-center py-16 text-muted-foreground bg-muted/50 rounded-lg">
-                <h3 className="text-xl font-semibold">No Workers Assigned Yet</h3>
-                <p className="mt-2">Select workers from the 'Available' tab and confirm to assign them.</p>
-            </div>
-           )}
-        </TabsContent>
-      </Tabs>
       
+      <div className="mt-6">
+        <h2 className="text-xl font-bold mb-4">Available Workers ({availableWorkers.length})</h2>
+        {availableWorkers.length > 0 ? (
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {availableWorkers.map((profile) => (
+                <WorkerCard 
+                  key={profile.id}
+                  profile={profile}
+                  isSelected={selectedWorkers.includes(profile.id)}
+                  onSelect={handleSelectWorker}
+                />
+            ))}
+          </div>
+        ) : (
+          <div className="text-center py-16 text-muted-foreground bg-muted/50 rounded-lg">
+              <h3 className="text-xl font-semibold">No Available Workers</h3>
+              <p className="mt-2">Try adjusting your search filters or check back later.</p>
+          </div>
+        )}
+      </div>
+
       {selectedWorkers.length > 0 && (
         <div className="fixed bottom-0 left-0 right-0 p-4 bg-background/80 backdrop-blur-sm border-t">
           <div className="container mx-auto flex justify-between items-center">

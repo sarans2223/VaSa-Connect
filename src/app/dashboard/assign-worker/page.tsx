@@ -20,8 +20,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Search, UserPlus, Star, CheckSquare, Square, UserCheck } from "lucide-react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Search, UserPlus, Star, CheckSquare, Square } from "lucide-react";
 import { useToast } from '@/hooks/use-toast';
 import { mockJobs } from '@/lib/data';
 import type { Job } from '@/lib/types';
@@ -43,7 +42,6 @@ type WorkerProfile = typeof allProfiles[0];
 export default function AssignWorkerPage() {
   const [allWorkers] = useState<WorkerProfile[]>(allProfiles);
   const [availableWorkers, setAvailableWorkers] = useState<WorkerProfile[]>([]);
-  const [assignedWorkers, setAssignedWorkers] = useState<WorkerProfile[]>([]);
   const [selectedWorkers, setSelectedWorkers] = useState<string[]>([]);
   const [selectedJob, setSelectedJob] = useState<string>('');
   const [searchQuery, setSearchQuery] = useState('');
@@ -52,7 +50,6 @@ export default function AssignWorkerPage() {
   const router = useRouter();
 
   useEffect(() => {
-    // Initialize available workers, you might want to fetch this
     setAvailableWorkers(allWorkers);
   }, [allWorkers]);
   
@@ -70,10 +67,6 @@ export default function AssignWorkerPage() {
             worker.skills.some(skill => skill.toLowerCase() === selectedSkill.toLowerCase())
         );
     }
-
-    // Exclude workers who are already assigned in the current session
-    const assignedIds = assignedWorkers.map(w => w.id);
-    filtered = filtered.filter(w => !assignedIds.includes(w.id));
 
     setAvailableWorkers(filtered);
 };
@@ -107,23 +100,29 @@ export default function AssignWorkerPage() {
       return;
     }
     
-    setAssignedWorkers(prev => [...prev, ...workersToAssign]);
-    setAvailableWorkers(prev => prev.filter(w => !selectedWorkers.includes(w.id)));
-    setSelectedWorkers([]);
+    // In a real app, this would be an API call. Here we simulate it.
+    console.log('Assigning workers:', workersToAssign.map(w => w.name), 'to job ID:', selectedJob);
 
     try {
         const storedJobs = localStorage.getItem('panchayatJobs');
-        if (storedJobs) {
-            let panchayatJobs: Job[] = JSON.parse(storedJobs);
-            const jobToUpdate = panchayatJobs.find(job => job.id === selectedJob);
+        let panchayatJobs: Job[] = storedJobs ? JSON.parse(storedJobs) : [];
+        const jobToUpdate = panchayatJobs.find(job => job.id === selectedJob);
 
-            if (jobToUpdate) {
-                const updatedJobs = panchayatJobs.map(job => 
-                    job.id === selectedJob 
-                    ? { ...job, workerNames: [...(job.workerNames || []), ...workersToAssign.map(w => w.name)], status: 'Worker Assigned' as Job['status'] }
-                    : job
-                );
-                localStorage.setItem('panchayatJobs', JSON.stringify(updatedJobs));
+        if (jobToUpdate) {
+            const updatedJobs = panchayatJobs.map(job => 
+                job.id === selectedJob 
+                ? { ...job, workerNames: [...(job.workerNames || []), ...workersToAssign.map(w => w.name)], status: 'Worker Assigned' as Job['status'] }
+                : job
+            );
+            localStorage.setItem('panchayatJobs', JSON.stringify(updatedJobs));
+        } else {
+             // Handle case where job is from mockJobs but not in localStorage
+            const mockJobToUpdate = mockJobs.find(job => job.id === selectedJob);
+            if (mockJobToUpdate) {
+                const newJobWithWorkers = { ...mockJobToUpdate, workerNames: workersToAssign.map(w => w.name), status: 'Worker Assigned' as Job['status'] };
+                 // This part is tricky as we don't want to overwrite all jobs, just update or add one.
+                 // For this demo, we'll just log it. A real app would need a more robust data store.
+                 console.log("Would update/add job in a central store:", newJobWithWorkers);
             }
         }
     } catch (error) {
@@ -253,74 +252,26 @@ export default function AssignWorkerPage() {
         </CardContent>
       </Card>
 
-      <Tabs defaultValue="available" className="w-full">
-        <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="available">Available Workers ({availableWorkers.length})</TabsTrigger>
-            <TabsTrigger value="assigned">Assigned to Current Job ({assignedWorkers.length})</TabsTrigger>
-        </TabsList>
-        <TabsContent value="available" className="mt-6">
-          {availableWorkers.length > 0 ? (
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {availableWorkers.map((profile) => (
-                 <WorkerCard 
-                   key={profile.id}
-                   profile={profile}
-                   isSelected={selectedWorkers.includes(profile.id)}
-                   onSelect={handleSelectWorker}
-                 />
-              ))}
-            </div>
-          ) : (
-            <div className="text-center py-16 text-muted-foreground bg-muted/50 rounded-lg">
-                <h3 className="text-xl font-semibold">No Available Workers</h3>
-                <p className="mt-2">Try adjusting your search filters or check back later.</p>
-            </div>
-          )}
-        </TabsContent>
-        <TabsContent value="assigned" className="mt-6">
-           {assignedWorkers.length > 0 ? (
-             <div className="space-y-4">
-                <Card>
-                    <CardHeader>
-                        <CardTitle>Assigned to: {mockJobs.find(j => j.id === selectedJob)?.title || 'Selected Job'}</CardTitle>
-                    </CardHeader>
-                    <CardContent className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                        {assignedWorkers.map((profile) => (
-                            <Card key={profile.id}>
-                                <CardHeader>
-                                <div className="flex justify-between items-start">
-                                    <CardTitle>{profile.name}</CardTitle>
-                                    <UserCheck className="h-6 w-6 text-green-600" />
-                                </div>
-                                </CardHeader>
-                                <CardContent className="space-y-4">
-                                <div>
-                                        <h4 className="text-sm font-semibold text-muted-foreground mb-2">Skills</h4>
-                                        <div className="flex flex-wrap gap-2">
-                                            {profile.skills.map(skill => <Badge key={skill} variant="secondary">{skill}</Badge>)}
-                                        </div>
-                                    </div>
-                                    <div className="flex justify-between items-center text-sm">
-                                        <span className="font-medium text-muted-foreground">Rating:</span>
-                                        <div className="flex items-center gap-1">
-                                        {renderStars(profile.rating)}
-                                        <span className="font-semibold">{profile.rating.toFixed(1)}</span>
-                                        </div>
-                                    </div>
-                                </CardContent>
-                            </Card>
-                        ))}
-                    </CardContent>
-                </Card>
-             </div>
-           ) : (
-             <div className="text-center py-16 text-muted-foreground bg-muted/50 rounded-lg">
-                <h3 className="text-xl font-semibold">No Workers Assigned Yet</h3>
-                <p className="mt-2">Select workers from the 'Available' tab and confirm to assign them.</p>
-            </div>
-           )}
-        </TabsContent>
-      </Tabs>
+      <div className="mt-6">
+        <h2 className="text-xl font-bold mb-4">Available Workers ({availableWorkers.length})</h2>
+        {availableWorkers.length > 0 ? (
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {availableWorkers.map((profile) => (
+               <WorkerCard 
+                 key={profile.id}
+                 profile={profile}
+                 isSelected={selectedWorkers.includes(profile.id)}
+                 onSelect={handleSelectWorker}
+               />
+            ))}
+          </div>
+        ) : (
+          <div className="text-center py-16 text-muted-foreground bg-muted/50 rounded-lg">
+              <h3 className="text-xl font-semibold">No Available Workers</h3>
+              <p className="mt-2">Try adjusting your search filters or check back later.</p>
+          </div>
+        )}
+      </div>
 
       {selectedWorkers.length > 0 && (
         <div className="fixed bottom-0 left-0 right-0 p-4 bg-background/80 backdrop-blur-sm border-t">
