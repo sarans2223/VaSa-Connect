@@ -46,11 +46,24 @@ export default function AssignWorkerPage() {
   const [selectedJob, setSelectedJob] = useState<string>('');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedSkill, setSelectedSkill] = useState('all');
+  const [jobs, setJobs] = useState<Job[]>([]);
   const { toast } = useToast();
   const router = useRouter();
 
   useEffect(() => {
     setAvailableWorkers(allWorkers);
+    try {
+        const storedJobs = localStorage.getItem('panchayatJobs');
+        if (storedJobs) {
+            setJobs(JSON.parse(storedJobs));
+        } else {
+            // Fallback to mockJobs if nothing in local storage
+            setJobs(mockJobs);
+        }
+    } catch (error) {
+        console.error("Failed to load jobs from local storage, using mock jobs.", error);
+        setJobs(mockJobs);
+    }
   }, [allWorkers]);
   
   const handleSearch = () => {
@@ -180,6 +193,8 @@ export default function AssignWorkerPage() {
       </Card>
   );
 
+  const unassignedJobs = jobs.filter(job => job.status === 'Yet To Assign');
+
   return (
     <div className="p-4 sm:p-6 lg:p-8 space-y-8">
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
@@ -236,11 +251,15 @@ export default function AssignWorkerPage() {
                             <SelectValue placeholder="Select a job to assign" />
                         </SelectTrigger>
                         <SelectContent>
-                            {mockJobs.slice(0, 5).map(job => (
-                                <SelectItem key={job.id} value={job.id}>
-                                    {job.title}
-                                </SelectItem>
-                            ))}
+                            {unassignedJobs.length > 0 ? (
+                                unassignedJobs.map(job => (
+                                    <SelectItem key={job.id} value={job.id}>
+                                        {job.title || job.name}
+                                    </SelectItem>
+                                ))
+                            ) : (
+                                <SelectItem value="no-jobs" disabled>No available jobs to assign</SelectItem>
+                            )}
                         </SelectContent>
                     </Select>
                 </div>

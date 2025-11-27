@@ -23,6 +23,7 @@ import {
 import { Search, UserPlus, Star, CheckSquare, Square } from "lucide-react";
 import { useToast } from '@/hooks/use-toast';
 import type { Job } from '@/lib/types';
+import { mockJobs } from '@/lib/data'; // Keep for fallback if needed
 
 const allProfiles = [
   { id: '1', name: 'Lakshmi Priya', skills: ['Cooking', 'Tailoring'], rating: 4.5 },
@@ -172,6 +173,8 @@ export default function AssignWorkerPanchayatPage() {
       </Card>
   );
 
+  const unassignedJobs = jobs.filter(job => job.status === 'Yet To Assign');
+
   return (
     <div className="p-4 sm:p-6 lg:p-8 space-y-8">
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
@@ -228,11 +231,15 @@ export default function AssignWorkerPanchayatPage() {
                             <SelectValue placeholder="Select a job to assign" />
                         </SelectTrigger>
                         <SelectContent>
-                            {jobs.filter(j => j.status !== 'Completed').map(job => (
-                                <SelectItem key={job.id} value={job.id}>
-                                    {job.name}
-                                </SelectItem>
-                            ))}
+                             {unassignedJobs.length > 0 ? (
+                                unassignedJobs.map(job => (
+                                    <SelectItem key={job.id} value={job.id}>
+                                        {job.name}
+                                    </SelectItem>
+                                ))
+                             ) : (
+                                <SelectItem value="no-jobs" disabled>No available jobs to assign</SelectItem>
+                             )}
                         </SelectContent>
                     </Select>
                 </div>
