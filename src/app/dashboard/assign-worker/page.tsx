@@ -42,6 +42,68 @@ const allProfiles = [
   { id: '12', name: 'Neha Reddy', skills: ['Graphic Design'], rating: 4.5, jobsCompleted: 2, job: 'Freelance Designer', location: 'Bangalore' },
 ];
 
+const sampleJobs: Job[] = [
+    {
+      id: 'sample-job-1',
+      title: 'Community Kitchen Chef',
+      companyName: 'Community Help Group',
+      companyLogoUrl: 'https://picsum.photos/seed/sample1/100/100',
+      location: 'Chennai',
+      jobType: 'Part-time',
+      description: 'Looking for a chef to manage our community kitchen.',
+      skillsRequired: ['Cooking', 'Menu Planning'],
+      industry: 'Catering',
+      status: 'Yet To Assign'
+    },
+    {
+      id: 'sample-job-2',
+      title: 'Urgent Tailoring Work',
+      companyName: 'Local Boutique',
+      companyLogoUrl: 'https://picsum.photos/seed/sample2/100/100',
+      location: 'Coimbatore',
+      jobType: 'Contract',
+      description: 'Need skilled tailors for a bulk order of dresses.',
+      skillsRequired: ['Tailoring', 'Sewing'],
+      industry: 'Fashion',
+      status: 'Yet To Assign'
+    },
+    {
+      id: 'sample-job-3',
+      title: 'Farm Hand for Harvest',
+      companyName: 'Green Fields Farm',
+      companyLogoUrl: 'https://picsum.photos/seed/sample3/100/100',
+      location: 'Salem',
+      jobType: 'Contract',
+      description: 'Seasonal work for harvesting crops.',
+      skillsRequired: ['Farming', 'Harvesting'],
+      industry: 'Agriculture',
+      status: 'Yet To Assign'
+    },
+    {
+      id: 'sample-job-4',
+      title: 'Office Cleaning Staff',
+      companyName: 'Corporate Solutions Ltd.',
+      companyLogoUrl: 'https://picsum.photos/seed/sample4/100/100',
+      location: 'Bangalore',
+      jobType: 'Full-time',
+      description: 'Daily cleaning and maintenance for our office premises.',
+      skillsRequired: ['Cleaning', 'Sanitization'],
+      industry: 'Domestic Services',
+      status: 'Yet To Assign'
+    },
+    {
+      id: 'sample-job-5',
+      title: 'Event Catering Assistant',
+      companyName: 'Grand Events',
+      companyLogoUrl: 'https://picsum.photos/seed/sample5/100/100',
+      location: 'Mumbai',
+      jobType: 'Part-time',
+      description: 'Assist in food preparation and serving for large events.',
+      skillsRequired: ['Cooking', 'Catering', 'Serving'],
+      industry: 'Events',
+      status: 'Yet To Assign'
+    }
+];
 
 type WorkerProfile = typeof allProfiles[0];
 
@@ -62,14 +124,12 @@ export default function AssignWorkerPage() {
     setAvailableWorkers(allWorkers);
     try {
         const storedJobs = localStorage.getItem('postedJobs');
-        if (storedJobs) {
-            setJobs(JSON.parse(storedJobs));
-        } else {
-            setJobs(mockJobs); // Fallback if nothing in localStorage
-        }
+        const parsedJobs = storedJobs ? JSON.parse(storedJobs) : [];
+        // Combine sample jobs with jobs from local storage
+        setJobs([...sampleJobs, ...parsedJobs]);
     } catch (error) {
-        console.error("Failed to load jobs from local storage, using mock jobs.", error);
-        setJobs(mockJobs);
+        console.error("Failed to load jobs from local storage, using sample jobs.", error);
+        setJobs(sampleJobs);
     }
   }, [allWorkers]);
   
@@ -330,3 +390,5 @@ export default function AssignWorkerPage() {
     </div>
   );
 }
+
+    
