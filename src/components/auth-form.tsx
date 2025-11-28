@@ -235,9 +235,9 @@ export function AuthForm({ type }: AuthFormProps) {
 
   return (
     <Dialog>
-      <div className="w-full lg:grid lg:min-h-screen lg:grid-cols-2">
+      <div className="flex w-full min-h-screen items-center justify-center bg-background">
         <div className="flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-          <Card className="w-full max-w-md border-0 shadow-none sm:border sm:shadow-sm">
+          <Card className="w-full max-w-md">
             <CardHeader className="text-center">
               <CardTitle className="text-2xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-[#E0BBE4] via-[#957DAD] to-[#D291BC]">
                 {type === "login"
@@ -438,16 +438,6 @@ export function AuthForm({ type }: AuthFormProps) {
             </CardFooter>
           </Card>
         </div>
-        <div className="hidden lg:block relative">
-           <Image
-            src="https://picsum.photos/seed/vasa-art/1200/1800"
-            alt="An abstract art piece with purple and pink tones, representing feminine energy and creativity."
-            data-ai-hint="feminine abstract art"
-            fill
-            style={{objectFit: 'cover'}}
-           />
-           <div className="absolute inset-0 bg-gradient-to-t from-background to-transparent" />
-        </div>
       </div>
 
       <DialogContent className="sm:max-w-3xl">
@@ -483,5 +473,3 @@ export function AuthForm({ type }: AuthFormProps) {
     </Dialog>
   );
 }
-
-    
