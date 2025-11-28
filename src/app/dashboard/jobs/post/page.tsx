@@ -42,6 +42,70 @@ import { Badge } from '@/components/ui/badge';
 import type { Job } from '@/lib/types';
 import { useToast } from '@/hooks/use-toast';
 
+const samplePostedJobs: Job[] = [
+    {
+      id: 'posted-job-1',
+      title: 'Handicraft Production',
+      companyName: 'Self-Help Group',
+      companyLogoUrl: 'https://picsum.photos/seed/posted1/100/100',
+      location: 'Madurai',
+      jobType: 'Contract',
+      description: 'Create handmade crafts for an upcoming exhibition.',
+      skillsRequired: ['Handicrafts', 'Painting'],
+      industry: 'Art & Craft',
+      status: 'Yet To Assign'
+    },
+    {
+      id: 'posted-job-2',
+      title: 'Childcare Assistant',
+      companyName: 'Local Daycare',
+      companyLogoUrl: 'https://picsum.photos/seed/posted2/100/100',
+      location: 'Chennai',
+      jobType: 'Part-time',
+      description: 'Assist with daily activities and care for children.',
+      skillsRequired: ['Child Care', 'First Aid'],
+      industry: 'Child Care',
+      status: 'Yet To Assign'
+    },
+    {
+      id: 'posted-job-3',
+      title: 'Event Catering Staff',
+      companyName: 'Weddings & Events',
+      companyLogoUrl: 'https://picsum.photos/seed/posted3/100/100',
+      location: 'Coimbatore',
+      jobType: 'Contract',
+      description: 'Help with food preparation and serving at events.',
+      skillsRequired: ['Cooking', 'Serving'],
+      industry: 'Events',
+      status: 'Worker Assigned'
+    },
+    {
+      id: 'posted-job-4',
+      title: 'Organic Gardening',
+      companyName: 'Green Thumbs Initiative',
+      companyLogoUrl: 'https://picsum.photos/seed/posted4/100/100',
+      location: 'Salem',
+      jobType: 'Part-time',
+      description: 'Maintain community organic vegetable garden.',
+      skillsRequired: ['Gardening', 'Farming'],
+      industry: 'Agriculture',
+      status: 'Yet To Assign'
+    },
+    {
+      id: 'posted-job-5',
+      title: 'Retail Store Assistant',
+      companyName: 'MyVillage Mart',
+      companyLogoUrl: 'https://picsum.photos/seed/posted5/100/100',
+      location: 'Erode',
+      jobType: 'Full-time',
+      description: 'Assist customers and manage stock at a local retail store.',
+      skillsRequired: ['Customer Service', 'Sales'],
+      industry: 'Retail',
+      status: 'Completed'
+    },
+];
+
+
 export default function PostJobPage() {
   const [postedJobs, setPostedJobs] = React.useState<Job[]>([]);
   const [jobTitle, setJobTitle] = React.useState('');
@@ -65,10 +129,22 @@ export default function PostJobPage() {
     try {
       const storedJobs = localStorage.getItem('postedJobs');
       if (storedJobs) {
-        setPostedJobs(JSON.parse(storedJobs));
+        const parsedJobs = JSON.parse(storedJobs);
+        // If local storage is empty, initialize with sample data
+        if (parsedJobs.length === 0) {
+            setPostedJobs(samplePostedJobs);
+            updateLocalStorage(samplePostedJobs);
+        } else {
+            setPostedJobs(parsedJobs);
+        }
+      } else {
+        // If no key exists, initialize with sample data
+        setPostedJobs(samplePostedJobs);
+        updateLocalStorage(samplePostedJobs);
       }
     } catch (error) {
-      console.error("Failed to load jobs from local storage", error);
+      console.error("Failed to load jobs from local storage, using samples.", error);
+      setPostedJobs(samplePostedJobs);
     }
   }, []);
 
