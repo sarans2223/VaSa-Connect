@@ -20,7 +20,6 @@ import {
   DialogTitle,
   DialogDescription,
   DialogFooter,
-  DialogTrigger,
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -68,6 +67,7 @@ export default function VasaWalletPage() {
   const [selectedReward, setSelectedReward] = useState<{points: number, name: string} | null>(null);
   const [isRedeemDialogOpen, setIsRedeemDialogOpen] = useState(false);
   const [showSetPin, setShowSetPin] = useState(false);
+  const [paymentInitiatedFromPostPage, setPaymentInitiatedFromPostPage] = useState(false);
   
   useEffect(() => {
     try {
@@ -87,6 +87,7 @@ export default function VasaWalletPage() {
       if (jobIdFromQuery) {
         setSelectedJob(jobIdFromQuery);
         setIsPaymentDialogOpen(true);
+        setPaymentInitiatedFromPostPage(true);
       }
 
     } catch (error) {
@@ -134,13 +135,16 @@ export default function VasaWalletPage() {
 
     toast({
       title: 'Payment Successful!',
-      description: `You paid ₹${jobToPay.pay.toLocaleString()} to ${jobToPay.workerNames?.[0] || 'the worker'}. You earned ${tokensEarned} VaSa Pink Tokens.`,
+      description: `You paid ₹${jobToPay.pay.toLocaleString()} for "${jobToPay.title}". You earned ${tokensEarned} VaSa Pink Tokens.`,
     });
 
     setIsPaymentDialogOpen(false);
     setSelectedJob('');
     setPin('');
-    router.push('/dashboard/jobs/post');
+
+    if (paymentInitiatedFromPostPage) {
+        router.push('/dashboard/jobs/post');
+    }
   };
   
   const handleOpenRedeemDialog = (points: number, name: string) => {
@@ -309,7 +313,7 @@ export default function VasaWalletPage() {
                             {payableJobs.length > 0 ? (
                                 payableJobs.map(job => (
                                     <SelectItem key={job.id} value={job.id}>
-                                        {job.title} - ₹{job.pay?.toLocaleString()} ({job.workerNames?.join(', ') || 'N/A'})
+                                        {job.title} - ₹{job.pay?.toLocaleString()}
                                     </SelectItem>
                                 ))
                             ) : (
