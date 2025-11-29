@@ -22,7 +22,7 @@ import {
   SelectGroup,
   SelectLabel,
 } from "@/components/ui/select";
-import { Search, UserPlus, Star, CheckSquare, Square, MapPin, Briefcase, DollarSign } from "lucide-react";
+import { Search, UserPlus, Star, CheckSquare, Square, MapPin, Briefcase, DollarSign, CalendarIcon } from "lucide-react";
 import { useToast } from '@/hooks/use-toast';
 import type { Job } from '@/lib/types';
 import {
@@ -35,6 +35,10 @@ import {
 } from '@/components/ui/dialog';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Textarea } from '@/components/ui/textarea';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Calendar } from '@/components/ui/calendar';
+import { cn } from '@/lib/utils';
+import { format } from 'date-fns';
 
 
 const allProfiles = [
@@ -139,6 +143,7 @@ export default function AssignWorkerPage() {
   const [isAssignmentModalOpen, setIsAssignmentModalOpen] = useState(false);
   const [selectedExistingJob, setSelectedExistingJob] = useState<string>('');
   const [newJobDetails, setNewJobDetails] = useState(initialNewJobState);
+  const [newJobDate, setNewJobDate] = useState<Date>();
   
   const { toast } = useToast();
   const router = useRouter();
@@ -246,7 +251,8 @@ export default function AssignWorkerPage() {
         description: description,
         skillsRequired: skillsRequired.split(',').map(s => s.trim()),
         industry: newJobDetails.industry || 'General',
-        status: 'Worker Assigned'
+        status: 'Worker Assigned',
+        date: newJobDate ? format(newJobDate, 'PPP') : 'Not Specified',
       };
 
       const updatedJobs = [newJob, ...jobs];
@@ -265,6 +271,7 @@ export default function AssignWorkerPage() {
       setSelectedWorkers([]);
       setSelectedExistingJob('');
       setNewJobDetails(initialNewJobState);
+      setNewJobDate(undefined);
   };
 
   
@@ -511,6 +518,31 @@ export default function AssignWorkerPage() {
                       </div>
                   </div>
                   <div className="space-y-2">
+                    <Label htmlFor="new-job-date">Date</Label>
+                     <Popover>
+                      <PopoverTrigger asChild>
+                        <Button
+                          variant={'outline'}
+                          className={cn(
+                            'w-full justify-start text-left font-normal',
+                            !newJobDate && 'text-muted-foreground'
+                          )}
+                        >
+                          <CalendarIcon className="mr-2 h-4 w-4" />
+                          {newJobDate ? format(newJobDate, 'PPP') : <span>Pick a date</span>}
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-auto p-0">
+                        <Calendar
+                          mode="single"
+                          selected={newJobDate}
+                          onSelect={setNewJobDate}
+                          initialFocus
+                        />
+                      </PopoverContent>
+                    </Popover>
+                  </div>
+                  <div className="space-y-2">
                       <Label htmlFor="new-job-description">Job Description</Label>
                       <Textarea id="new-job-description" value={newJobDetails.description} onChange={(e) => setNewJobDetails({...newJobDetails, description: e.target.value})} />
                   </div>
@@ -530,3 +562,5 @@ export default function AssignWorkerPage() {
     </div>
   );
 }
+
+    
