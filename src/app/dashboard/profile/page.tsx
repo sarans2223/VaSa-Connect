@@ -154,45 +154,7 @@ export default function ProfilePage() {
               </div>
             </CardContent>
           </Card>
-           <Card>
-            <CardHeader>
-               <div className="flex items-center gap-4">
-                 <PiggyBank className="h-8 w-8 text-primary" />
-                 <div>
-                    <CardTitle>Vasa Pay</CardTitle>
-                    <CardDescription>Manage your bank account details for payments.</CardDescription>
-                 </div>
-               </div>
-            </CardHeader>
-            <CardContent className="space-y-6">
-                 <div className="grid sm:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="bank-name">Bank Name</Label>
-                      <Input id="bank-name" placeholder="e.g., State Bank of India" />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="account-holder">Account Holder Name</Label>
-                      <Input id="account-holder" placeholder="As per your bank account" />
-                    </div>
-                  </div>
-                   <div className="grid sm:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="account-number">Account Number</Label>
-                      <Input id="account-number" placeholder="Enter your bank account number" />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="ifsc-code">IFSC Code</Label>
-                      <Input id="ifsc-code" placeholder="Enter the IFSC code" />
-                    </div>
-                  </div>
-                 <div className="flex justify-end">
-                    <Button className="bg-gradient-to-r from-[#E0BBE4] to-[#957DAD] hover:opacity-90 text-primary-foreground">
-                        <Save className="mr-2 h-4 w-4" />
-                        Save Bank Details
-                    </Button>
-                </div>
-            </CardContent>
-          </Card>
+          
           <Card>
             <CardHeader>
               <CardTitle>My Skills</CardTitle>
