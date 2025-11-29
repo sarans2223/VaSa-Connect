@@ -20,7 +20,6 @@ const membershipTiers = [
       "Access to job listings",
       "Create a professional profile",
       "Join community teams",
-      "Access free learning modules",
     ],
     buttonText: "Current Plan",
     variant: "secondary",
@@ -35,6 +34,7 @@ const membershipTiers = [
     priceSuffix: "/month",
     benefits: [
       "Everything in Vasa Rise, plus:",
+      "Access to all learning modules",
       "Skill Tests & Basic Certification",
       "Priority Job Notifications",
       "'Blooming' profile badge",
