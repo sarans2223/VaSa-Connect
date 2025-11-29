@@ -14,6 +14,7 @@ export type User = {
   vasaPinkTokens?: number;
   mobileNumber?: string;
   address?: string;
+  walletBalance?: number;
 };
 
 export type Job = {
@@ -29,10 +30,10 @@ export type Job = {
   industry: string;
   name?: string;
   workerNames?: string[];
-  status?: 'Completed' | 'Worker Assigned' | 'Yet To Assign';
+  status?: 'Completed' | 'Worker Assigned' | 'Yet To Assign' | 'Paid';
   date?: string;
   time?: string;
-  pay?: string;
+  pay?: number;
 };
 
 export type LearningModule = {

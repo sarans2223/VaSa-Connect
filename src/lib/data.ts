@@ -16,6 +16,7 @@ export const mockUser: User = {
   vasaPinkTokens: 250,
   mobileNumber: '9876543210',
   address: '123, Rose Garden Street, K.K. Nagar, Chennai, Tamil Nadu - 600078',
+  walletBalance: 5000,
 };
 
 export const sampleJobs: Job[] = [
@@ -32,6 +33,8 @@ export const sampleJobs: Job[] = [
       status: 'Worker Assigned',
       date: '2024-08-16', // A Friday
       time: '10:00 AM - 4:00 PM',
+      pay: 2000,
+      workerNames: ['Lakshmi Priya'],
     },
     {
       id: 'sample-job-2',
@@ -43,9 +46,11 @@ export const sampleJobs: Job[] = [
       description: 'Need skilled tailors for a bulk order of dresses.',
       skillsRequired: ['Tailoring', 'Sewing'],
       industry: 'Fashion',
-      status: 'Completed',
+      status: 'Paid',
       date: '2024-08-10',
       time: '9:00 AM - 6:00 PM',
+      pay: 5000,
+      workerNames: ['Kavita Devi'],
     },
     {
       id: 'sample-job-3',
@@ -60,6 +65,8 @@ export const sampleJobs: Job[] = [
       status: 'Worker Assigned',
       date: '2024-08-20',
       time: '7:00 AM - 3:00 PM',
+      pay: 1500,
+      workerNames: ['Meena Kumari'],
     },
     {
       id: 'sample-job-4',
@@ -73,6 +80,7 @@ export const sampleJobs: Job[] = [
       industry: 'Domestic Services',
       status: 'Yet To Assign',
       date: '2024-09-01',
+      pay: 12000,
     },
     {
       id: 'sample-job-5',
@@ -87,6 +95,8 @@ export const sampleJobs: Job[] = [
       status: 'Worker Assigned',
       date: '2024-08-18',
       time: '3:00 PM - 11:00 PM',
+      pay: 2500,
+      workerNames: ['Sita Rai', 'Rina Das'],
     },
      {
       id: 'sample-job-6',
@@ -98,8 +108,10 @@ export const sampleJobs: Job[] = [
       description: 'Assist the lead wedding planner in organizing and executing weddings. Excellent opportunity to learn.',
       skillsRequired: ['Event Planning', 'Communication', 'Organization'],
       industry: 'Events',
-      status: 'Completed',
+      status: 'Paid',
       date: '2024-08-05',
+      pay: 8000,
+      workerNames: ['Anjali Sharma'],
     },
     {
       id: 'sample-job-7',
@@ -114,6 +126,8 @@ export const sampleJobs: Job[] = [
       status: 'Worker Assigned',
       date: '2024-08-23', // Another Friday
       time: 'All Day',
+      pay: 10000,
+      workerNames: ['Sunita Devi'],
     },
     {
       id: 'sample-job-8',
@@ -128,6 +142,8 @@ export const sampleJobs: Job[] = [
       status: 'Worker Assigned',
       date: '2024-08-09', // A Friday
       time: '10:00 AM - 1:00 PM',
+      pay: 1000,
+      workerNames: ['Pooja Singh'],
     },
     {
         id: 'sample-job-9',
@@ -142,6 +158,8 @@ export const sampleJobs: Job[] = [
         status: 'Worker Assigned',
         date: '2024-08-12',
         time: '9:00 AM - 12:00 PM',
+        pay: 1200,
+        workerNames: ['Divya Gowda'],
     },
     {
         id: 'sample-job-10',
@@ -153,9 +171,11 @@ export const sampleJobs: Job[] = [
         description: 'One-day child care for a 5-year-old.',
         skillsRequired: ['Child Care', 'First Aid'],
         industry: 'Child Care',
-        status: 'Completed',
+        status: 'Paid',
         date: '2024-08-12',
         time: 'Full Day',
+        pay: 1500,
+        workerNames: ['Asha Patil'],
     },
     {
         id: 'sample-job-11',
@@ -170,6 +190,8 @@ export const sampleJobs: Job[] = [
         status: 'Worker Assigned',
         date: '2024-08-17',
         time: '4:00 PM - 9:00 PM',
+        pay: 1800,
+        workerNames: ['Priya Chavan'],
     },
     {
       id: 'sample-job-12',
@@ -184,6 +206,8 @@ export const sampleJobs: Job[] = [
       status: 'Worker Assigned',
       date: '2024-08-14',
       time: '8:00 AM - 5:00 PM',
+      pay: 2200,
+      workerNames: ['Neha Reddy'],
     },
     {
       id: 'sample-job-13',
@@ -195,9 +219,11 @@ export const sampleJobs: Job[] = [
       description: 'Assist in conducting handicraft workshops for tourists.',
       skillsRequired: ['Handicrafts', 'Communication'],
       industry: 'Art & Craft',
-      status: 'Completed',
+      status: 'Paid',
       date: '2024-08-15',
       time: '11:00 AM - 3:00 PM',
+      pay: 1300,
+      workerNames: ['Rina Das'],
     },
     {
       id: 'sample-job-14',
@@ -212,6 +238,8 @@ export const sampleJobs: Job[] = [
       status: 'Worker Assigned',
       date: '2024-08-22',
       time: '10:00 AM - 2:00 PM',
+      pay: 1600,
+      workerNames: ['Sita Rai'],
     },
 ];
 
