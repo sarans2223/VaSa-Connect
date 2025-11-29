@@ -227,8 +227,8 @@ export default function PostJobPage() {
     <VerificationGate>
         <div className="p-4 sm:p-6 lg:p-8 space-y-8">
             <div className="flex items-center gap-4 mb-8">
-                <UserSearch className="h-8 w-8 text-primary" />
-                <h1 className="text-3xl font-bold tracking-tight">Post Your Job Here</h1>
+                <FilePen className="h-8 w-8 text-primary" />
+                <h1 className="text-3xl font-bold tracking-tight">Job Post & Status</h1>
             </div>
             <Card>
                 <CardHeader>
