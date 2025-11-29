@@ -63,15 +63,20 @@ export default function VasaWalletPage() {
   const [toTime, setToTime] = useState('');
   const [selectedReward, setSelectedReward] = useState<{points: number, name: string} | null>(null);
   const [isRedeemDialogOpen, setIsRedeemDialogOpen] = useState(false);
+  const [showSetPin, setShowSetPin] = useState(false);
   
   useEffect(() => {
     try {
       const storedUser = localStorage.getItem('user');
       const storedJobs = localStorage.getItem('postedJobs');
-      const storedPin = localStorage.getItem('vasaPayPin') || '1234';
+      const storedPin = localStorage.getItem('vasaPayPin'); // No default here
       setUser(storedUser ? JSON.parse(storedUser) : mockUser);
       setJobs(storedJobs ? JSON.parse(storedJobs) : sampleJobs);
-      setUserPin(storedPin);
+      if (storedPin) {
+        setUserPin(storedPin);
+      } else {
+        setShowSetPin(true); // If no PIN is stored, show the input to set it.
+      }
     } catch (error) {
       console.error('Failed to load data from storage', error);
       setUser(mockUser);
@@ -189,6 +194,7 @@ export default function VasaWalletPage() {
       localStorage.setItem('vasaPayPin', newPin);
       setUserPin(newPin);
       setNewPin('');
+      setShowSetPin(false);
       toast({
         title: 'PIN Updated',
         description: 'Your Vasa Pay PIN has been set successfully.'
@@ -352,30 +358,39 @@ export default function VasaWalletPage() {
                 <CardDescription>Manage your payment security settings.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-                <div className="space-y-2">
-                    <Label htmlFor="set-pin">Set Your 4-Digit Vasa Pay PIN</Label>
-                    <div className="flex gap-2">
-                        <Input
-                            id="set-pin"
-                            type="password"
-                            maxLength={4}
-                            placeholder="****"
-                            value={newPin}
-                            onChange={(e) => setNewPin(e.target.value)}
-                        />
-                        <Button onClick={handleSetPin}>
-                            <Save className="mr-2 h-4 w-4" />
-                            Save
+                {showSetPin ? (
+                    <div className="space-y-2">
+                        <Label htmlFor="set-pin">Set Your 4-Digit Vasa Pay PIN</Label>
+                        <div className="flex gap-2">
+                            <Input
+                                id="set-pin"
+                                type="password"
+                                maxLength={4}
+                                placeholder="****"
+                                value={newPin}
+                                onChange={(e) => setNewPin(e.target.value)}
+                            />
+                            <Button onClick={handleSetPin}>
+                                <Save className="mr-2 h-4 w-4" />
+                                Save PIN
+                            </Button>
+                        </div>
+                    </div>
+                ) : (
+                    <div className="space-y-3">
+                         <p className="text-sm text-muted-foreground">Your Vasa Pay PIN is set.</p>
+                         <Button variant="outline" className="w-full" onClick={() => setShowSetPin(true)}>
+                            Change PIN
                         </Button>
                     </div>
-                </div>
+                )}
             </CardContent>
           </Card>
           <Card>
              <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Gift />
-                Redeem Your Tokens
+                Redeem Your VaSa Pink Tokens
               </CardTitle>
               <CardDescription>
                 Use your tokens to book a free service.
