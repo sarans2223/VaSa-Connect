@@ -19,7 +19,6 @@ import { Bell, User, Briefcase, Check, HelpCircle, Send, MapPin, DollarSign, Cal
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
-import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
 import { Label } from "@/components/ui/label";
 
@@ -221,5 +220,3 @@ export default function NotificationsPage() {
     </div>
   );
 }
-
-    
