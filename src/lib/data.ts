@@ -26,7 +26,9 @@ export const sampleJobs: Job[] = [
       description: 'Looking for a chef to manage our community kitchen.',
       skillsRequired: ['Cooking', 'Menu Planning'],
       industry: 'Catering',
-      status: 'Yet To Assign'
+      status: 'Worker Assigned',
+      date: '2024-08-15',
+      time: '10:00 AM - 2:00 PM',
     },
     {
       id: 'sample-job-2',
@@ -38,7 +40,9 @@ export const sampleJobs: Job[] = [
       description: 'Need skilled tailors for a bulk order of dresses.',
       skillsRequired: ['Tailoring', 'Sewing'],
       industry: 'Fashion',
-      status: 'Yet To Assign'
+      status: 'Completed',
+      date: '2024-08-10',
+      time: 'All Day',
     },
     {
       id: 'sample-job-3',
@@ -50,7 +54,9 @@ export const sampleJobs: Job[] = [
       description: 'Seasonal work for harvesting crops.',
       skillsRequired: ['Farming', 'Harvesting'],
       industry: 'Agriculture',
-      status: 'Yet To Assign'
+      status: 'Worker Assigned',
+      date: '2024-08-20',
+      time: '8:00 AM - 4:00 PM',
     },
     {
       id: 'sample-job-4',
@@ -74,7 +80,9 @@ export const sampleJobs: Job[] = [
       description: 'Assist in food preparation and serving for large events.',
       skillsRequired: ['Cooking', 'Catering', 'Serving'],
       industry: 'Events',
-      status: 'Yet To Assign'
+      status: 'Worker Assigned',
+      date: '2024-08-18',
+      time: '3:00 PM - 11:00 PM',
     }
 ];
 
