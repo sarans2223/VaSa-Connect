@@ -35,7 +35,7 @@ import { Calendar } from '@/components/ui/calendar';
 import { useToast } from '@/hooks/use-toast';
 import { mockUser, sampleJobs } from '@/lib/data';
 import type { User, Job } from '@/lib/types';
-import { Wallet, Star, Gift, Banknote, Landmark, CreditCard, KeyRound, Calendar as CalendarIcon } from 'lucide-react';
+import { Wallet, Star, Gift, Banknote, Landmark, CreditCard, KeyRound, Calendar as CalendarIcon, Save } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
 
@@ -46,14 +46,13 @@ const rewardTiers = [
   { name: 'Full Day Event Help', points: 1500, icon: '🎉' },
 ];
 
-// This would be securely stored and checked on a backend in a real app
-const FIXED_VASA_PAY_PIN = '1234';
-
 export default function VasaWalletPage() {
   const [user, setUser] = useState<User | null>(null);
   const [jobs, setJobs] = useState<Job[]>([]);
   const [selectedJob, setSelectedJob] = useState('');
   const [pin, setPin] = useState('');
+  const [newPin, setNewPin] = useState('');
+  const [userPin, setUserPin] = useState('');
   const [isPaymentDialogOpen, setIsPaymentDialogOpen] = useState(false);
   const { toast } = useToast();
 
@@ -69,8 +68,10 @@ export default function VasaWalletPage() {
     try {
       const storedUser = localStorage.getItem('user');
       const storedJobs = localStorage.getItem('postedJobs');
+      const storedPin = localStorage.getItem('vasaPayPin') || '1234';
       setUser(storedUser ? JSON.parse(storedUser) : mockUser);
       setJobs(storedJobs ? JSON.parse(storedJobs) : sampleJobs);
+      setUserPin(storedPin);
     } catch (error) {
       console.error('Failed to load data from storage', error);
       setUser(mockUser);
@@ -85,7 +86,11 @@ export default function VasaWalletPage() {
       toast({ title: 'Error', description: 'Invalid job selection or data.', variant: 'destructive' });
       return;
     }
-    if (pin !== FIXED_VASA_PAY_PIN) {
+    if (!userPin) {
+      toast({ title: 'Set PIN', description: 'Please set your Vasa Pay PIN before making a payment.', variant: 'destructive' });
+      return;
+    }
+    if (pin !== userPin) {
       toast({ title: 'Incorrect PIN', description: 'The Vasa Pay PIN is incorrect.', variant: 'destructive' });
       return;
     }
@@ -169,6 +174,33 @@ export default function VasaWalletPage() {
     setToDate(undefined);
     setFromTime('');
     setToTime('');
+  };
+
+  const handleSetPin = () => {
+    if (!newPin || newPin.length !== 4 || !/^\d{4}$/.test(newPin)) {
+      toast({
+        title: 'Invalid PIN',
+        description: 'Your PIN must be exactly 4 digits.',
+        variant: 'destructive'
+      });
+      return;
+    }
+    try {
+      localStorage.setItem('vasaPayPin', newPin);
+      setUserPin(newPin);
+      setNewPin('');
+      toast({
+        title: 'PIN Updated',
+        description: 'Your Vasa Pay PIN has been set successfully.'
+      });
+    } catch (e) {
+      console.error('Failed to save PIN to storage', e);
+      toast({
+        title: 'Error',
+        description: 'Could not save your new PIN. Please try again.',
+        variant: 'destructive'
+      });
+    }
   };
 
 
@@ -268,52 +300,77 @@ export default function VasaWalletPage() {
                     </Select>
                 </div>
                 <Dialog open={isPaymentDialogOpen} onOpenChange={setIsPaymentDialogOpen}>
-                    <DialogTrigger asChild>
-                        <Button
-                            className="w-full bg-gradient-to-r from-[#E0BBE4] to-[#957DAD] hover:opacity-90 text-primary-foreground"
-                            disabled={!selectedJob}
-                        >
-                            Make Payment
-                        </Button>
-                    </DialogTrigger>
-                    <DialogContent>
-                        <DialogHeader>
-                            <DialogTitle>Confirm Payment</DialogTitle>
-                            <DialogDescription>
-                                Enter your 4-digit Vasa Pay PIN to authorize this transaction.
-                            </DialogDescription>
-                        </DialogHeader>
-                        <div className="space-y-4 py-4">
-                            <div className="text-center">
-                                <p className="text-sm text-muted-foreground">You are paying</p>
-                                <p className="text-3xl font-bold">₹{jobs.find(j => j.id === selectedJob)?.pay?.toLocaleString()}</p>
-                                <p className="text-sm text-muted-foreground">for "{jobs.find(j => j.id === selectedJob)?.title}"</p>
-                            </div>
-                            <div className="space-y-2">
-                                <Label htmlFor="pin-input">Vasa Pay PIN</Label>
-                                <div className="relative">
-                                    <KeyRound className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                                    <Input
-                                        id="pin-input"
-                                        type="password"
-                                        maxLength={4}
-                                        className="pl-10 text-center tracking-[0.5em]"
-                                        value={pin}
-                                        onChange={(e) => setPin(e.target.value)}
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                        <DialogFooter>
-                            <Button variant="outline" onClick={() => setIsPaymentDialogOpen(false)}>Cancel</Button>
-                            <Button onClick={handleMakePayment}>Confirm & Pay</Button>
-                        </DialogFooter>
-                    </DialogContent>
+                  <DialogTrigger asChild>
+                      <Button
+                          className="w-full bg-gradient-to-r from-[#E0BBE4] to-[#957DAD] hover:opacity-90 text-primary-foreground"
+                          disabled={!selectedJob}
+                      >
+                          Make Payment
+                      </Button>
+                  </DialogTrigger>
+                  <DialogContent>
+                      <DialogHeader>
+                          <DialogTitle>Confirm Payment</DialogTitle>
+                          <DialogDescription>
+                              Enter your 4-digit Vasa Pay PIN to authorize this transaction.
+                          </DialogDescription>
+                      </DialogHeader>
+                      <div className="space-y-4 py-4">
+                          <div className="text-center">
+                              <p className="text-sm text-muted-foreground">You are paying</p>
+                              <p className="text-3xl font-bold">₹{jobs.find(j => j.id === selectedJob)?.pay?.toLocaleString()}</p>
+                              <p className="text-sm text-muted-foreground">for "{jobs.find(j => j.id === selectedJob)?.title}"</p>
+                          </div>
+                          <div className="space-y-2">
+                              <Label htmlFor="pin-input">Vasa Pay PIN</Label>
+                              <div className="relative">
+                                  <KeyRound className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                                  <Input
+                                      id="pin-input"
+                                      type="password"
+                                      maxLength={4}
+                                      className="pl-10 text-center tracking-[0.5em]"
+                                      value={pin}
+                                      onChange={(e) => setPin(e.target.value)}
+                                  />
+                              </div>
+                          </div>
+                      </div>
+                      <DialogFooter>
+                          <Button variant="outline" onClick={() => setIsPaymentDialogOpen(false)}>Cancel</Button>
+                          <Button onClick={handleMakePayment}>Confirm & Pay</Button>
+                      </DialogFooter>
+                  </DialogContent>
                 </Dialog>
             </CardContent>
           </Card>
         </div>
         <div className="space-y-8">
+          <Card>
+            <CardHeader>
+                <CardTitle>Security</CardTitle>
+                <CardDescription>Manage your payment security settings.</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+                <div className="space-y-2">
+                    <Label htmlFor="set-pin">Set Your 4-Digit Vasa Pay PIN</Label>
+                    <div className="flex gap-2">
+                        <Input
+                            id="set-pin"
+                            type="password"
+                            maxLength={4}
+                            placeholder="****"
+                            value={newPin}
+                            onChange={(e) => setNewPin(e.target.value)}
+                        />
+                        <Button onClick={handleSetPin}>
+                            <Save className="mr-2 h-4 w-4" />
+                            Save
+                        </Button>
+                    </div>
+                </div>
+            </CardContent>
+          </Card>
           <Card>
              <CardHeader>
               <CardTitle className="flex items-center gap-2">
