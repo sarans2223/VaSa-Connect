@@ -166,6 +166,7 @@ export default function JobsPage() {
                                 <SelectItem value="muzaffarpur">Muzaffarpur, BR</SelectItem>
                                 <SelectItem value="mysuru">Mysuru, KA</SelectItem>
                                 <SelectItem value="nagpur">Nagpur, MH</SelectItem>
+                                <SelectItem value="noida">Noida, UP</SelectItem>
                                 <SelectItem value="panaji">Panaji, GA</SelectItem>
                                 <SelectItem value="panipat">Panipat, HR</SelectItem>
                                 <SelectItem value="patna">Patna, BR</SelectItem>
