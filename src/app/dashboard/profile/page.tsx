@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, ChangeEvent } from "react";
 import Link from "next/link";
 import {
   Avatar,
@@ -21,8 +21,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
 import { mockUser as defaultUser } from "@/lib/data";
-import { User as UserIcon, Edit, Save, UploadCloud, PiggyBank, Star, Leaf, Gem, Crown } from "lucide-react";
+import { User as UserIcon, Edit, UploadCloud, Star, Leaf, Gem, Crown } from "lucide-react";
 import type { User } from "@/lib/types";
+import { useToast } from "@/hooks/use-toast";
 
 const membershipBadges = {
   Rise: {
@@ -45,6 +46,9 @@ const membershipBadges = {
 
 export default function ProfilePage() {
   const [user, setUser] = useState<User | null>(null);
+  const [isPanVerified, setIsPanVerified] = useState(false);
+  const [isAadhaarVerified, setIsAadhaarVerified] = useState(false);
+  const { toast } = useToast();
 
   useEffect(() => {
     try {
@@ -69,6 +73,24 @@ export default function ProfilePage() {
       setUser(defaultUser);
     }
   }, []);
+
+  const handleFileUpload = (fileType: 'pan' | 'aadhaar') => (event: ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files.length > 0) {
+      const fileName = event.target.files[0].name;
+      const docName = fileType === 'pan' ? 'PAN Card' : 'Aadhaar Card';
+
+      if (fileType === 'pan') {
+        setIsPanVerified(true);
+      } else {
+        setIsAadhaarVerified(true);
+      }
+
+      toast({
+        title: `${docName} Uploaded`,
+        description: `${fileName} has been selected for verification.`,
+      });
+    }
+  };
 
   const renderStars = (rating: number) => {
     const stars = [];
@@ -140,17 +162,36 @@ export default function ProfilePage() {
               </div>
               <div className="space-y-3 border-t pt-4">
                  <div className="flex justify-between items-center text-sm">
-                    <span className="font-medium">Profile Verification</span>
-                    <Badge variant="destructive">Not Verified</Badge>
+                    <span className="font-medium">PAN Verification</span>
+                    {isPanVerified ? (
+                        <Badge variant="secondary" className="bg-green-100 text-green-800">Verified</Badge>
+                    ) : (
+                        <Badge variant="destructive">Not Verified</Badge>
+                    )}
                  </div>
-                 <Button variant="outline" className="w-full">
-                    <UploadCloud className="mr-2 h-4 w-4" />
-                    Upload PAN Card
+                 <Button variant="outline" className="w-full" asChild>
+                    <Label htmlFor="pan-upload" className="cursor-pointer">
+                      <UploadCloud className="mr-2 h-4 w-4" />
+                      Upload PAN Card
+                    </Label>
                  </Button>
-                 <Button variant="outline" className="w-full">
-                    <UploadCloud className="mr-2 h-4 w-4" />
-                    Upload Aadhaar Card
+                 <Input id="pan-upload" type="file" className="hidden" onChange={handleFileUpload('pan')} accept="image/*,.pdf" />
+
+                 <div className="flex justify-between items-center text-sm pt-2">
+                    <span className="font-medium">Aadhaar Verification</span>
+                     {isAadhaarVerified ? (
+                        <Badge variant="secondary" className="bg-green-100 text-green-800">Verified</Badge>
+                    ) : (
+                        <Badge variant="destructive">Not Verified</Badge>
+                    )}
+                 </div>
+                 <Button variant="outline" className="w-full" asChild>
+                    <Label htmlFor="aadhaar-upload" className="cursor-pointer">
+                      <UploadCloud className="mr-2 h-4 w-4" />
+                      Upload Aadhaar Card
+                    </Label>
                  </Button>
+                 <Input id="aadhaar-upload" type="file" className="hidden" onChange={handleFileUpload('aadhaar')} accept="image/*,.pdf" />
               </div>
             </CardContent>
           </Card>
