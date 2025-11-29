@@ -13,7 +13,7 @@ export const mockUser: User = {
   industryPreferences: ['Hospitality', 'Events', 'Home Services'],
   rating: 4.5,
   membership: 'Rise',
-  redeemPoints: 250,
+  vasaPinkTokens: 250,
 };
 
 export const sampleJobs: Job[] = [
@@ -378,5 +378,3 @@ export const mockRecruiterHistory = [
     { id: 'rh-1', title: 'Wedding Planner Assistant', workersHired: ['Lakshmi P.', 'Sunita D.'], amountPaid: 15000, pointsEarned: 150 },
     { id: 'rh-2', title: 'Home Baker for Festival', workersHired: ['Anjali S.'], amountPaid: 7500, pointsEarned: 75 },
 ];
-
-    

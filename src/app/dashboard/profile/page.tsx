@@ -20,7 +20,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { mockUser as defaultUser, mockWorkerHistory, mockRecruiterHistory } from "@/lib/data";
-import { User as UserIcon, Edit, UploadCloud, Star, Leaf, Gem, Crown, History, Briefcase, Users, FileText } from "lucide-react";
+import { User as UserIcon, Edit, Upload, Star, Leaf, Gem, Crown, History, Briefcase, Users, FileText } from "lucide-react";
 import type { User } from "@/lib/types";
 import { useToast } from "@/hooks/use-toast";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -172,7 +172,7 @@ export default function ProfilePage() {
                  </div>
                  <Button variant="outline" className="w-full" asChild>
                     <Label htmlFor="pan-upload" className="cursor-pointer">
-                      <UploadCloud className="mr-2 h-4 w-4" />
+                      <Upload className="mr-2 h-4 w-4" />
                       Upload PAN Card
                     </Label>
                  </Button>
@@ -188,7 +188,7 @@ export default function ProfilePage() {
                  </div>
                  <Button variant="outline" className="w-full" asChild>
                     <Label htmlFor="aadhaar-upload" className="cursor-pointer">
-                      <UploadCloud className="mr-2 h-4 w-4" />
+                      <Upload className="mr-2 h-4 w-4" />
                       Upload Aadhaar Card
                     </Label>
                  </Button>
@@ -310,8 +310,8 @@ export default function ProfilePage() {
                                                 <p className="text-xs text-muted-foreground">Paid</p>
                                             </div>
                                             <div>
-                                                <p className="font-bold text-green-600">+{job.pointsEarned} pts</p>
-                                                <p className="text-xs text-muted-foreground">Points Earned</p>
+                                                <p className="font-bold text-green-600">+{job.pointsEarned} Tokens</p>
+                                                <p className="text-xs text-muted-foreground">Tokens Earned</p>
                                             </div>
                                         </div>
                                     </div>
@@ -332,5 +332,3 @@ export default function ProfilePage() {
     </div>
   );
 }
-
-    

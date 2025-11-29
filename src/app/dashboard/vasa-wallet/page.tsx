@@ -47,10 +47,10 @@ export default function VasaWalletPage() {
   }, []);
 
   const handleRedeem = (points: number, name: string) => {
-    if ((user?.redeemPoints || 0) < points) {
+    if ((user?.vasaPinkTokens || 0) < points) {
       toast({
-        title: 'Not Enough Points',
-        description: `You need ${points} points to redeem this reward.`,
+        title: 'Not Enough Tokens',
+        description: `You need ${points} VaSa Pink Tokens to redeem this reward.`,
         variant: 'destructive',
       });
     } else {
@@ -62,9 +62,9 @@ export default function VasaWalletPage() {
     }
   };
 
-  const nextReward = rewardTiers.find(tier => tier.points > (user?.redeemPoints || 0));
+  const nextReward = rewardTiers.find(tier => tier.points > (user?.vasaPinkTokens || 0));
   const progressPercentage = nextReward
-    ? ((user?.redeemPoints || 0) / nextReward.points) * 100
+    ? ((user?.vasaPinkTokens || 0) / nextReward.points) * 100
     : 100;
 
   if (!user) {
@@ -77,7 +77,7 @@ export default function VasaWalletPage() {
         <Wallet className="h-8 w-8 text-primary" />
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Vasa Wallet</h1>
-          <p className="text-muted-foreground">Your hub for payments, points, and rewards.</p>
+          <p className="text-muted-foreground">Your hub for payments, tokens, and rewards.</p>
         </div>
       </div>
 
@@ -87,17 +87,17 @@ export default function VasaWalletPage() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-xl">
                 <Star />
-                Your Redeem Points
+                Your VaSa Pink Tokens
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-5xl font-bold">{user.redeemPoints || 0}</div>
-              <p className="text-sm opacity-80 mb-4">Points earned</p>
+              <div className="text-5xl font-bold">{user.vasaPinkTokens || 0}</div>
+              <p className="text-sm opacity-80 mb-4">Tokens earned</p>
               <Progress value={progressPercentage} className="h-3 bg-primary-foreground/20 [&>div]:bg-primary-foreground" />
               <div className="text-xs mt-2 opacity-90">
                 {nextReward ? (
                   <span>
-                    {nextReward.points - (user.redeemPoints || 0)} points to your next reward: {nextReward.name}
+                    {nextReward.points - (user.vasaPinkTokens || 0)} tokens to your next reward: {nextReward.name}
                   </span>
                 ) : (
                   <span>Congratulations! You've unlocked all current rewards.</span>
@@ -108,7 +108,7 @@ export default function VasaWalletPage() {
           
           <Card>
             <CardHeader>
-              <CardTitle>How to Earn & Redeem Points</CardTitle>
+              <CardTitle>How to Earn & Redeem Tokens</CardTitle>
             </CardHeader>
             <CardContent>
               <Accordion type="single" collapsible className="w-full">
@@ -119,15 +119,15 @@ export default function VasaWalletPage() {
                   </AccordionContent>
                 </AccordionItem>
                 <AccordionItem value="item-2">
-                  <AccordionTrigger>2. Earn Points Automatically</AccordionTrigger>
+                  <AccordionTrigger>2. Earn Tokens Automatically</AccordionTrigger>
                   <AccordionContent>
-                    For every ₹100 spent on a successfully completed and paid job, you earn 10 redeem points. The more you use Vasa, the more you earn!
+                    For every ₹100 spent on a successfully completed and paid job, you earn 10 VaSa Pink Tokens. The more you use Vasa, the more you earn!
                   </AccordionContent>
                 </AccordionItem>
                 <AccordionItem value="item-3">
                   <AccordionTrigger>3. Redeem for Free Services</AccordionTrigger>
                   <AccordionContent>
-                    Once you've collected enough points, you can redeem them for free services. Choose a reward from the list, and VaSa will cover the payment to the worker on your behalf. It's our way of saying thank you!
+                    Once you've collected enough tokens, you can redeem them for free services. Choose a reward from the list, and VaSa will cover the payment to the worker on your behalf. It's our way of saying thank you!
                   </AccordionContent>
                 </AccordionItem>
               </Accordion>
@@ -139,10 +139,10 @@ export default function VasaWalletPage() {
              <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Gift />
-                Redeem Your Points
+                Redeem Your Tokens
               </CardTitle>
               <CardDescription>
-                Use your points to book a free service.
+                Use your tokens to book a free service.
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -150,12 +150,12 @@ export default function VasaWalletPage() {
                 <div key={tier.name} className="flex items-center justify-between rounded-lg border p-3">
                   <div>
                     <p className="font-semibold">{tier.icon} {tier.name}</p>
-                    <p className="text-sm text-muted-foreground">{tier.points} Points</p>
+                    <p className="text-sm text-muted-foreground">{tier.points} Tokens</p>
                   </div>
                   <Button 
                     size="sm" 
                     onClick={() => handleRedeem(tier.points, tier.name)}
-                    disabled={(user.redeemPoints || 0) < tier.points}
+                    disabled={(user.vasaPinkTokens || 0) < tier.points}
                   >
                     Redeem
                   </Button>

@@ -1,3 +1,4 @@
+
 export type User = {
   id: string;
   name: string;
@@ -10,7 +11,7 @@ export type User = {
   industryPreferences: string[];
   rating: number;
   membership: 'Rise' | 'Bloom' | 'Empower';
-  redeemPoints?: number;
+  vasaPinkTokens?: number;
 };
 
 export type Job = {
