@@ -61,6 +61,11 @@ export default function NotificationsPage() {
           return;
       }
       setRecruiterNotifs(prev => prev.map(n => n.id === id ? { ...n, answer: answer, status: 'answered' } : n));
+      // Also update the original worker notification to show the answer
+      const workerNotifToUpdate = workerNotifs.find(wn => wn.job === recruiterNotifs.find(rn => rn.id === id)?.job);
+      if (workerNotifToUpdate) {
+        setWorkerNotifs(prev => prev.map(wn => wn.id === workerNotifToUpdate.id ? {...wn, answer: answer} : wn));
+      }
       toast({ title: "Answer Sent!", description: "Your answer has been sent to the worker." });
   };
 
@@ -220,3 +225,5 @@ export default function NotificationsPage() {
     </div>
   );
 }
+
+    
