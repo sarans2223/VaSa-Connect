@@ -13,11 +13,11 @@ import {
   Users,
   BookOpen,
   UserCircle,
-  DollarSign,
   Gem,
   Shield,
   UserSearch,
   Menu,
+  Bell,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
@@ -49,7 +49,7 @@ const regularMenuItems = [
     { href: "/dashboard/learning", label: "Learning Hub", icon: BookOpen },
     { href: "/dashboard/teams", label: "My Team", icon: Users },
     { href: "/dashboard/profile", label: "My Profile", icon: UserCircle },
-    { href: "/dashboard/monetization", label: "Monetization", icon: DollarSign },
+    { href: "/dashboard/notifications", label: "Notifications", icon: Bell },
     { href: "/dashboard/membership", label: "Membership", icon: Gem },
     { href: "/dashboard/safety", label: "Safety Settings", icon: Shield },
 ];

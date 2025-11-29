@@ -3,7 +3,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { ArrowRight, BookOpen, Briefcase, DollarSign, Users } from "lucide-react";
+import { ArrowRight, BookOpen, Briefcase, Bell, Users } from "lucide-react";
 import {
   Card,
   CardContent,
@@ -37,11 +37,11 @@ const featureCards = [
     cta: "Manage Teams",
   },
   {
-    title: "Monetization",
-    description: "Track your earnings and recruitment metrics.",
-    href: "/dashboard/monetization",
-    icon: DollarSign,
-    cta: "View Analytics",
+    title: "Notifications",
+    description: "View job offers, confirmations, and messages.",
+    href: "/dashboard/notifications",
+    icon: Bell,
+    cta: "View Notifications",
   },
 ];
 
@@ -105,5 +105,3 @@ export default function DashboardPage() {
     </div>
   );
 }
-
-    
