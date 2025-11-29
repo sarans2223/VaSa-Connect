@@ -2,23 +2,23 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Calendar, MapPin, Clock, Briefcase } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Calendar as CalendarIcon, MapPin, Clock, Briefcase } from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import type { Job } from '@/lib/types';
 import { sampleJobs } from '@/lib/data';
-import { format, isFuture, isPast, parseISO, compareDesc, startOfDay } from 'date-fns';
+import { format, isSameDay, parseISO, startOfDay } from 'date-fns';
+import { Calendar } from '@/components/ui/calendar';
 
 export default function SchedulePage() {
     const [scheduledJobs, setScheduledJobs] = useState<Job[]>([]);
+    const [date, setDate] = useState<Date | undefined>(new Date());
     
     useEffect(() => {
         try {
             const storedJobs = localStorage.getItem('postedJobs');
             const parsedJobs: Job[] = storedJobs ? JSON.parse(storedJobs) : [];
 
-            // Combine with sample jobs and filter for scheduled ones
             const combinedJobs = [...sampleJobs, ...parsedJobs].filter(
                 (job, index, self) => index === self.findIndex((j) => j.id === job.id || j.title === job.title)
             );
@@ -27,22 +27,7 @@ export default function SchedulePage() {
                 job => (job.status === 'Worker Assigned' || job.status === 'Completed') && job.date
             );
 
-            // Sort jobs by date
-            const sortedJobs = confirmedAndDatedJobs.sort((a, b) => {
-                if (a.date && b.date) {
-                    try {
-                        const dateA = parseISO(a.date);
-                        const dateB = parseISO(b.date);
-                        return compareDesc(dateA, dateB);
-                    } catch(e) {
-                         // Fallback for non-ISO dates
-                         return new Date(b.date).getTime() - new Date(a.date).getTime();
-                    }
-                }
-                return 0;
-            });
-
-            setScheduledJobs(sortedJobs);
+            setScheduledJobs(confirmedAndDatedJobs);
         } catch (error) {
             console.error("Failed to load jobs from local storage:", error);
             setScheduledJobs([]);
@@ -52,26 +37,25 @@ export default function SchedulePage() {
     const getJobDate = (job: Job): Date | null => {
         if (!job.date) return null;
         try {
+            // Handles 'yyyy-MM-dd' or full ISO strings
             return startOfDay(parseISO(job.date));
         } catch (e) {
+            // Fallback for other formats like 'MMMM d, yyyy'
             const parsed = new Date(job.date);
             return isNaN(parsed.getTime()) ? null : startOfDay(parsed);
         }
     };
-
-    const upcomingJobs = scheduledJobs.filter(job => {
-        const jobDate = getJobDate(job);
-        return jobDate && isFuture(jobDate);
-    });
-
-    const pastJobs = scheduledJobs.filter(job => {
-        const jobDate = getJobDate(job);
-        return jobDate && isPast(jobDate);
-    });
     
-    const JobEventCard = ({ job }: { job: Job }) => {
-        const jobDate = getJobDate(job);
+    const scheduledDates = scheduledJobs.map(getJobDate).filter((d): d is Date => d !== null);
 
+    const jobsForSelectedDate = date 
+        ? scheduledJobs.filter(job => {
+            const jobDate = getJobDate(job);
+            return jobDate && isSameDay(jobDate, date);
+          })
+        : [];
+
+    const JobEventCard = ({ job }: { job: Job }) => {
         return (
             <Card className="hover:shadow-md transition-shadow">
                 <CardHeader>
@@ -93,12 +77,6 @@ export default function SchedulePage() {
                         <MapPin className="h-4 w-4" />
                         <span>{job.location}</span>
                     </div>
-                    {jobDate && (
-                         <div className="flex items-center text-sm text-muted-foreground gap-2">
-                            <Calendar className="h-4 w-4" />
-                             <span>{format(jobDate, 'E, d MMM yyyy')}</span>
-                        </div>
-                    )}
                     {job.time && (
                          <div className="flex items-center text-sm text-muted-foreground gap-2">
                             <Clock className="h-4 w-4" />
@@ -113,45 +91,41 @@ export default function SchedulePage() {
     return (
         <div className="p-4 sm:p-6 lg:p-8 space-y-8">
             <div className="flex items-center gap-4">
-                <Calendar className="h-8 w-8 text-primary" />
+                <CalendarIcon className="h-8 w-8 text-primary" />
                 <h1 className="text-3xl font-bold tracking-tight">My Schedule</h1>
             </div>
             <p className="text-muted-foreground max-w-2xl">
-                Here's a look at your upcoming and past job assignments.
+                Here's a look at your job assignments. Select a date to see the details.
             </p>
 
-            <Tabs defaultValue="upcoming" className="w-full">
-                <TabsList className="grid w-full grid-cols-2">
-                    <TabsTrigger value="upcoming">Upcoming ({upcomingJobs.length})</TabsTrigger>
-                    <TabsTrigger value="past">Past ({pastJobs.length})</TabsTrigger>
-                </TabsList>
-                <TabsContent value="upcoming" className="mt-6">
-                    {upcomingJobs.length > 0 ? (
-                        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                           {upcomingJobs.map(job => <JobEventCard key={job.id} job={job} />)}
+            <Card className="lg:grid lg:grid-cols-3 lg:gap-4">
+                <div className="p-4 lg:col-span-2 flex justify-center">
+                    <Calendar
+                        mode="single"
+                        selected={date}
+                        onSelect={setDate}
+                        className="rounded-md border"
+                        modifiers={{ scheduled: scheduledDates }}
+                        modifiersClassNames={{ scheduled: 'bg-primary/20 rounded-full' }}
+                    />
+                </div>
+                <div className="p-4 border-t lg:border-t-0 lg:border-l lg:col-span-1">
+                    <h2 className="text-lg font-semibold mb-4">
+                        Jobs for {date ? format(date, 'E, d MMM yyyy') : 'the selected date'}
+                    </h2>
+                    {jobsForSelectedDate.length > 0 ? (
+                        <div className="space-y-4 max-h-[60vh] overflow-y-auto pr-2">
+                            {jobsForSelectedDate.map(job => (
+                                <JobEventCard key={job.id} job={job} />
+                            ))}
                         </div>
                     ) : (
-                        <div className="text-center py-16 text-muted-foreground bg-muted/50 rounded-lg">
-                            <h3 className="text-xl font-semibold">No Upcoming Jobs</h3>
-                            <p className="mt-2">Your schedule is clear. Confirmed jobs will appear here.</p>
+                        <div className="text-center py-10 text-muted-foreground">
+                            <p>No jobs scheduled for this day.</p>
                         </div>
                     )}
-                </TabsContent>
-                <TabsContent value="past" className="mt-6">
-                    {pastJobs.length > 0 ? (
-                        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                           {pastJobs.map(job => <JobEventCard key={job.id} job={job} />)}
-                        </div>
-                    ) : (
-                         <div className="text-center py-16 text-muted-foreground bg-muted/50 rounded-lg">
-                            <h3 className="text-xl font-semibold">No Past Jobs</h3>
-                            <p className="mt-2">Your completed jobs will be shown here.</p>
-                        </div>
-                    )}
-                </TabsContent>
-            </Tabs>
+                </div>
+            </Card>
         </div>
     );
 }
-
-    
