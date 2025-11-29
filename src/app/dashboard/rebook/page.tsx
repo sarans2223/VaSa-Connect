@@ -157,6 +157,18 @@ export default function RebookPage() {
         </p>
       </div>
 
+      <Card className="border-amber-500/50 bg-amber-50 text-amber-900">
+        <CardContent className="p-6">
+            <div className="flex flex-col items-center text-center gap-3">
+                <AlertTriangle className="h-8 w-8 text-amber-600"/>
+                <h3 className="text-xl font-bold">Thinking of booking the worker privately?</h3>
+                <p className="text-sm max-w-xl">
+                    By booking outside the app, you lose access to VaSa's safety net. You will not receive job insurance, worker guarantees, VaSa Pink Tokens, or premium member discounts. Book through VaSa to keep yourself and your worker protected.
+                </p>
+            </div>
+        </CardContent>
+      </Card>
+
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
         <Card className="border-primary/20 bg-primary/5">
           <CardHeader>
@@ -203,19 +215,6 @@ export default function RebookPage() {
           </CardContent>
         </Card>
       </div>
-
-      <Card className="border-amber-500/50 bg-amber-50 text-amber-900">
-        <CardContent className="p-6">
-            <div className="flex flex-col items-center text-center gap-3">
-                <AlertTriangle className="h-8 w-8 text-amber-600"/>
-                <h3 className="text-xl font-bold">Thinking of booking the worker privately?</h3>
-                <p className="text-sm max-w-xl">
-                    By booking outside the app, you lose access to VaSa's safety net. You will not receive job insurance, worker guarantees, VaSa Pink Tokens, or premium member discounts. Book through VaSa to keep yourself and your worker protected.
-                </p>
-            </div>
-        </CardContent>
-      </Card>
-
 
       <div className="text-center pt-4">
          <Dialog open={isBookingDialogOpen} onOpenChange={setIsBookingDialogOpen}>
