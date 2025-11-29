@@ -75,7 +75,11 @@ export default function VasaWalletPage() {
       const storedJobs = localStorage.getItem('postedJobs');
       const storedPin = localStorage.getItem('vasaPayPin');
       setUser(storedUser ? JSON.parse(storedUser) : mockUser);
-      setJobs(storedJobs ? JSON.parse(storedJobs) : sampleJobs);
+      const allJobs = storedJobs ? JSON.parse(storedJobs) : sampleJobs;
+      const combinedJobs = [...allJobs, ...sampleJobs].filter(
+        (job, index, self) => index === self.findIndex((j) => j.id === job.id || j.title === job.title)
+      );
+      setJobs(combinedJobs);
       
       if (storedPin) {
         setUserPin(storedPin);
@@ -99,9 +103,13 @@ export default function VasaWalletPage() {
 
   const handleMakePayment = () => {
     const jobToPay = jobs.find(j => j.id === selectedJob);
+    
+    // Check if job needs a numeric pay field. Let's assume some might be string-based from older data.
+    const payAmount = jobToPay?.pay ? (typeof jobToPay.pay === 'string' ? parseFloat(jobToPay.pay.replace(/[^0-9.-]+/g,"")) : jobToPay.pay) : 0;
 
-    if (!jobToPay || !jobToPay.pay || !user || user.walletBalance === undefined) {
-      toast({ title: 'Error', description: 'Invalid job selection or data.', variant: 'destructive' });
+
+    if (!jobToPay || !payAmount || !user || user.walletBalance === undefined) {
+      toast({ title: 'Error', description: 'Invalid job selection or payment data.', variant: 'destructive' });
       return;
     }
     if (!userPin) {
@@ -112,13 +120,13 @@ export default function VasaWalletPage() {
       toast({ title: 'Incorrect PIN', description: 'The Vasa Pay PIN is incorrect.', variant: 'destructive' });
       return;
     }
-    if (user.walletBalance < jobToPay.pay) {
+    if (user.walletBalance < payAmount) {
       toast({ title: 'Insufficient Balance', description: 'Your wallet balance is too low to make this payment.', variant: 'destructive' });
       return;
     }
 
-    const newBalance = user.walletBalance - jobToPay.pay;
-    const tokensEarned = Math.floor(jobToPay.pay / 100) * 10;
+    const newBalance = user.walletBalance - payAmount;
+    const tokensEarned = Math.floor(payAmount / 100) * 10;
     const newTokens = (user.vasaPinkTokens || 0) + tokensEarned;
 
     const updatedUser = { ...user, walletBalance: newBalance, vasaPinkTokens: newTokens };
@@ -135,7 +143,7 @@ export default function VasaWalletPage() {
 
     toast({
       title: 'Payment Successful!',
-      description: `You paid ₹${jobToPay.pay.toLocaleString()} for "${jobToPay.title}". You earned ${tokensEarned} VaSa Pink Tokens.`,
+      description: `You paid ₹${payAmount.toLocaleString()} for "${jobToPay.title}". You earned ${tokensEarned} VaSa Pink Tokens.`,
     });
 
     setIsPaymentDialogOpen(false);
@@ -313,7 +321,7 @@ export default function VasaWalletPage() {
                             {payableJobs.length > 0 ? (
                                 payableJobs.map(job => (
                                     <SelectItem key={job.id} value={job.id}>
-                                        {job.title} - ₹{job.pay?.toLocaleString()}
+                                        {job.title} - ₹{typeof job.pay === 'number' ? job.pay.toLocaleString() : job.pay}
                                     </SelectItem>
                                 ))
                             ) : (
@@ -447,7 +455,7 @@ export default function VasaWalletPage() {
                 </div>
                 <DialogFooter>
                     <Button variant="outline" onClick={() => setIsPaymentDialogOpen(false)}>Cancel</Button>
-                    <Button onClick={handleMakePayment}>Confirm & Pay</Button>
+                    <Button onClick={handleMakePayment}>Confirm &amp; Pay</Button>
                 </DialogFooter>
             </DialogContent>
         </Dialog>
