@@ -15,7 +15,7 @@ import {
   TabsList,
   TabsTrigger,
 } from '@/components/ui/tabs';
-import { Bell, User, Briefcase, Check, HelpCircle, Send } from 'lucide-react';
+import { Bell, User, Briefcase, Check, HelpCircle, Send, MapPin, DollarSign, Calendar } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
@@ -24,14 +24,16 @@ import { Input } from '@/components/ui/input';
 import { Label } from "@/components/ui/label";
 
 const initialWorkerNotifications = [
-    { id: 1, type: 'offer', job: 'Community Kitchen Chef', recruiter: 'Community Help Group', status: 'pending' as const, question: '', answer: '' },
-    { id: 2, type: 'offer', job: 'Urgent Tailoring Work', recruiter: 'Local Boutique', status: 'confirmed' as const, question: 'What is the exact fabric type?', answer: 'It is a 60% cotton, 40% polyester blend.' },
+    { id: 1, type: 'offer' as const, job: 'Community Kitchen Chef', recruiter: 'Community Help Group', status: 'pending' as const, question: '', answer: '', location: 'Chennai', pay: '₹15,000/month', schedule: 'Mon-Fri, 9am-5pm' },
+    { id: 2, type: 'offer' as const, job: 'Urgent Tailoring Work', recruiter: 'Local Boutique', status: 'confirmed' as const, question: 'What is the exact fabric type?', answer: 'It is a 60% cotton, 40% polyester blend.', location: 'Coimbatore', pay: '₹500/piece', schedule: 'Flexible' },
+    { id: 3, type: 'offer' as const, job: 'Farm Hand for Harvest', recruiter: 'Green Fields Farm', status: 'pending' as const, question: '', answer: '', location: 'Salem', pay: '₹450/day', schedule: 'Seasonal' },
+
 ];
 
 const initialRecruiterNotifications = [
-    { id: 1, type: 'confirmation', job: 'Event Catering Assistant', worker: 'Lakshmi Priya', status: 'confirmed' as const, question: '', answer: '' },
-    { id: 2, type: 'confirmation', job: 'Office Cleaning Staff', worker: 'Anjali Sharma', status: 'pending' as const, question: '', answer: '' },
-    { id: 3, type: 'question', job: 'Urgent Tailoring Work', worker: 'Kavita Devi', status: 'answered' as const, question: 'What is the exact fabric type?', answer: 'It is a 60% cotton, 40% polyester blend.' },
+    { id: 1, type: 'confirmation' as const, job: 'Event Catering Assistant', worker: 'Lakshmi Priya', status: 'confirmed' as const, question: '', answer: '' },
+    { id: 2, type: 'confirmation' as const, job: 'Office Cleaning Staff', worker: 'Anjali Sharma', status: 'pending' as const, question: '', answer: '' },
+    { id: 3, type: 'question' as const, job: 'Urgent Tailoring Work', worker: 'Kavita Devi', status: 'answered' as const, question: 'What is the exact fabric type?', answer: 'It is a 60% cotton, 40% polyester blend.' },
 ];
 
 
@@ -109,6 +111,20 @@ export default function NotificationsPage() {
                     )}
                     {notif.status === 'confirmed' && <Badge variant="secondary" className="bg-green-100 text-green-800">Confirmed</Badge>}
                     {notif.status === 'question_asked' && <Badge variant="secondary" className="bg-blue-100 text-blue-800">Question Sent</Badge>}
+                  </div>
+                  <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm text-muted-foreground border-t border-b py-3">
+                      <div className="flex items-center gap-2">
+                          <MapPin className="h-4 w-4" />
+                          <span>{notif.location}</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                          <DollarSign className="h-4 w-4" />
+                          <span>{notif.pay}</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                          <Calendar className="h-4 w-4" />
+                          <span>{notif.schedule}</span>
+                      </div>
                   </div>
                   <div className="mt-4 space-y-4">
                     {notif.question && (
