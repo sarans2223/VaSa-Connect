@@ -4,7 +4,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { ArrowRight, BookOpen, Briefcase, Bell, Users, Calendar } from "lucide-react";
+import { ArrowRight, BookOpen, Briefcase, Bell, Users } from "lucide-react";
 import {
   Card,
   CardContent,
@@ -22,13 +22,6 @@ const featureCards = [
     href: "/dashboard/jobs",
     icon: Briefcase,
     cta: "Search Jobs",
-  },
-  {
-    title: "View Your Schedule",
-    description: "Check your upcoming and past job assignments.",
-    href: "/dashboard/schedule",
-    icon: Calendar,
-    cta: "View Schedule",
   },
   {
     title: "Grow Your Skills",
