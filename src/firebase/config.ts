@@ -5,7 +5,7 @@ import { initializeApp, getApp, getApps, type FirebaseOptions } from 'firebase/a
 import { getFirestore } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
 
-const firebaseConfig: FirebaseOptions = {
+export const firebaseConfig: FirebaseOptions = {
   "projectId": "studio-9096752878-3dca9",
   "appId": "1:780954864730:web:5cb3158728adf02b8bdc63",
   "apiKey": "AIzaSyClKKrYHgGnW2ltvrXPd5mTrwVVrcEdvkE",
