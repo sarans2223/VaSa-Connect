@@ -22,10 +22,20 @@ import {
   SelectGroup,
   SelectLabel,
 } from "@/components/ui/select";
-import { Search, UserPlus, Star, CheckSquare, Square, MapPin } from "lucide-react";
+import { Search, UserPlus, Star, CheckSquare, Square, MapPin, Briefcase, DollarSign } from "lucide-react";
 import { useToast } from '@/hooks/use-toast';
 import type { Job } from '@/lib/types';
-import { mockJobs } from '@/lib/data'; // Keep for fallback if needed
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from '@/components/ui/dialog';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Textarea } from '@/components/ui/textarea';
+
 
 const allProfiles = [
   { id: '1', name: 'Lakshmi Priya', skills: ['Cooking', 'Tailoring'], rating: 4.5, jobsCompleted: 2, job: 'Catering Project', location: 'Chennai' },
@@ -107,16 +117,29 @@ const sampleJobs: Job[] = [
 
 type WorkerProfile = typeof allProfiles[0];
 
+const initialNewJobState = {
+  title: '',
+  companyName: '',
+  location: '',
+  jobType: '' as Job['jobType'] | '',
+  salary: '',
+  industry: '',
+  description: '',
+  skillsRequired: '',
+};
 
 export default function AssignWorkerPage() {
   const [allWorkers] = useState<WorkerProfile[]>(allProfiles);
   const [availableWorkers, setAvailableWorkers] = useState<WorkerProfile[]>([]);
   const [selectedWorkers, setSelectedWorkers] = useState<string[]>([]);
-  const [selectedJob, setSelectedJob] = useState<string>('');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedSkill, setSelectedSkill] = useState('all');
   const [selectedLocation, setSelectedLocation] = useState('all');
   const [jobs, setJobs] = useState<Job[]>([]);
+  const [isAssignmentModalOpen, setIsAssignmentModalOpen] = useState(false);
+  const [selectedExistingJob, setSelectedExistingJob] = useState<string>('');
+  const [newJobDetails, setNewJobDetails] = useState(initialNewJobState);
+  
   const { toast } = useToast();
   const router = useRouter();
 
@@ -125,8 +148,10 @@ export default function AssignWorkerPage() {
     try {
         const storedJobs = localStorage.getItem('postedJobs');
         const parsedJobs = storedJobs ? JSON.parse(storedJobs) : [];
-        // Combine sample jobs with jobs from local storage
-        setJobs([...sampleJobs, ...parsedJobs]);
+        const combinedJobs = [...sampleJobs, ...parsedJobs].filter(
+            (job, index, self) => index === self.findIndex((j) => j.id === job.id || j.title === job.title)
+        );
+        setJobs(combinedJobs);
     } catch (error) {
         console.error("Failed to load jobs from local storage, using sample jobs.", error);
         setJobs(sampleJobs);
@@ -165,18 +190,8 @@ export default function AssignWorkerPage() {
     );
   };
 
-  const handleConfirmAssignment = () => {
-    if (!selectedJob) {
-      toast({
-        title: 'No Job Selected',
-        description: 'Please select a job to assign workers to.',
-        variant: 'destructive',
-      });
-      return;
-    }
-
-    const workersToAssign = allWorkers.filter(w => selectedWorkers.includes(w.id));
-    if (workersToAssign.length === 0) {
+  const handleOpenAssignmentModal = () => {
+    if (selectedWorkers.length === 0) {
       toast({
         title: 'No Workers Selected',
         description: 'Please select at least one worker to assign.',
@@ -184,18 +199,74 @@ export default function AssignWorkerPage() {
       });
       return;
     }
-    
-    // In a real app, this would be an API call. Here we simulate it.
-    console.log('Assigning workers:', workersToAssign.map(w => w.name), 'to job ID:', selectedJob);
-
-    toast({
-      title: 'Assignment Confirmed!',
-      description: `${workersToAssign.length} worker(s) have been assigned to the job. This is a demo; no data was persisted.`,
-    });
-    // For demo purposes, we don't redirect or change job status here as it's complex with mock data.
-    setSelectedJob('');
-    setSelectedWorkers([]);
+    setIsAssignmentModalOpen(true);
   };
+
+  const updateLocalStorageJobs = (updatedJobs: Job[]) => {
+    try {
+      localStorage.setItem('postedJobs', JSON.stringify(updatedJobs));
+    } catch (error) {
+      console.error("Failed to save jobs to local storage", error);
+      toast({
+        title: 'Storage Error',
+        description: 'Could not save job to your browser storage.',
+        variant: 'destructive'
+      });
+    }
+  };
+  
+  const handleAssignToExisting = () => {
+      if (!selectedExistingJob) {
+          toast({ title: 'Error', description: 'Please select a job.', variant: 'destructive' });
+          return;
+      }
+      // Logic to assign worker
+      toast({
+          title: 'Assignment Confirmed!',
+          description: `${selectedWorkers.length} worker(s) assigned to "${jobs.find(j => j.id === selectedExistingJob)?.title}".`,
+      });
+      resetAndClose();
+  };
+
+  const handlePostAndAssign = () => {
+      const { title, jobType, location, description, skillsRequired } = newJobDetails;
+      if (!title || !jobType || !location || !description || !skillsRequired) {
+          toast({ title: 'Missing Information', description: 'Please fill out all required fields for the new job.', variant: 'destructive' });
+          return;
+      }
+      
+      const newJob: Job = {
+        id: `job-${Date.now()}`,
+        title: title,
+        companyName: newJobDetails.companyName || 'Private Employer',
+        companyLogoUrl: 'https://picsum.photos/seed/newlogo/100/100',
+        location: location,
+        jobType: jobType as Job['jobType'],
+        salary: newJobDetails.salary,
+        description: description,
+        skillsRequired: skillsRequired.split(',').map(s => s.trim()),
+        industry: newJobDetails.industry || 'General',
+        status: 'Worker Assigned'
+      };
+
+      const updatedJobs = [newJob, ...jobs];
+      setJobs(updatedJobs);
+      updateLocalStorageJobs(updatedJobs);
+
+      toast({
+          title: 'Job Posted & Assigned!',
+          description: `${selectedWorkers.length} worker(s) have been assigned to the new job: "${newJob.title}".`,
+      });
+      resetAndClose();
+  };
+
+  const resetAndClose = () => {
+      setIsAssignmentModalOpen(false);
+      setSelectedWorkers([]);
+      setSelectedExistingJob('');
+      setNewJobDetails(initialNewJobState);
+  };
+
   
   const renderStars = (rating: number) => {
     const stars = [];
@@ -364,10 +435,98 @@ export default function AssignWorkerPage() {
         <div className="fixed bottom-0 left-0 right-0 p-4 bg-background/80 backdrop-blur-sm border-t">
           <div className="container mx-auto flex justify-between items-center">
             <p className="font-semibold">{selectedWorkers.length} worker(s) selected.</p>
-            <Button size="lg" onClick={handleConfirmAssignment}>Confirm Assignment</Button>
+            <Button size="lg" onClick={handleOpenAssignmentModal}>Confirm Assignment</Button>
           </div>
         </div>
       )}
+
+      <Dialog open={isAssignmentModalOpen} onOpenChange={setIsAssignmentModalOpen}>
+        <DialogContent className="sm:max-w-xl">
+          <DialogHeader>
+            <DialogTitle>Assign Workers</DialogTitle>
+            <DialogDescription>
+              Assign the {selectedWorkers.length} selected worker(s) to an existing job or create a new one.
+            </DialogDescription>
+          </DialogHeader>
+          <Tabs defaultValue="existing-job" className="w-full">
+            <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger value="existing-job">Assign to Existing Job</TabsTrigger>
+              <TabsTrigger value="new-job">Post a New Job</TabsTrigger>
+            </TabsList>
+            <TabsContent value="existing-job">
+              <div className="space-y-4 py-4">
+                <Label htmlFor="existing-job-select">Select a Job</Label>
+                <Select value={selectedExistingJob} onValueChange={setSelectedExistingJob}>
+                    <SelectTrigger id="existing-job-select">
+                        <SelectValue placeholder="Choose a job..." />
+                    </SelectTrigger>
+                    <SelectContent>
+                        {assignableJobs.length > 0 ? (
+                            assignableJobs.map(job => (
+                                <SelectItem key={job.id} value={job.id}>{job.title}</SelectItem>
+                            ))
+                        ) : (
+                            <SelectItem value="no-jobs" disabled>No unassigned jobs available</SelectItem>
+                        )}
+                    </SelectContent>
+                </Select>
+              </div>
+              <DialogFooter>
+                <Button variant="outline" onClick={resetAndClose}>Cancel</Button>
+                <Button onClick={handleAssignToExisting} disabled={!selectedExistingJob}>Assign to this Job</Button>
+              </DialogFooter>
+            </TabsContent>
+            <TabsContent value="new-job">
+              <div className="space-y-4 py-4 max-h-[60vh] overflow-y-auto pr-2">
+                  <div className="space-y-2">
+                      <Label htmlFor="new-job-title">Job Title</Label>
+                      <Input id="new-job-title" value={newJobDetails.title} onChange={(e) => setNewJobDetails({...newJobDetails, title: e.target.value})} />
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                          <Label htmlFor="new-job-company">Company (Optional)</Label>
+                          <Input id="new-job-company" value={newJobDetails.companyName} onChange={(e) => setNewJobDetails({...newJobDetails, companyName: e.target.value})} />
+                      </div>
+                      <div className="space-y-2">
+                          <Label htmlFor="new-job-location">Location</Label>
+                          <Input id="new-job-location" value={newJobDetails.location} onChange={(e) => setNewJobDetails({...newJobDetails, location: e.target.value})} />
+                      </div>
+                  </div>
+                   <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                          <Label htmlFor="new-job-type">Job Type</Label>
+                          <Select value={newJobDetails.jobType} onValueChange={(value) => setNewJobDetails({...newJobDetails, jobType: value as Job['jobType']})}>
+                            <SelectTrigger id="new-job-type"><SelectValue placeholder="Select..." /></SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="Full-time">Full-time</SelectItem>
+                                <SelectItem value="Part-time">Part-time</SelectItem>
+                                <SelectItem value="Contract">Contract</SelectItem>
+                                <SelectItem value="Internship">Internship</SelectItem>
+                            </SelectContent>
+                          </Select>
+                      </div>
+                      <div className="space-y-2">
+                          <Label htmlFor="new-job-salary">Salary (Optional)</Label>
+                          <Input id="new-job-salary" value={newJobDetails.salary} onChange={(e) => setNewJobDetails({...newJobDetails, salary: e.target.value})} />
+                      </div>
+                  </div>
+                  <div className="space-y-2">
+                      <Label htmlFor="new-job-description">Job Description</Label>
+                      <Textarea id="new-job-description" value={newJobDetails.description} onChange={(e) => setNewJobDetails({...newJobDetails, description: e.target.value})} />
+                  </div>
+                  <div className="space-y-2">
+                      <Label htmlFor="new-job-skills">Skills Required (comma-separated)</Label>
+                      <Input id="new-job-skills" value={newJobDetails.skillsRequired} onChange={(e) => setNewJobDetails({...newJobDetails, skillsRequired: e.target.value})} />
+                  </div>
+              </div>
+              <DialogFooter className="pt-4 border-t">
+                  <Button variant="outline" onClick={resetAndClose}>Cancel</Button>
+                  <Button onClick={handlePostAndAssign}>Post and Assign</Button>
+              </DialogFooter>
+            </TabsContent>
+          </Tabs>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
