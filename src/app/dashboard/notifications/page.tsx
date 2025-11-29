@@ -126,7 +126,7 @@ export default function NotificationsPage() {
                     {!notif.question && (
                         <div className="space-y-2">
                             <Label htmlFor={`worker-question-${notif.id}`} className="text-sm font-medium flex items-center gap-2">
-                                <HelpCircle className="h-4 w-4" /> Ask a question about this job
+                                <HelpCircle className="h-4 w-4" /> Ask a question or doubt
                             </Label>
                             <div className="flex gap-2">
                                 <Input id={`worker-question-${notif.id}`} placeholder="Type your question..." />
