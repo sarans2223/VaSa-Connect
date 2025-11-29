@@ -245,7 +245,7 @@ export default function PostJobPage() {
     <div className="p-4 sm:p-6 lg:p-8 space-y-8">
       <div className="flex items-center gap-4 mb-8">
         <UserSearch className="h-8 w-8 text-primary" />
-        <h1 className="text-3xl font-bold tracking-tight">post your here</h1>
+        <h1 className="text-3xl font-bold tracking-tight">Post Your Job Here</h1>
       </div>
       <Card>
         <CardHeader>
@@ -516,5 +516,3 @@ export default function PostJobPage() {
     </div>
   );
 }
-
-    
