@@ -2,146 +2,92 @@
 'use client';
 
 import { useState } from 'react';
-import Image from "next/image";
 import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
-import { mockLearningModules } from "@/lib/data";
-import { BookOpen, Clock, Languages, Play, Rewind } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
+import { BookOpen, Award, FileQuestion, ArrowRight, Star } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { mockUser } from '@/lib/data';
+import Link from 'next/link';
 
+const skillsToLearn = [
+  { id: 'skill-1', title: 'Professional Cooking', description: 'Master culinary fundamentals, from knife skills to advanced sauce making.' },
+  { id: 'skill-2', title: 'Digital Marketing', description: 'Learn SEO, SEM, and social media strategies to boost online presence.' },
+  { id: 'skill-3', title: 'Advanced Tailoring', description: 'Go beyond basics with pattern making and complex garment construction.' },
+  { id: 'skill-4', title: 'Financial Literacy for Small Business', description: 'Understand budgeting, cash flow, and how to secure funding.' },
+  { id: 'skill-5', title: 'Customer Service Excellence', description: 'Develop communication skills to provide outstanding customer support.' },
+  { id: 'skill-6', title: 'Event Planning & Management', description: 'Learn to organize and execute flawless events from start to finish.' },
+  { id: 'skill-7', title: 'Basic Computer Skills', description: 'Grasp the essentials of using computers, including email and Microsoft Office.' },
+  { id: 'skill-8', title: 'Handicrafts & Artisan Skills', description: 'Monetize your creative talents by learning to produce and sell handmade goods.' },
+];
 
 export default function LearningPage() {
   const { toast } = useToast();
-  const [language, setLanguage] = useState('all');
-  // State to force re-render of iframes
-  const [videoKeys, setVideoKeys] = useState<Record<string, number>>({});
+  const [user] = useState(mockUser);
+  const isPremium = user.membership === 'Bloom' || user.membership === 'Empower';
 
-  const handleResume = (title: string) => {
-    toast({
-      title: "Resuming Video",
-      description: `Playing "${title}" from where you left off.`,
-    });
+  const handlePremiumCheck = (action: string, skill: string) => {
+    if (isPremium) {
+      toast({
+        title: 'Feature Unlocked!',
+        description: `You have access to ${action} for ${skill} as a premium member.`,
+      });
+      // In a real app, you would navigate to the learning/testing page.
+    } else {
+      toast({
+        title: 'Upgrade Required',
+        description: `Please upgrade to a premium membership to ${action.toLowerCase()} for ${skill}.`,
+        action: (
+          <Button asChild>
+            <Link href="/dashboard/membership">Upgrade Now</Link>
+          </Button>
+        ),
+      });
+    }
   };
-
-  const handleRewind = (moduleId: string, title: string) => {
-    // Change the key of the video to force the iframe to re-render
-    setVideoKeys(prev => ({ ...prev, [moduleId]: (prev[moduleId] || 0) + 1 }));
-    toast({
-      title: "Rewinding Video",
-      description: `Playing "${title}" from the beginning.`,
-    });
-  };
-
-  const filteredModules = mockLearningModules.filter(module => 
-    language === 'all' || module.language === language
-  );
 
   return (
     <div className="p-4 sm:p-6 lg:p-8 space-y-8">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div className="flex items-center gap-4">
-          <BookOpen className="h-8 w-8 text-primary" />
-          <h1 className="text-3xl font-bold tracking-tight">Learning Hub</h1>
-        </div>
-        <div className="flex items-center gap-2">
-            <Languages className="h-5 w-5 text-muted-foreground" />
-            <Select value={language} onValueChange={setLanguage}>
-                <SelectTrigger className="w-full sm:w-[180px]">
-                    <SelectValue placeholder="Filter by language" />
-                </SelectTrigger>
-                <SelectContent>
-                    <SelectItem value="all">All Languages</SelectItem>
-                    <SelectItem value="en">English</SelectItem>
-                    <SelectItem value="hi">Hindi</SelectItem>
-                    <SelectItem value="ta">Tamil</SelectItem>
-                    <SelectItem value="te">Telugu</SelectItem>
-                    <SelectItem value="bn">Bengali</SelectItem>
-                    <SelectItem value="mr">Marathi</SelectItem>
-                </SelectContent>
-            </Select>
-        </div>
+      <div className="flex items-center gap-4">
+        <BookOpen className="h-8 w-8 text-primary" />
+        <h1 className="text-3xl font-bold tracking-tight">Learning & Certification Hub</h1>
       </div>
       <p className="text-muted-foreground max-w-2xl">
-        Empower yourself with new skills. Explore our curated courses and articles designed for your growth.
+        Empower yourself with new skills. Learn, take tests, and get certified to stand out.
       </p>
 
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {filteredModules.map((module) => (
-          <Card key={module.id} className="flex flex-col overflow-hidden transition-all hover:shadow-lg">
-            <CardHeader className="p-0">
-              <div className="relative aspect-video">
-                 {module.type === 'video' && module.videoId ? (
-                  <iframe
-                    key={videoKeys[module.id] || 0}
-                    src={`https://www.youtube.com/embed/${module.videoId}`}
-                    title={module.title}
-                    frameBorder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                    className="w-full h-full"
-                  ></iframe>
-                ) : (
-                  <Image
-                    src={module.imageUrl}
-                    alt={module.title}
-                    fill
-                    className="object-cover"
-                    data-ai-hint={
-                      module.title.toLowerCase().includes('cook') ? 'food preparation' :
-                      module.title.toLowerCase().includes('plate') ? 'gourmet food' :
-                      module.title.toLowerCase().includes('marketing') ? 'digital marketing' :
-                      module.title.toLowerCase().includes('coding') ? 'laptop code' :
-                      'woman working'
-                    }
-                  />
-                )}
-              </div>
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {skillsToLearn.map((skill) => (
+          <Card key={skill.id} className="flex flex-col">
+            <CardHeader>
+              <CardTitle>{skill.title}</CardTitle>
+              <CardDescription>{skill.description}</CardDescription>
             </CardHeader>
-            <CardContent className="p-4 flex-grow space-y-3">
-               <Badge variant={module.type === 'video' ? 'default' : 'secondary'} className="capitalize bg-accent text-accent-foreground">{module.type}</Badge>
-              <CardTitle className="text-lg leading-snug">{module.title}</CardTitle>
-              <CardDescription className="line-clamp-2">{module.description}</CardDescription>
+            <CardContent className="flex-grow flex flex-col justify-end space-y-2">
+              <Button 
+                variant="outline"
+                onClick={() => handlePremiumCheck('Learn Skill', skill.title)}
+              >
+                <BookOpen className="mr-2 h-4 w-4" /> Learn Skill
+              </Button>
+              <Button
+                variant="outline"
+                onClick={() => handlePremiumCheck('Take Test', skill.title)}
+              >
+                <FileQuestion className="mr-2 h-4 w-4" /> Take Test
+              </Button>
+              <Button 
+                className="bg-gradient-to-r from-[#E0BBE4] to-[#957DAD] hover:opacity-90 text-primary-foreground"
+                onClick={() => handlePremiumCheck('Get Certified', skill.title)}
+              >
+                <Award className="mr-2 h-4 w-4" /> Get Certified
+              </Button>
             </CardContent>
-            <CardFooter className="p-4 pt-0 flex-col items-start gap-3">
-              <div className="flex items-center text-sm text-muted-foreground w-full">
-                <Clock className="mr-1.5 h-4 w-4" />
-                <span>{module.duration}</span>
-              </div>
-              <div className="w-full">
-                <Progress value={module.progress} className="h-2 w-full" />
-                <span className="text-xs text-muted-foreground mt-1">
-                  {module.progress}% Complete
-                </span>
-              </div>
-              {module.type === 'video' && (
-                <div className="flex w-full items-center gap-2 pt-2">
-                  <Button size="sm" className="w-full" onClick={() => handleResume(module.title)}>
-                    <Play className="mr-2 h-4 w-4" />
-                    Resume
-                  </Button>
-                  <Button size="sm" variant="outline" className="w-full" onClick={() => handleRewind(module.id, module.title)}>
-                    <Rewind className="mr-2 h-4 w-4" />
-                    Rewind
-                  </Button>
-                </div>
-              )}
-            </CardFooter>
           </Card>
         ))}
       </div>
