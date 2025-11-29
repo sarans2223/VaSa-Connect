@@ -483,3 +483,62 @@ export const mockRecruiterHistory = [
     { id: 'rh-1', title: 'Wedding Planner Assistant', workersHired: ['Lakshmi P.', 'Sunita D.'], amountPaid: 15000, pointsEarned: 150 },
     { id: 'rh-2', title: 'Home Baker for Festival', workersHired: ['Anjali S.'], amountPaid: 7500, pointsEarned: 75 },
 ];
+
+
+export const workerMonetizationData = {
+  monthly: [
+    { label: 'Jan', amount: 8500, jobs: 3 },
+    { label: 'Feb', amount: 7200, jobs: 2 },
+    { label: 'Mar', amount: 9800, jobs: 4 },
+    { label: 'Apr', amount: 6500, jobs: 2 },
+    { label: 'May', amount: 11000, jobs: 5 },
+    { label: 'Jun', amount: 9200, jobs: 3 },
+  ],
+  weekly: [
+    { label: 'W1', amount: 2200, jobs: 1 },
+    { label: 'W2', amount: 1800, jobs: 1 },
+    { label: 'W3', amount: 3500, jobs: 2 },
+    { label: 'W4', amount: 1700, jobs: 1 },
+  ],
+  last_10_days: [
+    { label: 'Day 1', amount: 0, jobs: 0 },
+    { label: 'Day 2', amount: 500, jobs: 1 },
+    { label: 'Day 3', amount: 0, jobs: 0 },
+    { label: 'Day 4', amount: 800, jobs: 1 },
+    { label: 'Day 5', amount: 0, jobs: 0 },
+    { label: 'Day 6', amount: 1200, jobs: 1 },
+    { label: 'Day 7', amount: 0, jobs: 0 },
+    { label: 'Day 8', amount: 0, jobs: 0 },
+    { label: 'Day 9', amount: 750, jobs: 1 },
+    { label: 'Day 10', amount: 0, jobs: 0 },
+  ],
+};
+
+export const recruiterMonetizationData = {
+  monthly: [
+    { label: 'Jan', amount: 15000, commission: 1500, workers: 5 },
+    { label: 'Feb', amount: 12000, commission: 1200, workers: 4 },
+    { label: 'Mar', amount: 20000, commission: 2000, workers: 8 },
+    { label: 'Apr', amount: 18000, commission: 1800, workers: 6 },
+    { label: 'May', amount: 25000, commission: 2500, workers: 10 },
+    { label: 'Jun', amount: 22000, commission: 2200, workers: 9 },
+  ],
+  weekly: [
+    { label: 'W1', amount: 5000, commission: 500, workers: 2 },
+    { label: 'W2', amount: 4000, commission: 400, workers: 2 },
+    { label: 'W3', amount: 7000, commission: 700, workers: 3 },
+    { label: 'W4', amount: 6000, commission: 600, workers: 2 },
+  ],
+  last_10_days: [
+    { label: 'Day 1', amount: 0, commission: 0, workers: 0 },
+    { label: 'Day 2', amount: 1500, commission: 150, workers: 1 },
+    { label: 'Day 3', amount: 2000, commission: 200, workers: 2 },
+    { label: 'Day 4', amount: 0, commission: 0, workers: 0 },
+    { label: 'Day 5', amount: 3000, commission: 300, workers: 2 },
+    { label: 'Day 6', amount: 0, commission: 0, workers: 0 },
+    { label: 'Day 7', amount: 2500, commission: 250, workers: 1 },
+    { label: 'Day 8', amount: 0, commission: 0, workers: 0 },
+    { label: 'Day 9', amount: 1000, commission: 100, workers: 1 },
+    { label: 'Day 10', amount: 4000, commission: 400, workers: 3 },
+  ],
+};
