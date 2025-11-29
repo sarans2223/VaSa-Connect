@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -27,11 +27,11 @@ import {
   TrendingUp,
   Gift,
   Zap,
-  CalendarDays,
   MapPin,
   Repeat,
   BadgeCheck,
-  Crown
+  Crown,
+  AlertTriangle
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Label } from '@/components/ui/label';
@@ -42,6 +42,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { Calendar as CalendarIcon } from 'lucide-react';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
+import { Checkbox } from '@/components/ui/checkbox';
 
 
 const clientBenefits = [
@@ -91,20 +92,34 @@ const workerBenefits = [
 ];
 
 const pastWorkers = [
-    { id: 'worker-1', name: 'Lakshmi Priya', job: 'Community Kitchen Chef', avatarUrl: 'https://picsum.photos/seed/user1/100/100' },
-    { id: 'worker-2', name: 'Kavita Devi', job: 'Urgent Tailoring Work', avatarUrl: 'https://picsum.photos/seed/user2/100/100' },
-    { id: 'worker-3', name: 'Meena Kumari', job: 'Farm Hand for Harvest', avatarUrl: 'https://picsum.photos/seed/user4/100/100' },
+    { id: 'worker-1', name: 'Lakshmi Priya', job: 'Community Kitchen Chef', avatarUrl: 'https://picsum.photos/seed/user1/100/100', previousLocation: '123 Rose Garden, Chennai' },
+    { id: 'worker-2', name: 'Kavita Devi', job: 'Urgent Tailoring Work', avatarUrl: 'https://picsum.photos/seed/user2/100/100', previousLocation: '456 Weavers Colony, Coimbatore' },
+    { id: 'worker-3', name: 'Meena Kumari', job: 'Farm Hand for Harvest', avatarUrl: 'https://picsum.photos/seed/user4/100/100', previousLocation: '789 Green Valley, Salem' },
 ]
+
+type PastWorker = typeof pastWorkers[0];
 
 export default function RebookPage() {
     const { toast } = useToast();
-    const [selectedWorker, setSelectedWorker] = useState<typeof pastWorkers[0] | null>(null);
+    const [selectedWorker, setSelectedWorker] = useState<PastWorker | null>(null);
     const [bookingDate, setBookingDate] = useState<Date>();
     const [bookingLocation, setBookingLocation] = useState('');
     const [isBookingDialogOpen, setIsBookingDialogOpen] = useState(false);
+    const [usePreviousLocation, setUsePreviousLocation] = useState(false);
 
-    const handleSelectWorker = (worker: typeof pastWorkers[0]) => {
+    useEffect(() => {
+        if (usePreviousLocation && selectedWorker) {
+            setBookingLocation(selectedWorker.previousLocation);
+        } else {
+            setBookingLocation('');
+        }
+    }, [usePreviousLocation, selectedWorker]);
+    
+
+    const handleSelectWorker = (worker: PastWorker) => {
         setSelectedWorker(worker);
+        setUsePreviousLocation(false);
+        setBookingLocation('');
     }
     
     const handleConfirmBooking = () => {
@@ -127,6 +142,7 @@ export default function RebookPage() {
         setSelectedWorker(null);
         setBookingDate(undefined);
         setBookingLocation('');
+        setUsePreviousLocation(false);
     }
 
   return (
@@ -187,6 +203,19 @@ export default function RebookPage() {
           </CardContent>
         </Card>
       </div>
+
+      <Card className="border-amber-500/50 bg-amber-50 text-amber-900">
+        <CardContent className="p-6">
+            <div className="flex flex-col items-center text-center gap-3">
+                <AlertTriangle className="h-8 w-8 text-amber-600"/>
+                <h3 className="text-xl font-bold">Thinking of booking the worker privately?</h3>
+                <p className="text-sm max-w-xl">
+                    By booking outside the app, you lose access to VaSa's safety net. You will not receive job insurance, worker guarantees, VaSa Pink Tokens, or premium member discounts. Book through VaSa to keep yourself and your worker protected.
+                </p>
+            </div>
+        </CardContent>
+      </Card>
+
 
       <div className="text-center pt-4">
          <Dialog open={isBookingDialogOpen} onOpenChange={setIsBookingDialogOpen}>
@@ -274,7 +303,21 @@ export default function RebookPage() {
                                         className="pl-10"
                                         value={bookingLocation}
                                         onChange={(e) => setBookingLocation(e.target.value)}
+                                        disabled={usePreviousLocation}
                                     />
+                                </div>
+                                 <div className="flex items-center space-x-2 pt-2">
+                                    <Checkbox 
+                                        id="same-location-checkbox"
+                                        checked={usePreviousLocation}
+                                        onCheckedChange={(checked) => setUsePreviousLocation(checked as boolean)}
+                                    />
+                                    <label
+                                        htmlFor="same-location-checkbox"
+                                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                                    >
+                                        Same location as before
+                                    </label>
                                 </div>
                             </div>
                         </div>
