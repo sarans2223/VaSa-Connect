@@ -35,7 +35,6 @@ export default function MonetizationPage() {
 
   const totalRecruiterPaid = recruiterData.reduce((acc, item) => acc + item.amount, 0);
   const totalWorkersRecruited = recruiterData.reduce((acc, item) => acc + item.workers, 0);
-  const totalCommission = recruiterData.reduce((acc, item) => acc + item.commission, 0);
   
   return (
     <div className="p-4 sm:p-6 lg:p-8 space-y-8">
@@ -131,7 +130,7 @@ export default function MonetizationPage() {
         </TabsContent>
 
         <TabsContent value="recruiter" className="space-y-6">
-          <div className="grid gap-6 md:grid-cols-3">
+          <div className="grid gap-6 md:grid-cols-2">
              <Card>
               <CardHeader>
                 <CardTitle>Total Amount Paid</CardTitle>
@@ -150,17 +149,6 @@ export default function MonetizationPage() {
               <CardContent>
                 <p className="text-3xl font-bold">{totalWorkersRecruited}</p>
                  <p className="text-xs text-muted-foreground">Total assignments filled</p>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader>
-                <CardTitle>Commission to VaSa</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-3xl font-bold">
-                  ₹{totalCommission.toLocaleString()}
-                </p>
-                 <p className="text-xs text-muted-foreground">Contribution to the platform</p>
               </CardContent>
             </Card>
           </div>
