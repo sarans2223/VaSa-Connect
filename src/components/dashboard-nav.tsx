@@ -19,6 +19,7 @@ import {
   Menu,
   Bell,
   Wallet,
+  Calendar,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
@@ -52,6 +53,7 @@ const regularMenuItems = [
     { href: "/dashboard/profile", label: "My Profile", icon: UserCircle },
     { href: "/dashboard/notifications", label: "Notifications", icon: Bell },
     { href: "/dashboard/vasa-wallet", label: "Vasa Wallet", icon: Wallet },
+    { href: "/dashboard/vasa-calendar", label: "Vasa Calendar", icon: Calendar },
     { href: "/dashboard/membership", label: "Membership", icon: Gem },
     { href: "/dashboard/safety", label: "Safety Settings", icon: Shield },
 ];

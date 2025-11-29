@@ -28,7 +28,8 @@ export const sampleJobs: Job[] = [
       skillsRequired: ['Cooking', 'Menu Planning'],
       industry: 'Catering',
       status: 'Worker Assigned',
-      date: '2024-08-15',
+      date: '2024-08-16', // A Friday
+      time: '10:00 AM - 4:00 PM',
     },
     {
       id: 'sample-job-2',
@@ -42,6 +43,7 @@ export const sampleJobs: Job[] = [
       industry: 'Fashion',
       status: 'Completed',
       date: '2024-08-10',
+      time: '9:00 AM - 6:00 PM',
     },
     {
       id: 'sample-job-3',
@@ -55,6 +57,7 @@ export const sampleJobs: Job[] = [
       industry: 'Agriculture',
       status: 'Worker Assigned',
       date: '2024-08-20',
+      time: '7:00 AM - 3:00 PM',
     },
     {
       id: 'sample-job-4',
@@ -81,6 +84,7 @@ export const sampleJobs: Job[] = [
       industry: 'Events',
       status: 'Worker Assigned',
       date: '2024-08-18',
+      time: '3:00 PM - 11:00 PM',
     },
      {
       id: 'sample-job-6',
@@ -92,8 +96,8 @@ export const sampleJobs: Job[] = [
       description: 'Assist the lead wedding planner in organizing and executing weddings. Excellent opportunity to learn.',
       skillsRequired: ['Event Planning', 'Communication', 'Organization'],
       industry: 'Events',
-      status: 'Worker Assigned',
-      date: '2024-09-05',
+      status: 'Completed',
+      date: '2024-08-05',
     },
     {
       id: 'sample-job-7',
@@ -106,7 +110,8 @@ export const sampleJobs: Job[] = [
       skillsRequired: ['Baking', 'Cooking', 'Sweets Making'],
       industry: 'Catering',
       status: 'Worker Assigned',
-      date: '2024-09-10',
+      date: '2024-08-23', // Another Friday
+      time: 'All Day',
     },
 ];
 
