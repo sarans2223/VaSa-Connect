@@ -50,11 +50,10 @@ const regularMenuItems = [
     { href: "/dashboard/jobs", label: "Job Search", icon: Briefcase },
     { href: "/dashboard/jobs/post", label: "Job Post & Status", icon: FilePen },
     { href: "/dashboard/assign-worker", label: "Hire Talent", icon: UserPlus },
-    { href: "/dashboard/rebook", label: "Rebook", icon: Repeat },
+    { href: "/dashboard/rebook", label: "VaSa Rebook", icon: Repeat },
     { href: "/dashboard/learning", label: "Learning Hub", icon: BookOpen },
     { href: "/dashboard/teams", label: "My Team", icon: Users },
     { href: "/dashboard/profile", label: "My Profile", icon: UserCircle },
-    { href: "/dashboard/notifications", label: "Notifications", icon: Bell },
     { href: "/dashboard/vasa-wallet", label: "Vasa Wallet", icon: Wallet },
     { href: "/dashboard/membership", label: "Membership", icon: Gem },
     { href: "/dashboard/monetization", label: "Monetization", icon: DollarSign },
@@ -222,6 +221,12 @@ export function DashboardNav() {
                 </Link>
             </div>
             <div className="ml-auto flex items-center gap-2 overflow-hidden">
+                <Button asChild variant="ghost" size="icon">
+                  <Link href="/dashboard/notifications">
+                    <Bell className="h-5 w-5" />
+                    <span className="sr-only">Notifications</span>
+                  </Link>
+                </Button>
                 <div className="flex items-center gap-2">
                     <UserNameDisplay />
                 </div>
