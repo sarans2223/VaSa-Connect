@@ -115,7 +115,7 @@ export default function SafetyPage() {
           <CardHeader>
             <CardTitle>Emergency Contacts</CardTitle>
             <CardDescription>
-              These contacts will be notified when you activate an SOS alert.
+              These contacts will be notified when you activate an SOS alert. The message will be sent in the format: "WORKER_NAME IS IN DANGER ..FACING SOME ISSUES WHILE WENT TO WORK AT JOB_LOCATION WHERE SHE WAS CURRENTLY WORKING ".
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
