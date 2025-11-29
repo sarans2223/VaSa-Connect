@@ -102,6 +102,14 @@ export default function EditProfilePage() {
               <Input id="email" type="email" value={user.email} disabled />
             </div>
           </div>
+            <div className="space-y-2">
+              <Label htmlFor="mobileNumber">Mobile Number</Label>
+              <Input id="mobileNumber" type="tel" value={user.mobileNumber || ''} onChange={handleInputChange} placeholder="e.g., 9876543210" />
+            </div>
+             <div className="space-y-2">
+              <Label htmlFor="address">Address</Label>
+              <Textarea id="address" value={user.address || ''} onChange={handleInputChange} placeholder="Enter your full address" />
+            </div>
           <div className="space-y-2">
             <Label htmlFor="experience">Experience Summary</Label>
             <Textarea

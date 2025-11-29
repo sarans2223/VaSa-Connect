@@ -12,6 +12,8 @@ export type User = {
   rating: number;
   membership: 'Rise' | 'Bloom' | 'Empower';
   vasaPinkTokens?: number;
+  mobileNumber?: string;
+  address?: string;
 };
 
 export type Job = {

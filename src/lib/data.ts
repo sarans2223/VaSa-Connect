@@ -14,6 +14,8 @@ export const mockUser: User = {
   rating: 4.5,
   membership: 'Rise',
   vasaPinkTokens: 250,
+  mobileNumber: '9876543210',
+  address: '123, Rose Garden Street, K.K. Nagar, Chennai, Tamil Nadu - 600078',
 };
 
 export const sampleJobs: Job[] = [

@@ -20,7 +20,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { mockUser as defaultUser, mockWorkerHistory, mockRecruiterHistory } from "@/lib/data";
-import { User as UserIcon, Edit, Upload, Star, Leaf, Gem, Crown, History, Briefcase, Users, FileText } from "lucide-react";
+import { User as UserIcon, Edit, Upload, Star, Leaf, Gem, Crown, History, Briefcase, Users, FileText, Phone, Mail, Home } from "lucide-react";
 import type { User } from "@/lib/types";
 import { useToast } from "@/hooks/use-toast";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -225,6 +225,21 @@ export default function ProfilePage() {
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
+               <div className="space-y-4">
+                <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                  <Mail className="h-5 w-5" />
+                  <span>{user.email}</span>
+                </div>
+                 <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                  <Phone className="h-5 w-5" />
+                  <span>{user.mobileNumber || 'Not provided'}</span>
+                </div>
+                 <div className="flex items-start gap-4 text-sm text-muted-foreground">
+                  <Home className="h-5 w-5 mt-1" />
+                  <span>{user.address || 'Not provided'}</span>
+                </div>
+              </div>
+              <Separator />
               <div className="space-y-2">
                 <Label>Experience Summary</Label>
                 <p className="text-sm text-muted-foreground p-3 bg-muted rounded-md min-h-[120px]">
