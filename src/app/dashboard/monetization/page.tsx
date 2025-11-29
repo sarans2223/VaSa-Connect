@@ -169,7 +169,7 @@ export default function MonetizationPage() {
               <div>
                 <CardTitle>Your Payments</CardTitle>
                 <CardDescription>
-                  A summary of payments and commissions over time.
+                  A summary of payments to workers over time.
                 </CardDescription>
               </div>
               <Select
@@ -201,8 +201,7 @@ export default function MonetizationPage() {
                     cursor={false}
                     content={<ChartTooltipContent indicator="dot" />}
                   />
-                  <Bar dataKey="amount" fill="var(--color-amount)" radius={4} stackId="a" />
-                  <Bar dataKey="commission" fill="var(--color-commission)" radius={4} stackId="a" />
+                  <Bar dataKey="amount" fill="var(--color-amount)" radius={4} />
                 </BarChart>
               </ChartContainer>
             </CardContent>
