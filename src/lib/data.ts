@@ -29,7 +29,6 @@ export const sampleJobs: Job[] = [
       industry: 'Catering',
       status: 'Worker Assigned',
       date: '2024-08-15',
-      time: '10:00 AM - 2:00 PM',
     },
     {
       id: 'sample-job-2',
@@ -43,7 +42,6 @@ export const sampleJobs: Job[] = [
       industry: 'Fashion',
       status: 'Completed',
       date: '2024-08-10',
-      time: 'All Day',
     },
     {
       id: 'sample-job-3',
@@ -57,7 +55,6 @@ export const sampleJobs: Job[] = [
       industry: 'Agriculture',
       status: 'Worker Assigned',
       date: '2024-08-20',
-      time: '8:00 AM - 4:00 PM',
     },
     {
       id: 'sample-job-4',
@@ -69,7 +66,8 @@ export const sampleJobs: Job[] = [
       description: 'Daily cleaning and maintenance for our office premises.',
       skillsRequired: ['Cleaning', 'Sanitization'],
       industry: 'Domestic Services',
-      status: 'Yet To Assign'
+      status: 'Yet To Assign',
+      date: '2024-09-01',
     },
     {
       id: 'sample-job-5',
@@ -83,7 +81,6 @@ export const sampleJobs: Job[] = [
       industry: 'Events',
       status: 'Worker Assigned',
       date: '2024-08-18',
-      time: '3:00 PM - 11:00 PM',
     },
      {
       id: 'sample-job-6',
@@ -97,7 +94,6 @@ export const sampleJobs: Job[] = [
       industry: 'Events',
       status: 'Worker Assigned',
       date: '2024-09-05',
-      time: '10:00 AM - 6:00 PM',
     },
     {
       id: 'sample-job-7',
@@ -111,7 +107,6 @@ export const sampleJobs: Job[] = [
       industry: 'Catering',
       status: 'Worker Assigned',
       date: '2024-09-10',
-      time: 'Flexible',
     },
 ];
 
@@ -372,3 +367,16 @@ export const mockTeams: Team[] = [
     ],
   },
 ];
+
+export const mockWorkerHistory = [
+    { id: 'wh-1', title: 'Urgent Tailoring Work', dateCompleted: '2024-08-10', amountEarned: 12000 },
+    { id: 'wh-2', title: 'Community Kitchen Chef', dateCompleted: '2024-08-01', amountEarned: 8000 },
+    { id: 'wh-3', title: 'Organic Farm Hand', dateCompleted: '2024-07-15', amountEarned: 6500 },
+];
+
+export const mockRecruiterHistory = [
+    { id: 'rh-1', title: 'Wedding Planner Assistant', workersHired: ['Lakshmi P.', 'Sunita D.'], amountPaid: 15000, pointsEarned: 150 },
+    { id: 'rh-2', title: 'Home Baker for Festival', workersHired: ['Anjali S.'], amountPaid: 7500, pointsEarned: 75 },
+];
+
+    

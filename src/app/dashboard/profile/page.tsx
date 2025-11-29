@@ -19,11 +19,12 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Progress } from "@/components/ui/progress";
-import { mockUser as defaultUser } from "@/lib/data";
-import { User as UserIcon, Edit, UploadCloud, Star, Leaf, Gem, Crown } from "lucide-react";
+import { mockUser as defaultUser, mockWorkerHistory, mockRecruiterHistory } from "@/lib/data";
+import { User as UserIcon, Edit, UploadCloud, Star, Leaf, Gem, Crown, History, Briefcase, Users, FileText } from "lucide-react";
 import type { User } from "@/lib/types";
 import { useToast } from "@/hooks/use-toast";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Separator } from "@/components/ui/separator";
 
 const membershipBadges = {
   Rise: {
@@ -254,6 +255,82 @@ export default function ProfilePage() {
           </Card>
         </div>
       </div>
+      <Separator className="my-8" />
+       <Card>
+        <CardHeader>
+            <div className="flex items-center gap-4">
+                <History className="h-6 w-6 text-primary" />
+                <CardTitle>My History</CardTitle>
+            </div>
+            <CardDescription>Review your past activities as a worker and a recruiter.</CardDescription>
+        </CardHeader>
+        <CardContent>
+            <Tabs defaultValue="worker-history">
+                <TabsList className="grid w-full grid-cols-2">
+                    <TabsTrigger value="worker-history"><Briefcase className="mr-2 h-4 w-4" />As a Worker</TabsTrigger>
+                    <TabsTrigger value="recruiter-history"><Users className="mr-2 h-4 w-4" />As a Recruiter</TabsTrigger>
+                </TabsList>
+                <TabsContent value="worker-history" className="pt-6">
+                    {mockWorkerHistory.length > 0 ? (
+                        <div className="space-y-4">
+                            {mockWorkerHistory.map(job => (
+                                <div key={job.id} className="p-4 border rounded-lg flex flex-col sm:flex-row justify-between sm:items-center gap-3">
+                                    <div>
+                                        <h4 className="font-semibold">{job.title}</h4>
+                                        <p className="text-sm text-muted-foreground">Completed on: {job.dateCompleted}</p>
+                                    </div>
+                                    <div className="text-right">
+                                        <p className="font-bold text-green-600">₹{job.amountEarned.toLocaleString()}</p>
+                                        <p className="text-xs text-muted-foreground">Amount Earned</p>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    ) : (
+                        <div className="text-center py-8 text-muted-foreground">
+                            <p>You haven't completed any jobs as a worker yet.</p>
+                        </div>
+                    )}
+                </TabsContent>
+                <TabsContent value="recruiter-history" className="pt-6">
+                     {mockRecruiterHistory.length > 0 ? (
+                        <div className="space-y-4">
+                            {mockRecruiterHistory.map(job => (
+                                <div key={job.id} className="p-4 border rounded-lg">
+                                    <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-3">
+                                        <div>
+                                            <h4 className="font-semibold">{job.title}</h4>
+                                            <div className="flex flex-wrap gap-2 mt-2">
+                                                {job.workersHired.map(worker => <Badge key={worker} variant="secondary">{worker}</Badge>)}
+                                            </div>
+                                        </div>
+                                        <div className="grid grid-cols-2 gap-4 text-right">
+                                            <div>
+                                                <p className="font-bold text-destructive">-₹{job.amountPaid.toLocaleString()}</p>
+                                                <p className="text-xs text-muted-foreground">Paid</p>
+                                            </div>
+                                            <div>
+                                                <p className="font-bold text-green-600">+{job.pointsEarned} pts</p>
+                                                <p className="text-xs text-muted-foreground">Points Earned</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    ) : (
+                        <div className="text-center py-8 text-muted-foreground">
+                             <FileText className="mx-auto h-12 w-12 text-gray-400" />
+                            <h3 className="mt-2 text-sm font-medium text-gray-900">No recruiter history</h3>
+                            <p className="mt-1 text-sm text-gray-500">You haven't hired any workers yet.</p>
+                        </div>
+                    )}
+                </TabsContent>
+            </Tabs>
+        </CardContent>
+      </Card>
     </div>
   );
 }
+
+    
