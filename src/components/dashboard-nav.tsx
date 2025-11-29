@@ -21,6 +21,7 @@ import {
   Wallet,
   DollarSign,
   FilePen,
+  Repeat,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
@@ -57,6 +58,7 @@ const regularMenuItems = [
     { href: "/dashboard/membership", label: "Membership", icon: Gem },
     { href: "/dashboard/monetization", label: "Monetization", icon: DollarSign },
     { href: "/dashboard/safety", label: "Safety Settings", icon: Shield },
+    { href: "/dashboard/keep-booking", label: "Rebook & Protect", icon: Repeat },
 ];
 
 export function DashboardNav() {
