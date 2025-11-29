@@ -115,10 +115,16 @@ export default function SafetyPage() {
           <CardHeader>
             <CardTitle>Emergency Contacts</CardTitle>
             <CardDescription>
-              These contacts will be notified when you activate an SOS alert. The message will be sent in the format: "WORKER_NAME IS IN DANGER ..FACING SOME ISSUES WHILE WENT TO WORK AT JOB_LOCATION WHERE SHE WAS CURRENTLY WORKING ".
+              When you activate an SOS alert, a notification will be sent to these contacts. The message will include your name and current work location for a quick response.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
+             <div className="space-y-2 rounded-lg border bg-muted/50 p-4">
+                  <h4 className="font-semibold text-sm">Example Message Format:</h4>
+                  <p className="text-sm text-muted-foreground italic">
+                    "Emergency alert from VaSa: [Your Name] is in danger at [Your Current Job Location]. Please respond immediately."
+                  </p>
+            </div>
             <div className="space-y-4">
               {contacts.map((contact) => (
                 <div
@@ -165,7 +171,7 @@ export default function SafetyPage() {
               ))}
             </div>
 
-            <form onSubmit={handleAddContact} className="space-y-4 pt-4 border-t">
+            <form onSubmit={handleAddContact} className="space-y-4 pt-6 border-t">
               <h3 className="font-semibold">Add New Contact</h3>
               <div className="grid sm:grid-cols-2 gap-4">
                 <div className="space-y-2">
