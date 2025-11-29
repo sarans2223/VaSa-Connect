@@ -21,6 +21,7 @@ import {
   Wallet,
   DollarSign,
   FilePen,
+  Repeat,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
@@ -49,6 +50,7 @@ const regularMenuItems = [
     { href: "/dashboard/jobs", label: "Job Search", icon: Briefcase },
     { href: "/dashboard/jobs/post", label: "Job Post & Status", icon: FilePen },
     { href: "/dashboard/assign-worker", label: "Hire Talent", icon: UserPlus },
+    { href: "/dashboard/rebook", label: "Rebook", icon: Repeat },
     { href: "/dashboard/learning", label: "Learning Hub", icon: BookOpen },
     { href: "/dashboard/teams", label: "My Team", icon: Users },
     { href: "/dashboard/profile", label: "My Profile", icon: UserCircle },
