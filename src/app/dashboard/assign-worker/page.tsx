@@ -143,7 +143,10 @@ export default function AssignWorkerPage() {
   const [isAssignmentModalOpen, setIsAssignmentModalOpen] = useState(false);
   const [selectedExistingJob, setSelectedExistingJob] = useState<string>('');
   const [newJobDetails, setNewJobDetails] = useState(initialNewJobState);
-  const [newJobDate, setNewJobDate] = useState<Date>();
+  const [fromDate, setFromDate] = useState<Date>();
+  const [toDate, setToDate] = useState<Date>();
+  const [fromTime, setFromTime] = useState<string>('');
+  const [toTime, setToTime] = useState<string>('');
   
   const { toast } = useToast();
   const router = useRouter();
@@ -252,7 +255,7 @@ export default function AssignWorkerPage() {
         skillsRequired: skillsRequired.split(',').map(s => s.trim()),
         industry: newJobDetails.industry || 'General',
         status: 'Worker Assigned',
-        date: newJobDate ? format(newJobDate, 'PPP') : 'Not Specified',
+        date: fromDate ? format(fromDate, 'PPP') : 'Not Specified',
       };
 
       const updatedJobs = [newJob, ...jobs];
@@ -271,7 +274,10 @@ export default function AssignWorkerPage() {
       setSelectedWorkers([]);
       setSelectedExistingJob('');
       setNewJobDetails(initialNewJobState);
-      setNewJobDate(undefined);
+      setFromDate(undefined);
+      setToDate(undefined);
+      setFromTime('');
+      setToTime('');
   };
 
   
@@ -284,6 +290,21 @@ export default function AssignWorkerPage() {
     }
     return stars;
   };
+
+  const timeOptions = Array.from({ length: 24 * 2 }, (_, i) => {
+    const hours = Math.floor(i / 2);
+    const minutes = i % 2 === 0 ? '00' : '30';
+    const formattedHours = hours.toString().padStart(2, '0');
+    return `${formattedHours}:${minutes}`;
+  });
+
+  const getToTimeOptions = () => {
+    if (!fromTime) return timeOptions;
+    const fromIndex = timeOptions.indexOf(fromTime);
+    return timeOptions.slice(fromIndex + 1);
+  };
+
+  const toTimeOptions = getToTimeOptions();
 
   const WorkerCard = ({ profile, isSelected, onSelect }: { profile: WorkerProfile, isSelected: boolean, onSelect: (id: string) => void }) => (
       <Card 
@@ -517,31 +538,85 @@ export default function AssignWorkerPage() {
                           <Input id="new-job-salary" value={newJobDetails.salary} onChange={(e) => setNewJobDetails({...newJobDetails, salary: e.target.value})} />
                       </div>
                   </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="new-job-date">Date</Label>
-                     <Popover>
+                 <div className="grid sm:grid-cols-2 gap-6">
+              <div className="grid grid-cols-2 gap-4">
+                 <div className="space-y-2">
+                    <Label htmlFor="from-date">From Date</Label>
+                    <Popover>
                       <PopoverTrigger asChild>
                         <Button
                           variant={'outline'}
                           className={cn(
                             'w-full justify-start text-left font-normal',
-                            !newJobDate && 'text-muted-foreground'
+                            !fromDate && 'text-muted-foreground'
                           )}
                         >
                           <CalendarIcon className="mr-2 h-4 w-4" />
-                          {newJobDate ? format(newJobDate, 'PPP') : <span>Pick a date</span>}
+                          {fromDate ? format(fromDate, 'PPP') : <span>Pick a date</span>}
                         </Button>
                       </PopoverTrigger>
                       <PopoverContent className="w-auto p-0">
                         <Calendar
                           mode="single"
-                          selected={newJobDate}
-                          onSelect={setNewJobDate}
+                          selected={fromDate}
+                          onSelect={setFromDate}
                           initialFocus
                         />
                       </PopoverContent>
                     </Popover>
                   </div>
+                   <div className="space-y-2">
+                    <Label htmlFor="from-time">From Time</Label>
+                    <Select value={fromTime} onValueChange={setFromTime}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select time" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {timeOptions.map(time => <SelectItem key={time} value={time}>{time}</SelectItem>)}
+                      </SelectContent>
+                    </Select>
+                  </div>
+              </div>
+               <div className="grid grid-cols-2 gap-4">
+                 <div className="space-y-2">
+                    <Label htmlFor="to-date">To Date</Label>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <Button
+                          variant={'outline'}
+                          className={cn(
+                            'w-full justify-start text-left font-normal',
+                            !toDate && 'text-muted-foreground'
+                          )}
+                        >
+                          <CalendarIcon className="mr-2 h-4 w-4" />
+                          {toDate ? format(toDate, 'PPP') : <span>Pick a date</span>}
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-auto p-0">
+                        <Calendar
+                          mode="single"
+                          selected={toDate}
+                          onSelect={setToDate}
+                          disabled={fromDate ? { before: fromDate } : undefined}
+                          initialFocus
+                        />
+                      </PopoverContent>
+                    </Popover>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="to-time">To Time</Label>
+                     <Select value={toTime} onValueChange={setToTime} disabled={!fromTime}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select time" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {toTimeOptions.map(time => <SelectItem key={time} value={time}>{time}</SelectItem>)}
+                      </SelectContent>
+                    </Select>
+                  </div>
+              </div>
+            </div>
                   <div className="space-y-2">
                       <Label htmlFor="new-job-description">Job Description</Label>
                       <Textarea id="new-job-description" value={newJobDetails.description} onChange={(e) => setNewJobDetails({...newJobDetails, description: e.target.value})} />
@@ -562,5 +637,3 @@ export default function AssignWorkerPage() {
     </div>
   );
 }
-
-    
