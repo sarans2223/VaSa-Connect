@@ -146,7 +146,7 @@ export default function RebookPage() {
           <CardHeader>
             <CardTitle className="flex items-center gap-3">
               <Sparkles className="text-primary" />
-              Benefits for You (The Client)
+              Benefits as a Recruiter
             </CardTitle>
             <CardDescription>
               Booking through VaSa keeps you safe and rewarded.
@@ -168,7 +168,7 @@ export default function RebookPage() {
           <CardHeader>
             <CardTitle className="flex items-center gap-3">
               <Award className="text-accent-foreground bg-accent p-1 rounded-full" />
-              Benefits for Them (The Worker)
+              Benefits as a Worker
             </CardTitle>
             <CardDescription>
               You empower your worker with every in-app booking.
