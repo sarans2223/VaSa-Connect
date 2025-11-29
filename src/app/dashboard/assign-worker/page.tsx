@@ -40,6 +40,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { Calendar } from '@/components/ui/calendar';
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
+import { VerificationGate } from '@/components/verification-gate';
 
 
 const allProfiles = [
@@ -281,299 +282,299 @@ export default function AssignWorkerPage() {
   const assignableJobs = jobs.filter(job => !job.status || job.status === 'Yet To Assign');
 
   return (
-    <div className="p-4 sm:p-6 lg:p-8 space-y-8">
-      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
-        <div>
-            <div className="flex items-center gap-4">
-                <UserPlus className="h-8 w-8 text-primary" />
-                <h1 className="text-3xl font-bold tracking-tight">Hire Talent</h1>
+    <VerificationGate>
+        <div className="p-4 sm:p-6 lg:p-8 space-y-8">
+        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
+            <div>
+                <div className="flex items-center gap-4">
+                    <UserPlus className="h-8 w-8 text-primary" />
+                    <h1 className="text-3xl font-bold tracking-tight">Hire Talent</h1>
+                </div>
+                <p className="text-muted-foreground mt-2">search and select the profiles for your job needs</p>
             </div>
-            <p className="text-muted-foreground mt-2">search and select the profiles for your job needs</p>
         </div>
-      </div>
 
-      <Card>
-        <CardContent className="p-4 flex justify-center">
-            <div className="w-full max-w-4xl grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 items-end">
-                <div className="lg:col-span-1 space-y-2">
-                    <Label htmlFor="search-input">Search by Name</Label>
-                    <div className="relative">
-                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                        <Input 
-                          id="search-input" 
-                          placeholder="Name..." 
-                          className="pl-10" 
-                          value={searchQuery}
-                          onChange={(e) => setSearchQuery(e.target.value)}
-                        />
+        <Card>
+            <CardContent className="p-4 flex justify-center">
+                <div className="w-full max-w-4xl grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 items-end">
+                    <div className="lg:col-span-1 space-y-2">
+                        <Label htmlFor="search-input">Search by Name</Label>
+                        <div className="relative">
+                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                            <Input 
+                            id="search-input" 
+                            placeholder="Name..." 
+                            className="pl-10" 
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            />
+                        </div>
+                    </div>
+                    <div className="space-y-2">
+                        <Label>Skill</Label>
+                        <Select value={selectedSkill} onValueChange={setSelectedSkill}>
+                        <SelectTrigger>
+                            <SelectValue placeholder="Filter by skill" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="all">All Skills</SelectItem>
+                            <SelectItem value="cooking">Cooking</SelectItem>
+                            <SelectItem value="farming">Farming</SelectItem>
+                            <SelectItem value="tailoring">Tailoring</SelectItem>
+                            <SelectItem value="cleaning">Cleaning</SelectItem>
+                            <SelectItem value="herding">Herding</SelectItem>
+                            <SelectItem value="child-care">Child Care</SelectItem>
+                            <SelectItem value="handicrafts">Handicrafts</SelectItem>
+                            <SelectItem value="painting">Painting</SelectItem>
+                            <SelectItem value="embroidery">Embroidery</SelectItem>
+                            <SelectItem value="driving">Driving</SelectItem>
+                            <SelectItem value="data-entry">Data Entry</SelectItem>
+                            <SelectItem value="gardening">Gardening</SelectItem>
+                            <SelectItem value="baking">Baking</SelectItem>
+                            <SelectItem value="graphic-design">Graphic Design</SelectItem>
+                        </SelectContent>
+                        </Select>
+                    </div>
+                    <div className="space-y-2">
+                        <Label>Location</Label>
+                        <Select value={selectedLocation} onValueChange={setSelectedLocation}>
+                        <SelectTrigger>
+                            <SelectValue placeholder="Filter by location" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="all">All Locations</SelectItem>
+                            <SelectGroup>
+                                <SelectLabel>Tamil Nadu</SelectLabel>
+                                <SelectItem value="Chennai">Chennai</SelectItem>
+                                <SelectItem value="Coimbatore">Coimbatore</SelectItem>
+                                <SelectItem value="Madurai">Madurai</SelectItem>
+                                <SelectItem value="Tiruchirappalli">Tiruchirappalli</SelectItem>
+                                <SelectItem value="Salem">Salem</SelectItem>
+                                <SelectItem value="Erode">Erode</SelectItem>
+                                <SelectItem value="Tirunelveli">Tirunelveli</SelectItem>
+                                <SelectItem value="Vellore">Vellore</SelectItem>
+                            </SelectGroup>
+                            <SelectGroup>
+                                <SelectLabel>Karnataka</SelectLabel>
+                                <SelectItem value="Bangalore">Bangalore</SelectItem>
+                                <SelectItem value="Mysuru">Mysuru</SelectItem>
+                                <SelectItem value="Mangalore">Mangalore</SelectItem>
+                                <SelectItem value="Hubli">Hubli</SelectItem>
+                            </SelectGroup>
+                            <SelectGroup>
+                                <SelectLabel>Maharashtra</SelectLabel>
+                                <SelectItem value="Mumbai">Mumbai</SelectItem>
+                            </SelectGroup>
+                        </SelectContent>
+                        </Select>
+                    </div>
+                    <div className="flex justify-center">
+                        <Button onClick={handleSearch}>
+                            <Search className="mr-2 h-4 w-4" />
+                            Search
+                        </Button>
                     </div>
                 </div>
-                <div className="space-y-2">
-                    <Label>Skill</Label>
-                    <Select value={selectedSkill} onValueChange={setSelectedSkill}>
-                    <SelectTrigger>
-                        <SelectValue placeholder="Filter by skill" />
-                    </SelectTrigger>
-                    <SelectContent>
-                        <SelectItem value="all">All Skills</SelectItem>
-                        <SelectItem value="cooking">Cooking</SelectItem>
-                        <SelectItem value="farming">Farming</SelectItem>
-                        <SelectItem value="tailoring">Tailoring</SelectItem>
-                        <SelectItem value="cleaning">Cleaning</SelectItem>
-                        <SelectItem value="herding">Herding</SelectItem>
-                        <SelectItem value="child-care">Child Care</SelectItem>
-                        <SelectItem value="handicrafts">Handicrafts</SelectItem>
-                        <SelectItem value="painting">Painting</SelectItem>
-                        <SelectItem value="embroidery">Embroidery</SelectItem>
-                        <SelectItem value="driving">Driving</SelectItem>
-                        <SelectItem value="data-entry">Data Entry</SelectItem>
-                        <SelectItem value="gardening">Gardening</SelectItem>
-                        <SelectItem value="baking">Baking</SelectItem>
-                        <SelectItem value="graphic-design">Graphic Design</SelectItem>
-                    </SelectContent>
-                    </Select>
-                </div>
-                <div className="space-y-2">
-                    <Label>Location</Label>
-                    <Select value={selectedLocation} onValueChange={setSelectedLocation}>
-                    <SelectTrigger>
-                        <SelectValue placeholder="Filter by location" />
-                    </SelectTrigger>
-                    <SelectContent>
-                        <SelectItem value="all">All Locations</SelectItem>
-                        <SelectGroup>
-                            <SelectLabel>Tamil Nadu</SelectLabel>
-                            <SelectItem value="Chennai">Chennai</SelectItem>
-                            <SelectItem value="Coimbatore">Coimbatore</SelectItem>
-                            <SelectItem value="Madurai">Madurai</SelectItem>
-                            <SelectItem value="Tiruchirappalli">Tiruchirappalli</SelectItem>
-                            <SelectItem value="Salem">Salem</SelectItem>
-                            <SelectItem value="Erode">Erode</SelectItem>
-                            <SelectItem value="Tirunelveli">Tirunelveli</SelectItem>
-                            <SelectItem value="Vellore">Vellore</SelectItem>
-                        </SelectGroup>
-                        <SelectGroup>
-                            <SelectLabel>Karnataka</SelectLabel>
-                            <SelectItem value="Bangalore">Bangalore</SelectItem>
-                            <SelectItem value="Mysuru">Mysuru</SelectItem>
-                            <SelectItem value="Mangalore">Mangalore</SelectItem>
-                            <SelectItem value="Hubli">Hubli</SelectItem>
-                        </SelectGroup>
-                         <SelectGroup>
-                            <SelectLabel>Maharashtra</SelectLabel>
-                            <SelectItem value="Mumbai">Mumbai</SelectItem>
-                        </SelectGroup>
-                    </SelectContent>
-                    </Select>
-                </div>
-                 <div className="flex justify-center">
-                    <Button onClick={handleSearch}>
-                        <Search className="mr-2 h-4 w-4" />
-                        Search
-                    </Button>
-                </div>
+            </CardContent>
+        </Card>
+
+        <div className="mt-6">
+            <h2 className="text-xl font-bold mb-4">Available Workers ({availableWorkers.length})</h2>
+            {availableWorkers.length > 0 ? (
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                {availableWorkers.map((profile) => (
+                <WorkerCard 
+                    key={profile.id}
+                    profile={profile}
+                    isSelected={selectedWorkers.includes(profile.id)}
+                    onSelect={handleSelectWorker}
+                />
+                ))}
             </div>
-        </CardContent>
-      </Card>
-
-      <div className="mt-6">
-        <h2 className="text-xl font-bold mb-4">Available Workers ({availableWorkers.length})</h2>
-        {availableWorkers.length > 0 ? (
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {availableWorkers.map((profile) => (
-               <WorkerCard 
-                 key={profile.id}
-                 profile={profile}
-                 isSelected={selectedWorkers.includes(profile.id)}
-                 onSelect={handleSelectWorker}
-               />
-            ))}
-          </div>
-        ) : (
-          <div className="text-center py-16 text-muted-foreground bg-muted/50 rounded-lg">
-              <h3 className="text-xl font-semibold">No Available Workers</h3>
-              <p className="mt-2">Try adjusting your search filters or check back later.</p>
-          </div>
-        )}
-      </div>
-
-      {selectedWorkers.length > 0 && (
-        <div className="fixed bottom-0 left-0 right-0 p-4 bg-background/80 backdrop-blur-sm border-t">
-          <div className="container mx-auto flex justify-between items-center">
-            <p className="font-semibold">{selectedWorkers.length} worker(s) selected.</p>
-            <Button size="lg" onClick={handleOpenAssignmentModal}>Confirm Assignment</Button>
-          </div>
+            ) : (
+            <div className="text-center py-16 text-muted-foreground bg-muted/50 rounded-lg">
+                <h3 className="text-xl font-semibold">No Available Workers</h3>
+                <p className="mt-2">Try adjusting your search filters or check back later.</p>
+            </div>
+            )}
         </div>
-      )}
 
-      <Dialog open={isAssignmentModalOpen} onOpenChange={setIsAssignmentModalOpen}>
-        <DialogContent className="sm:max-w-xl">
-          <DialogHeader>
-            <DialogTitle>Assign Workers</DialogTitle>
-            <DialogDescription>
-              Assign the {selectedWorkers.length} selected worker(s) to an existing job or create a new one.
-            </DialogDescription>
-          </DialogHeader>
-          <Tabs defaultValue="existing-job" className="w-full">
-            <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="existing-job">Assign to Existing Job</TabsTrigger>
-              <TabsTrigger value="new-job">Post a New Job</TabsTrigger>
-            </TabsList>
-            <TabsContent value="existing-job">
-              <div className="space-y-4 py-4">
-                <Label htmlFor="existing-job-select">Select a Job</Label>
-                <Select value={selectedExistingJob} onValueChange={setSelectedExistingJob}>
-                    <SelectTrigger id="existing-job-select">
-                        <SelectValue placeholder="Choose a job..." />
-                    </SelectTrigger>
-                    <SelectContent>
-                        {assignableJobs.length > 0 ? (
-                            assignableJobs.map(job => (
-                                <SelectItem key={job.id} value={job.id}>{job.title}</SelectItem>
-                            ))
-                        ) : (
-                            <SelectItem value="no-jobs" disabled>No unassigned jobs available</SelectItem>
-                        )}
-                    </SelectContent>
-                </Select>
-              </div>
-              <DialogFooter>
-                <Button variant="outline" onClick={resetAndClose}>Cancel</Button>
-                <Button onClick={handleAssignToExisting} disabled={!selectedExistingJob}>Assign to this Job</Button>
-              </DialogFooter>
-            </TabsContent>
-            <TabsContent value="new-job">
-              <div className="space-y-4 py-4 max-h-[60vh] overflow-y-auto pr-2">
-                  <div className="space-y-2">
-                      <Label htmlFor="new-job-title">Job Title</Label>
-                      <Input id="new-job-title" value={newJobDetails.title} onChange={(e) => setNewJobDetails({...newJobDetails, title: e.target.value})} />
-                  </div>
-                  <div className="grid grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                          <Label htmlFor="new-job-company">Company (Optional)</Label>
-                          <Input id="new-job-company" value={newJobDetails.companyName} onChange={(e) => setNewJobDetails({...newJobDetails, companyName: e.target.value})} />
-                      </div>
-                      <div className="space-y-2">
-                          <Label htmlFor="new-job-location">Location</Label>
-                          <Input id="new-job-location" value={newJobDetails.location} onChange={(e) => setNewJobDetails({...newJobDetails, location: e.target.value})} />
-                      </div>
-                  </div>
-                   <div className="grid grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                          <Label htmlFor="new-job-type">Job Type</Label>
-                          <Select value={newJobDetails.jobType} onValueChange={(value) => setNewJobDetails({...newJobDetails, jobType: value as Job['jobType']})}>
-                            <SelectTrigger id="new-job-type"><SelectValue placeholder="Select..." /></SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="Full-time">Full-time</SelectItem>
-                                <SelectItem value="Part-time">Part-time</SelectItem>
-                                <SelectItem value="Contract">Contract</SelectItem>
-                                <SelectItem value="Internship">Internship</SelectItem>
-                            </SelectContent>
-                          </Select>
-                      </div>
-                      <div className="space-y-2">
-                          <Label htmlFor="new-job-salary">Salary (Optional)</Label>
-                          <Input id="new-job-salary" value={newJobDetails.salary} onChange={(e) => setNewJobDetails({...newJobDetails, salary: e.target.value})} />
-                      </div>
-                  </div>
-                 <div className="grid sm:grid-cols-2 gap-6">
-              <div className="grid grid-cols-2 gap-4">
-                 <div className="space-y-2">
-                    <Label htmlFor="from-date">From Date</Label>
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <Button
-                          variant={'outline'}
-                          className={cn(
-                            'w-full justify-start text-left font-normal',
-                            !fromDate && 'text-muted-foreground'
-                          )}
-                        >
-                          <CalendarIcon className="mr-2 h-4 w-4" />
-                          {fromDate ? format(fromDate, 'PPP') : <span>Pick a date</span>}
-                        </Button>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0">
-                        <Calendar
-                          mode="single"
-                          selected={fromDate}
-                          onSelect={setFromDate}
-                          initialFocus
-                        />
-                      </PopoverContent>
-                    </Popover>
-                  </div>
-                   <div className="space-y-2">
-                    <Label htmlFor="from-time">From Time</Label>
-                    <Select value={fromTime} onValueChange={setFromTime}>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select time" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {timeOptions.map(time => <SelectItem key={time} value={time}>{time}</SelectItem>)}
-                      </SelectContent>
-                    </Select>
-                  </div>
-              </div>
-               <div className="grid grid-cols-2 gap-4">
-                 <div className="space-y-2">
-                    <Label htmlFor="to-date">To Date</Label>
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <Button
-                          variant={'outline'}
-                          className={cn(
-                            'w-full justify-start text-left font-normal',
-                            !toDate && 'text-muted-foreground'
-                          )}
-                        >
-                          <CalendarIcon className="mr-2 h-4 w-4" />
-                          {toDate ? format(toDate, 'PPP') : <span>Pick a date</span>}
-                        </Button>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0">
-                        <Calendar
-                          mode="single"
-                          selected={toDate}
-                          onSelect={setToDate}
-                          disabled={fromDate ? { before: fromDate } : undefined}
-                          initialFocus
-                        />
-                      </PopoverContent>
-                    </Popover>
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="to-time">To Time</Label>
-                     <Select value={toTime} onValueChange={setToTime} disabled={!fromTime}>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select time" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {toTimeOptions.map(time => <SelectItem key={time} value={time}>{time}</SelectItem>)}
-                      </SelectContent>
-                    </Select>
-                  </div>
-              </div>
+        {selectedWorkers.length > 0 && (
+            <div className="fixed bottom-0 left-0 right-0 p-4 bg-background/80 backdrop-blur-sm border-t">
+            <div className="container mx-auto flex justify-between items-center">
+                <p className="font-semibold">{selectedWorkers.length} worker(s) selected.</p>
+                <Button size="lg" onClick={handleOpenAssignmentModal}>Confirm Assignment</Button>
             </div>
-                  <div className="space-y-2">
-                      <Label htmlFor="new-job-description">Job Description</Label>
-                      <Textarea id="new-job-description" value={newJobDetails.description} onChange={(e) => setNewJobDetails({...newJobDetails, description: e.target.value})} />
-                  </div>
-                  <div className="space-y-2">
-                      <Label htmlFor="new-job-skills">Skills Required (comma-separated)</Label>
-                      <Input id="new-job-skills" value={newJobDetails.skillsRequired} onChange={(e) => setNewJobDetails({...newJobDetails, skillsRequired: e.target.value})} />
-                  </div>
-              </div>
-              <DialogFooter className="pt-4 border-t">
-                  <Button variant="outline" onClick={resetAndClose}>Cancel</Button>
-                  <Button onClick={handlePostAndAssign}>Post and Assign</Button>
-              </DialogFooter>
-            </TabsContent>
-          </Tabs>
-        </DialogContent>
-      </Dialog>
-    </div>
+            </div>
+        )}
+
+        <Dialog open={isAssignmentModalOpen} onOpenChange={setIsAssignmentModalOpen}>
+            <DialogContent className="sm:max-w-xl">
+            <DialogHeader>
+                <DialogTitle>Assign Workers</DialogTitle>
+                <DialogDescription>
+                Assign the {selectedWorkers.length} selected worker(s) to an existing job or create a new one.
+                </DialogDescription>
+            </DialogHeader>
+            <Tabs defaultValue="existing-job" className="w-full">
+                <TabsList className="grid w-full grid-cols-2">
+                <TabsTrigger value="existing-job">Assign to Existing Job</TabsTrigger>
+                <TabsTrigger value="new-job">Post a New Job</TabsTrigger>
+                </TabsList>
+                <TabsContent value="existing-job">
+                <div className="space-y-4 py-4">
+                    <Label htmlFor="existing-job-select">Select a Job</Label>
+                    <Select value={selectedExistingJob} onValueChange={setSelectedExistingJob}>
+                        <SelectTrigger id="existing-job-select">
+                            <SelectValue placeholder="Choose a job..." />
+                        </SelectTrigger>
+                        <SelectContent>
+                            {assignableJobs.length > 0 ? (
+                                assignableJobs.map(job => (
+                                    <SelectItem key={job.id} value={job.id}>{job.title}</SelectItem>
+                                ))
+                            ) : (
+                                <SelectItem value="no-jobs" disabled>No unassigned jobs available</SelectItem>
+                            )}
+                        </SelectContent>
+                    </Select>
+                </div>
+                <DialogFooter>
+                    <Button variant="outline" onClick={resetAndClose}>Cancel</Button>
+                    <Button onClick={handleAssignToExisting} disabled={!selectedExistingJob}>Assign to this Job</Button>
+                </DialogFooter>
+                </TabsContent>
+                <TabsContent value="new-job">
+                <div className="space-y-4 py-4 max-h-[60vh] overflow-y-auto pr-2">
+                    <div className="space-y-2">
+                        <Label htmlFor="new-job-title">Job Title</Label>
+                        <Input id="new-job-title" value={newJobDetails.title} onChange={(e) => setNewJobDetails({...newJobDetails, title: e.target.value})} />
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                            <Label htmlFor="new-job-company">Company (Optional)</Label>
+                            <Input id="new-job-company" value={newJobDetails.companyName} onChange={(e) => setNewJobDetails({...newJobDetails, companyName: e.target.value})} />
+                        </div>
+                        <div className="space-y-2">
+                            <Label htmlFor="new-job-location">Location</Label>
+                            <Input id="new-job-location" value={newJobDetails.location} onChange={(e) => setNewJobDetails({...newJobDetails, location: e.target.value})} />
+                        </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                            <Label htmlFor="new-job-type">Job Type</Label>
+                            <Select value={newJobDetails.jobType} onValueChange={(value) => setNewJobDetails({...newJobDetails, jobType: value as Job['jobType']})}>
+                                <SelectTrigger id="new-job-type"><SelectValue placeholder="Select..." /></SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="Full-time">Full-time</SelectItem>
+                                    <SelectItem value="Part-time">Part-time</SelectItem>
+                                    <SelectItem value="Contract">Contract</SelectItem>
+                                    <SelectItem value="Internship">Internship</SelectItem>
+                                </SelectContent>
+                            </Select>
+                        </div>
+                        <div className="space-y-2">
+                            <Label htmlFor="new-job-salary">Salary (Optional)</Label>
+                            <Input id="new-job-salary" value={newJobDetails.salary} onChange={(e) => setNewJobDetails({...newJobDetails, salary: e.target.value})} />
+                        </div>
+                    </div>
+                    <div className="grid sm:grid-cols-2 gap-6">
+                <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                        <Label htmlFor="from-date">From Date</Label>
+                        <Popover>
+                        <PopoverTrigger asChild>
+                            <Button
+                            variant={'outline'}
+                            className={cn(
+                                'w-full justify-start text-left font-normal',
+                                !fromDate && 'text-muted-foreground'
+                            )}
+                            >
+                            <CalendarIcon className="mr-2 h-4 w-4" />
+                            {fromDate ? format(fromDate, 'PPP') : <span>Pick a date</span>}
+                            </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-0">
+                            <Calendar
+                            mode="single"
+                            selected={fromDate}
+                            onSelect={setFromDate}
+                            initialFocus
+                            />
+                        </PopoverContent>
+                        </Popover>
+                    </div>
+                    <div className="space-y-2">
+                        <Label htmlFor="from-time">From Time</Label>
+                        <Select value={fromTime} onValueChange={setFromTime}>
+                        <SelectTrigger>
+                            <SelectValue placeholder="Select time" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            {timeOptions.map(time => <SelectItem key={time} value={time}>{time}</SelectItem>)}
+                        </SelectContent>
+                        </Select>
+                    </div>
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                        <Label htmlFor="to-date">To Date</Label>
+                        <Popover>
+                        <PopoverTrigger asChild>
+                            <Button
+                            variant={'outline'}
+                            className={cn(
+                                'w-full justify-start text-left font-normal',
+                                !toDate && 'text-muted-foreground'
+                            )}
+                            >
+                            <CalendarIcon className="mr-2 h-4 w-4" />
+                            {toDate ? format(toDate, 'PPP') : <span>Pick a date</span>}
+                            </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-0">
+                            <Calendar
+                            mode="single"
+                            selected={toDate}
+                            onSelect={setToDate}
+                            disabled={fromDate ? { before: fromDate } : undefined}
+                            initialFocus
+                            />
+                        </PopoverContent>
+                        </Popover>
+                    </div>
+                    <div className="space-y-2">
+                        <Label htmlFor="to-time">To Time</Label>
+                        <Select value={toTime} onValueChange={setToTime} disabled={!fromTime}>
+                        <SelectTrigger>
+                            <SelectValue placeholder="Select time" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            {toTimeOptions.map(time => <SelectItem key={time} value={time}>{time}</SelectItem>)}
+                        </SelectContent>
+                        </Select>
+                    </div>
+                </div>
+                </div>
+                    <div className="space-y-2">
+                        <Label htmlFor="new-job-description">Job Description</Label>
+                        <Textarea id="new-job-description" value={newJobDetails.description} onChange={(e) => setNewJobDetails({...newJobDetails, description: e.target.value})} />
+                    </div>
+                    <div className="space-y-2">
+                        <Label htmlFor="new-job-skills">Skills Required (comma-separated)</Label>
+                        <Input id="new-job-skills" value={newJobDetails.skillsRequired} onChange={(e) => setNewJobDetails({...newJobDetails, skillsRequired: e.target.value})} />
+                    </div>
+                </div>
+                <DialogFooter className="pt-4 border-t">
+                    <Button variant="outline" onClick={resetAndClose}>Cancel</Button>
+                    <Button onClick={handlePostAndAssign}>Post and Assign</Button>
+                </DialogFooter>
+                </TabsContent>
+            </Tabs>
+            </DialogContent>
+        </Dialog>
+        </div>
+    </VerificationGate>
   );
 }
-
-    

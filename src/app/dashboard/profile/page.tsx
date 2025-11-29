@@ -25,6 +25,7 @@ import type { User } from "@/lib/types";
 import { useToast } from "@/hooks/use-toast";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
+import { useVerification } from "@/hooks/use-verification";
 
 const membershipBadges = {
   Rise: {
@@ -47,8 +48,7 @@ const membershipBadges = {
 
 export default function ProfilePage() {
   const [user, setUser] = useState<User | null>(null);
-  const [isPanVerified, setIsPanVerified] = useState(false);
-  const [isAadhaarVerified, setIsAadhaarVerified] = useState(false);
+  const { isPanVerified, isAadhaarVerified, setPanVerified, setAadhaarVerified } = useVerification();
   const { toast } = useToast();
 
   useEffect(() => {
@@ -81,9 +81,9 @@ export default function ProfilePage() {
       const docName = fileType === 'pan' ? 'PAN Card' : 'Aadhaar Card';
 
       if (fileType === 'pan') {
-        setIsPanVerified(true);
+        setPanVerified(true);
       } else {
-        setIsAadhaarVerified(true);
+        setAadhaarVerified(true);
       }
 
       toast({
