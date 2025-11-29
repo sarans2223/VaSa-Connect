@@ -13,6 +13,7 @@ export const mockUser: User = {
   industryPreferences: ['Hospitality', 'Events', 'Home Services'],
   rating: 4.5,
   membership: 'Rise',
+  redeemPoints: 250,
 };
 
 export const sampleJobs: Job[] = [
@@ -83,7 +84,35 @@ export const sampleJobs: Job[] = [
       status: 'Worker Assigned',
       date: '2024-08-18',
       time: '3:00 PM - 11:00 PM',
-    }
+    },
+     {
+      id: 'sample-job-6',
+      title: 'Wedding Planner Assistant',
+      companyName: 'Dream Weddings',
+      companyLogoUrl: 'https://picsum.photos/seed/sample6/100/100',
+      location: 'Delhi',
+      jobType: 'Internship',
+      description: 'Assist the lead wedding planner in organizing and executing weddings. Excellent opportunity to learn.',
+      skillsRequired: ['Event Planning', 'Communication', 'Organization'],
+      industry: 'Events',
+      status: 'Worker Assigned',
+      date: '2024-09-05',
+      time: '10:00 AM - 6:00 PM',
+    },
+    {
+      id: 'sample-job-7',
+      title: 'Home Baker for Festival',
+      companyName: 'Sweet Delights',
+      companyLogoUrl: 'https://picsum.photos/seed/sample7/100/100',
+      location: 'Kolkata',
+      jobType: 'Contract',
+      description: 'Bulk order for traditional sweets and baked goods for the upcoming festival season.',
+      skillsRequired: ['Baking', 'Cooking', 'Sweets Making'],
+      industry: 'Catering',
+      status: 'Worker Assigned',
+      date: '2024-09-10',
+      time: 'Flexible',
+    },
 ];
 
 export const mockJobs: Job[] = [
@@ -343,5 +372,3 @@ export const mockTeams: Team[] = [
     ],
   },
 ];
-
-    

@@ -10,6 +10,7 @@ export type User = {
   industryPreferences: string[];
   rating: number;
   membership: 'Rise' | 'Bloom' | 'Empower';
+  redeemPoints?: number;
 };
 
 export type Job = {
