@@ -21,6 +21,7 @@ import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
 import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
+import { Label } from "@/components/ui/label";
 
 const initialWorkerNotifications = [
     { id: 1, type: 'offer', job: 'Community Kitchen Chef', recruiter: 'Community Help Group', status: 'pending' as const, question: '', answer: '' },
