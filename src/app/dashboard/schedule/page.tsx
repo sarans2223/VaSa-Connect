@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import type { Job } from '@/lib/types';
-import { sampleJobs } from '@/app/dashboard/assign-worker/page';
+import { sampleJobs } from '@/lib/data';
 import { format, isFuture, isPast, parseISO, compareDesc, startOfDay } from 'date-fns';
 
 export default function SchedulePage() {
@@ -153,3 +153,5 @@ export default function SchedulePage() {
         </div>
     );
 }
+
+    
