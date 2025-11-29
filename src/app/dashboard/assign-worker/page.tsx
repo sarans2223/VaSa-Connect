@@ -251,13 +251,13 @@ export default function AssignWorkerPage() {
                 <UserPlus className="h-8 w-8 text-primary" />
                 <h1 className="text-3xl font-bold tracking-tight">Hire Talent</h1>
             </div>
-            <p className="text-muted-foreground mt-2">Select profiles to hire for a job.</p>
+            <p className="text-muted-foreground mt-2">search and select the profiles for your job needs</p>
         </div>
       </div>
 
       <Card>
         <CardContent className="p-4 flex justify-center">
-            <div className="w-full max-w-7xl grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 items-end">
+            <div className="w-full max-w-4xl grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 items-end">
                 <div className="lg:col-span-1 space-y-2">
                     <Label htmlFor="search-input">Search by Name</Label>
                     <div className="relative">
@@ -327,25 +327,6 @@ export default function AssignWorkerPage() {
                             <SelectItem value="Mumbai">Mumbai</SelectItem>
                         </SelectGroup>
                     </SelectContent>
-                    </Select>
-                </div>
-                <div className="space-y-2">
-                    <Label>Job</Label>
-                    <Select value={selectedJob} onValueChange={setSelectedJob}>
-                        <SelectTrigger>
-                            <SelectValue placeholder="Select a job to assign" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            {assignableJobs.length > 0 ? (
-                                assignableJobs.map(job => (
-                                    <SelectItem key={job.id} value={job.id}>
-                                        {job.title}
-                                    </SelectItem>
-                                ))
-                            ) : (
-                                <SelectItem value="no-jobs" disabled>No available jobs to assign</SelectItem>
-                            )}
-                        </SelectContent>
                     </Select>
                 </div>
                  <div className="flex justify-center">
